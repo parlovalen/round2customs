@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Round 2 Customs — Custom Arcade Machines</title>
+  <meta name="description" content="Round 2 Customs builds the highest quality custom arcade machines for commercial clients and home users. Start your build today.">
+
+  <!-- Halyard Display via Adobe Fonts -->
+  <link rel="stylesheet" href="https://use.typekit.net/sjv2mus.css">
+
+  <!-- Gabarito (body) via Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+</head>
+<body>
+
+  <!-- ======= NAV ======= -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="Round 2 Customs — home">
+        <img src="assets/brand/r2c-logo.svg" alt="Round 2 Customs">
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAV OVERLAY MENU -->
+  <div class="nav-menu" id="nav-menu" aria-hidden="true">
+    <div class="nav-media" id="nav-media-cnc" aria-hidden="true">
+      <video muted loop playsinline preload="auto" src="assets/animation/cnc-router.mp4"></video>
+    </div>
+    <ul>
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#fully-custom">About</a></li>
+      <li><a href="#studio">Showroom</a></li>
+      <li><a href="#contact" id="nav-link-custom-builder">Custom Builder</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ======= HERO ======= -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>WE BUILD<br><span class="word-cycle" id="word-cycle"><span class="word-cycle-display" id="word-cycle-display" data-text="ARCADES">ARCADES</span></span></h1>
+        <p>Round 2 Customs builds the highest quality arcade machines for commercial clients and home users. We bring our unique sense of design and building prowess to every project we take on.</p>
+      </div>
+      <button class="btn-primary">
+        <canvas class="btn-particle-canvas"></canvas>
+        START YOUR BUILD</button>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/hero-pinball.png" alt="Custom pinball machine by Round 2 Customs">
+      <div class="hero-image-fade"></div>
+    </div>
+  </section>
+
+  <!-- ======= FULLY CUSTOM ======= -->
+  <section class="split-section fully-custom" id="fully-custom">
+    <div class="split-image split-image--left">
+      <img src="assets/images/fully-custom-2player.png" alt="Custom 2-player arcade cabinet">
+    </div>
+    <div class="split-content split-content--right">
+      <div class="section-text">
+        <h2>FULLY<br>CUSTOM</h2>
+        <p>Do you like modern games? Are you more of a retro gamer? We design fully custom builds that are crafted around your specific needs. From the drawing board, all the way through build and delivery, we design and fabricate everything for you in-house and on time.</p>
+        <div class="services-list">
+          <ul>
+            <li>CUSTOM CABINET DESIGN</li>
+            <li>FABRICATION &amp; CONSTRUCTION</li>
+            <li>AUTOMATION</li>
+          </ul>
+          <ul>
+            <li>GRAPHIC DESIGN</li>
+            <li>ELECTRICAL WIRING</li>
+            <li>LIGHTING</li>
+          </ul>
+        </div>
+      </div>
+      <button class="btn-primary">
+        <canvas class="btn-particle-canvas"></canvas>
+        START YOUR BUILD</button>
+    </div>
+  </section>
+
+  <!-- ======= TRUSTED VENDORS ======= -->
+  <section class="trusted-vendors">
+    <p class="section-label">TRUSTED VENDORS</p>
+    <div class="logo-gallery">
+      <div class="logo-track" id="logo-track">
+        <img src="assets/logos/brook.svg" alt="Brook" class="vendor-logo">
+        <img src="assets/logos/ultimarc.svg" alt="Ultimarc" class="vendor-logo">
+        <img src="assets/logos/sanwa.svg" alt="Sanwa" class="vendor-logo">
+        <img src="assets/logos/LG.svg" alt="LG" class="vendor-logo">
+        <img src="assets/logos/suzo-happ.svg" alt="Suzo-Happ" class="vendor-logo">
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= GSAP SCROLL CAROUSEL (codepen.io/GreenSock/pen/RwKwLWK) ======= -->
+  <section class="gsap-showcase">
+    <div class="gallery">
+      <ul class="cards">
+        <li style="background-image: url(assets/images/theStudio.png)"></li>
+        <li style="background-image: url(assets/images/classic-vpin.png)"></li>
+        <li style="background-image: url(assets/images/fully-custom-2player.png)"></li>
+        <li style="background-image: url(assets/images/hero-pinball.png)"></li>
+        <li style="background-image: url(assets/images/theStudio.png)"></li>
+      </ul>
+      <div class="actions">
+        <button class="prev">Prev</button>
+        <button class="next">Next</button>
+      </div>
+    </div>
+    <div class="drag-proxy"></div>
+  </section>
+
+  <!-- ======= THE STUDIO CAROUSEL ======= -->
+  <section class="studio" id="studio">
+    <div class="carousel-container" id="carousel">
+      <ul class="carousel-track" id="carousel-track"></ul>
+    </div>
+    <div class="carousel-pagination" id="carousel-pagination" role="tablist" aria-label="Carousel slides"></div>
+  </section>
+
+  <!-- ======= CUSTOMER BUILD ======= -->
+  <section class="split-section customer-build">
+    <div class="split-content split-content--left">
+      <div class="section-text">
+        <span class="eyebrow">CUSTOMER BUILD</span>
+        <h2>CLASSIC<br>VIRTUAL PIN</h2>
+        <p>Lorem ipsum dolor sit amet consectetur. Et pretium eget ultrices placerat praesent et donec nullam. Dignissim fermentum tristique posuere aliquet amet at amet malesuada consequat.</p>
+      </div>
+      <button class="btn-primary">
+        <canvas class="btn-particle-canvas"></canvas>
+        READ FULL STORY</button>
+    </div>
+    <div class="split-image split-image--right">
+      <img src="assets/images/classic-vpin.png" alt="Classic Virtual Pin custom build">
+      <div class="image-fade image-fade--left"></div>
+      <div class="image-fade image-fade--bottom"></div>
+    </div>
+  </section>
+
+  <!-- ======= CONTACT FORM ======= -->
+  <section class="contact" id="contact">
+    <div class="contact-header">
+      <h2>GET IN TOUCH</h2>
+      <p>Lorem ipsum dolor sit amet consectetur. Et pretium eget ultrices placerat praesent et donec nullam. Dignissim fermentum tristique posuere aliquet amet at amet malesuada consequat.</p>
+    </div>
+    <form class="contact-form" id="contact-form" novalidate>
+
+      <div class="form-row">
+        <div class="form-field">
+          <input type="text" name="name" placeholder="Name*" required autocomplete="name">
+        </div>
+        <div class="form-field">
+          <input type="email" name="email" placeholder="Email*" required autocomplete="email">
+        </div>
+        <div class="form-field">
+          <input type="tel" name="phone" placeholder="Phone" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="form-field form-field--textarea">
+        <textarea name="message" placeholder="Message*" required></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn">
+          SUBMIT INQUIRY
+          <svg class="submit-arrow" width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L6 6L1 11" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Lottie player for nav icon animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+  <script src="assets/animation/coin-flip-data.js"></script>
+
+  <!-- GSAP + plugins for the scroll carousel (codepen.io/GreenSock/pen/RwKwLWK) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js"></script>
+  <script src="gallery.js"></script>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
