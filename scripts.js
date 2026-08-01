@@ -3,6 +3,46 @@
    ============================================================ */
 
 // ============================================================
+// FOOTER YEAR
+// ============================================================
+const footerYearEl = document.getElementById('footer-year');
+if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
+
+
+// ============================================================
+// GRID LINES — one elongated highlight per line, drifting on scroll
+// in opposing directions
+// ============================================================
+const gridLines = document.querySelectorAll('.grid-line');
+
+function buildGridLineGradient() {
+  const length = 18; // % of tile
+  const half = length / 2;
+  const opacity = (0.08 + Math.random() * 0.06).toFixed(2);
+  return `linear-gradient(to bottom, transparent 0%, transparent ${(50 - half).toFixed(2)}%, rgba(255, 255, 255, ${opacity}) 50%, transparent ${(50 + half).toFixed(2)}%, transparent 100%)`;
+}
+
+const gridLineConfigs = Array.from(gridLines).map((line, i) => {
+  const tileHeight = Math.round(1300 + Math.random() * 300);
+  line.style.backgroundImage = buildGridLineGradient();
+  line.style.backgroundSize = `100% ${tileHeight}px`;
+  return { el: line, factor: i === 0 ? 0.25 : -0.25 };
+});
+
+function updateGridLineParallax() {
+  const y = window.scrollY;
+  gridLineConfigs.forEach(cfg => {
+    cfg.el.style.backgroundPositionY = `${y * cfg.factor}px`;
+  });
+}
+
+if (gridLineConfigs.length) {
+  window.addEventListener('scroll', updateGridLineParallax, { passive: true });
+  updateGridLineParallax();
+}
+
+
+// ============================================================
 // HERO WORD CYCLE — scanline glitch transition
 // ============================================================
 const wordCycleEl = document.getElementById('word-cycle');

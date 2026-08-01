@@ -25,6 +25,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
+  position: relative;
   background: var(--bg);
   color: var(--white);
   font-family: var(--font-body);
@@ -32,6 +33,81 @@ body {
   line-height: 26px;
   letter-spacing: 0.16px;
   overflow-x: hidden;
+}
+
+/* Lift all real content above the guide lines below */
+body > * { position: relative; z-index: 1; }
+
+/* Vertical guide lines tracking the content column edges, with randomized
+   faint highlights (generated in JS) that drift on scroll like parallax */
+.grid-line {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.08);
+  background-repeat: repeat-y;
+  pointer-events: none;
+  z-index: 2;
+  will-change: background-position;
+}
+.grid-line--left { left: var(--page-pad); }
+.grid-line--right { right: var(--page-pad); }
+
+/* Horizontal rules marking section boundaries, each with its own
+   elongated highlight sliding across it, alternating direction */
+.fully-custom,
+.trusted-vendors,
+.studio,
+.customer-build,
+.contact,
+.site-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.fully-custom::before,
+.trusted-vendors::before,
+.studio::before,
+.customer-build::before,
+.contact::before,
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.12) 50%, transparent 100%);
+  background-size: 28% 100%;
+  background-repeat: no-repeat;
+  background-position-x: -28%;
+  pointer-events: none;
+  animation: h-line-flow 11s linear infinite;
+}
+
+.trusted-vendors::before,
+.customer-build::before {
+  animation-direction: reverse;
+}
+
+@keyframes h-line-flow {
+  from { background-position-x: -28%; }
+  to { background-position-x: 128%; }
+}
+
+/* Desktop: inset each section 24px from the viewport's left/right edges,
+   on top of the existing --page-pad content padding inside each section */
+@media (min-width: 1025px) {
+  .hero,
+  .split-section,
+  .trusted-vendors,
+  .studio,
+  .contact,
+  .site-footer {
+    margin-left: 24px;
+    margin-right: 24px;
+  }
 }
 img { display: block; max-width: 100%; }
 a { text-decoration: none; color: inherit; }
@@ -621,11 +697,11 @@ h2 {
 }
 
 .pagination-dot {
-  height: 4px;
+  height: 2px;
   border-radius: 0;
   cursor: pointer;
   transition: width 0.3s ease, background 0.3s ease;
-  width: 8px;
+  width: 14px;
   background: var(--gray-inactive);
   padding: 0;
 }
@@ -719,22 +795,6 @@ h2 {
   justify-content: flex-end;
 }
 
-.submit-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 16px;
-  letter-spacing: 0.8px;
-  color: var(--white);
-  transition: color 0.2s ease;
-}
-
-.submit-btn:hover { color: var(--terracotta); }
-
-.submit-arrow { display: block; }
-.submit-btn:hover .submit-arrow path { stroke: var(--terracotta); transition: stroke 0.2s ease; }
 .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .form-success {
@@ -743,6 +803,65 @@ h2 {
   font-family: var(--font-display);
   font-size: 18px;
   letter-spacing: 0.5px;
+  color: var(--terracotta);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 48px var(--page-pad);
+}
+
+.footer-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-name {
+  font-size: 13px;
+  line-height: 22px;
+  letter-spacing: 0.13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.footer-address {
+  font-style: normal;
+  font-size: 13px;
+  line-height: 22px;
+  letter-spacing: 0.13px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: left;
+}
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  opacity: 0.7;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.footer-social-link:hover {
+  opacity: 1;
   color: var(--terracotta);
 }
 
@@ -956,7 +1075,7 @@ h2 {
     gap: 40px;
   }
   h2 { font-size: 40px; line-height: 38px; letter-spacing: 0.9px; }
-  .services-list { flex-direction: column; gap: 16px; }
+  .services-list { flex-direction: column; gap: 10px; }
   .image-fade--left {
     background: linear-gradient(to bottom, var(--bg) 0%, transparent 18%);
   }
@@ -987,10 +1106,15 @@ h2 {
   .contact-header { gap: 20px; align-items: flex-start; text-align: left; }
   .contact-header h2 { font-size: 36px; line-height: 36px; }
   .contact-header p { font-size: 15px; }
+  .contact-form { gap: 16px; }
   .form-row { flex-direction: column; gap: 16px; }
   .form-field input,
   .form-field textarea { padding: 16px 18px; }
   .form-actions { justify-content: flex-start; }
+
+  /* Footer */
+  .site-footer { padding: 40px var(--page-pad); gap: 28px; }
+  .footer-top { flex-direction: column; align-items: flex-start; gap: 24px; }
 }
 
 /* --- Small phones --- */
