@@ -97,49 +97,6 @@ navMenu.querySelectorAll('a').forEach(link => {
 });
 
 
-// ============================================================
-// NAV LINKS — first "O" flips into a coin (Lottie) on hover
-// ============================================================
-navMenu.querySelectorAll('li a').forEach(link => {
-  const text = link.textContent;
-  const oIndex = text.search(/o/i);
-  if (oIndex === -1) return;
-
-  const before = text.slice(0, oIndex);
-  const letter = text[oIndex];
-  const after = text.slice(oIndex + 1);
-
-  link.textContent = '';
-  if (before) link.appendChild(document.createTextNode(before));
-
-  const oSlot = document.createElement('span');
-  oSlot.className = 'nav-o-slot';
-
-  const oLetter = document.createElement('span');
-  oLetter.className = 'nav-o-letter';
-  oLetter.textContent = letter;
-
-  const oCoin = document.createElement('span');
-  oCoin.className = 'nav-o-coin';
-  oCoin.setAttribute('aria-hidden', 'true');
-
-  oSlot.appendChild(oLetter);
-  oSlot.appendChild(oCoin);
-  link.appendChild(oSlot);
-
-  if (after) link.appendChild(document.createTextNode(after));
-
-  const coinAnim = lottie.loadAnimation({
-    container: oCoin,
-    renderer: 'svg',
-    loop: true,
-    autoplay: false,
-    animationData: coinFlipAnimationData,
-  });
-
-  link.addEventListener('mouseenter', () => coinAnim.play());
-  link.addEventListener('mouseleave', () => coinAnim.stop());
-});
 
 
 // ============================================================
