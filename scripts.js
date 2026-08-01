@@ -396,6 +396,19 @@ form.querySelectorAll('[required]').forEach(field => {
 
 form.addEventListener('submit', e => {
   e.preventDefault();
+
+  // Honeypot — real users never fill this (it's visually hidden); if it
+  // has a value, silently pretend to succeed so the bot doesn't retry
+  const honeypot = form.querySelector('[name="hp_website"]');
+  if (honeypot && honeypot.value.trim()) {
+    form.innerHTML = `
+      <div class="form-success">
+        <p>Message received. We'll be in touch shortly.</p>
+      </div>
+    `;
+    return;
+  }
+
   if (!validateForm()) return;
 
   const originalHTML = submitBtn.innerHTML;

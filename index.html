@@ -181,6 +181,12 @@
         <textarea name="message" placeholder="Message*" required></textarea>
       </div>
 
+      <!-- Honeypot — hidden from real users, bots that auto-fill every field trip it -->
+      <div class="form-honeypot" aria-hidden="true">
+        <label for="hp-website">Leave this field blank</label>
+        <input type="text" id="hp-website" name="hp_website" tabindex="-1" autocomplete="off">
+      </div>
+
       <div class="form-actions">
         <button type="submit" class="btn-primary submit-btn">
           <canvas class="btn-particle-canvas"></canvas>
