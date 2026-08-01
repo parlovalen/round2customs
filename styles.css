@@ -297,6 +297,23 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   overflow: hidden;
 }
 
+.hero--compact {
+  min-height: 450px;
+  justify-content: flex-start;
+}
+
+.hero--compact .hero-content {
+  flex: none;
+  align-items: flex-start;
+  text-align: left;
+  padding: 0 var(--page-pad);
+  transform: none;
+}
+
+.hero--compact .hero-text p {
+  max-width: 588px;
+}
+
 .hero-content {
   flex: 1;
   display: flex;
@@ -733,13 +750,443 @@ h2 {
 }
 
 /* ============================================================
+   SHOWROOM PAGE
+   ============================================================ */
+.showroom-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px var(--page-pad) 120px;
+}
+
+/* ============================================================
+   RECENT PROJECT STORIES
+   Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=68-95
+   Uses its own accent (#d65e38) rather than --terracotta — matches the
+   design file exactly rather than the button/eyebrow accent used elsewhere.
+   ============================================================ */
+.project-stories-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: normal;
+  letter-spacing: 0.48px;
+  color: #d65e38;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 220px;
+  padding: 0 44px;
+  border-radius: 8px;
+  border: 1px solid #3e3e3e;
+  overflow: hidden;
+  background: var(--bg);
+  transition: border-color 0.3s ease, border-width 0.3s ease, padding 0.35s ease;
+}
+
+.project-card:hover {
+  border-color: #d65e38;
+  border-width: 2px;
+  padding: 16px 44px 28px;
+}
+
+/* Card image is sized/offset larger than its container (Figma's pan-and-zoom
+   crop technique) so the hover state can zoom out and pan left smoothly.
+   object-fit:cover on top keeps any source photo's own aspect ratio intact. */
+.project-card img {
+  position: absolute;
+  max-width: none;
+  width: 74.21%;
+  height: 279.62%;
+  top: -71.69%;
+  left: 40.85%;
+  object-fit: cover;
+  object-position: center;
+  transition: width 0.45s ease, height 0.45s ease, top 0.45s ease, left 0.45s ease;
+  z-index: 0;
+}
+
+.project-card:hover img {
+  width: 49.91%;
+  height: 188.06%;
+  top: -44.19%;
+  left: 53%;
+}
+
+.project-card-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.15) 55%, transparent 100%);
+  z-index: 1;
+}
+
+.project-card-name {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 36px;
+  letter-spacing: 0.84px;
+  color: var(--white);
+  text-transform: uppercase;
+  transform: translateY(5px);
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-card-name {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   PROJECT GALLERY
+   Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=69-132
+   Bento-style mosaic: a large card + a stacked column on the top row,
+   three equal cards on the bottom row. Fluid widths (flex:1) instead of
+   Figma's fixed 588px so it holds up at any viewport width.
+   ============================================================ */
+.project-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 120px var(--page-pad);
+  background: #f2f2f2;
+}
+
+.project-gallery h2 {
+  font-size: 24px;
+  line-height: normal;
+  letter-spacing: 0.48px;
+  color: #000000;
+}
+
+.gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gallery-row {
+  display: flex;
+  gap: 16px;
+}
+
+.gallery-row--top {
+  height: 580px;
+}
+
+.gallery-card {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid #d9d9d9;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: none;
+}
+
+/* Category pill that follows the pointer in place of the native cursor
+   while hovering a gallery tile. Fixed to the viewport (not the card) so
+   it renders above everything instead of being clipped by the card's own
+   overflow:hidden — a single shared element, positioned via JS. */
+.gallery-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  border-radius: 60px;
+  background: #d65e38;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.55px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.gallery-cursor.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.gallery-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transform: scale(1);
+  transition: transform 0.35s ease;
+}
+
+.gallery-card:hover img {
+  transform: scale(1.12);
+}
+
+.gallery-col {
+  flex: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gallery-col > .gallery-row {
+  flex: 1;
+  min-height: 0;
+}
+
+.gallery-row--split .gallery-card:first-child {
+  flex: 3;
+}
+
+.gallery-row--split .gallery-card:last-child {
+  flex: 2;
+}
+
+/* ============================================================
+   PROJECT GALLERY MODAL
+   ============================================================ */
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  background: rgba(0, 0, 0, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-modal.is-open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.gallery-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.gallery-modal-title {
+  position: absolute;
+  top: 32px;
+  left: 32px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.gallery-modal-image {
+  position: relative;
+  width: 100%;
+  height: 680px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.gallery-modal-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gallery-modal-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.gallery-modal-thumb {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.gallery-modal-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.gallery-modal-thumb:hover img {
+  opacity: 0.8;
+}
+
+.gallery-modal-thumb.is-active {
+  border-color: #d65e38;
+}
+
+.gallery-modal-thumb.is-active img {
+  opacity: 1;
+}
+
+/* Bare pixel-X icon, no button chrome — same treatment as the arrows,
+   from the Figma "close" component (node 56:78) */
+.gallery-modal-close {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #808080;
+  transition: color 0.2s ease;
+}
+
+.gallery-modal-close:hover {
+  color: var(--white);
+}
+
+/* Bare pixel-chevron icon, no button chrome — matches the studio
+   carousel's prev/next cursor treatment exactly, just larger and clickable */
+.gallery-modal-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d65e38;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-modal-arrow:hover {
+  color: var(--white);
+}
+
+.gallery-modal-arrow--prev {
+  left: 32px;
+}
+
+.gallery-modal-arrow--prev:hover {
+  transform: translate(-6px, -50%);
+}
+
+.gallery-modal-arrow--next {
+  right: 32px;
+}
+
+.gallery-modal-arrow--next:hover {
+  transform: translate(6px, -50%);
+}
+
+.gallery-modal-arrow svg {
+  display: block;
+  width: 48px;
+  height: 34px;
+}
+
+/* ============================================================
+   PROJECT DETAIL PAGES
+   ============================================================ */
+.project-hero {
+  position: relative;
+  height: 520px;
+  overflow: hidden;
+}
+
+.project-hero img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.project-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--bg) 0%, transparent 30%);
+  pointer-events: none;
+}
+
+.project-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  max-width: 750px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.project-content p {
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0.16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.project-back {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.65px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
+}
+
+.project-back:hover {
+  color: var(--terracotta);
+}
+
+/* ============================================================
    CONTACT FORM
    ============================================================ */
 .contact {
   display: flex;
   flex-direction: column;
   gap: 60px;
-  padding: 60px var(--page-pad);
+  padding: 120px var(--page-pad) 60px;
 }
 
 .contact-header {
@@ -1006,6 +1453,7 @@ h2 {
   }
 
   .hero { min-height: 640px; }
+  .hero--compact { min-height: 440px; }
   .hero h1 { font-size: 72px; line-height: 68px; }
   .word-cycle,
   .word-cycle-display { height: 68px; }
@@ -1022,6 +1470,16 @@ h2 {
 
   .services-list { flex-direction: column; gap: 10px; }
   .services-list li { white-space: normal; }
+
+  .project-card { height: 200px; padding: 0 32px; }
+  .project-card:hover { padding: 16px 32px 26px; }
+  .project-card-name { font-size: 34px; line-height: 32px; }
+
+  .project-hero { height: 400px; }
+
+  .gallery-row--top { height: 420px; }
+
+  .gallery-modal-image { height: 460px; }
 }
 
 /* --- Mobile --- */
@@ -1079,6 +1537,9 @@ h2 {
     flex: none;
     height: 450px;
   }
+  .hero--compact .hero-image {
+    height: 320px;
+  }
   .hero h1 { font-size: clamp(32px, 11vw, 44px); line-height: clamp(32px, 11vw, 44px); letter-spacing: 1px; }
   .word-cycle,
   .word-cycle-display { height: clamp(32px, 11vw, 44px); }
@@ -1135,6 +1596,48 @@ h2 {
   .carousel-track { width: 74vw; max-width: 300px; }
   .studio-label { padding: 24px; }
   .studio-label h2 { font-size: 32px; line-height: 30px; }
+
+  /* Showroom page */
+  .showroom-gallery { gap: 24px; }
+
+  /* Recent project stories */
+  .project-stories-label { font-size: 18px; }
+  .project-gallery h2 { font-size: 18px; }
+  .project-grid { grid-template-columns: 1fr; gap: 16px; }
+  .project-card { height: 180px; padding: 0 24px; }
+  .project-card:hover { padding: 16px 24px 24px; }
+  .project-card-name { font-size: 28px; line-height: 26px; letter-spacing: 0.5px; }
+
+  /* Project detail pages */
+  .project-hero { height: 280px; }
+  .project-content { padding: 48px var(--page-pad); gap: 16px; }
+
+  /* Project gallery — collapse the bento mosaic to a single column */
+  .project-gallery { gap: 24px; padding: 0 var(--page-pad) 48px; }
+  .gallery-grid { gap: 16px; }
+  .gallery-row {
+    flex-direction: column;
+    height: auto;
+    gap: 16px;
+  }
+  .gallery-col { gap: 16px; }
+  .gallery-card,
+  .gallery-row--split .gallery-card:first-child,
+  .gallery-row--split .gallery-card:last-child {
+    flex: none;
+    height: 220px;
+  }
+
+  /* Project gallery modal */
+  .gallery-modal { padding: 24px; }
+  .gallery-modal-title { top: 16px; left: 16px; font-size: 16px; }
+  .gallery-modal-image { height: 300px; }
+  .gallery-modal-thumb { width: 52px; height: 52px; }
+  .gallery-modal-close { top: 16px; right: 16px; }
+  .gallery-modal-close svg { width: 20px; height: 20px; }
+  .gallery-modal-arrow svg { width: 28px; height: 20px; }
+  .gallery-modal-arrow--prev { left: 12px; }
+  .gallery-modal-arrow--next { right: 12px; }
 
   /* Contact form */
   .contact { padding: 60px var(--page-pad); gap: 40px; }

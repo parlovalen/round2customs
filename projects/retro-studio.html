@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETRO STUDIO — Round 2 Customs</title>
+  <meta name="description" content="Retro Studio custom arcade build, by Round 2 Customs.">
+
+  <!-- Halyard Display via Adobe Fonts -->
+  <link rel="stylesheet" href="https://use.typekit.net/sjv2mus.css">
+
+  <!-- Gabarito (body) via Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles.css">
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+</head>
+<body>
+
+  <div class="grid-line grid-line--left" aria-hidden="true"></div>
+  <div class="grid-line grid-line--right" aria-hidden="true"></div>
+
+  <!-- ======= NAV ======= -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo" aria-label="Round 2 Customs — home">
+        <img src="../assets/brand/r2c-logo.svg" alt="Round 2 Customs">
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- NAV OVERLAY MENU -->
+  <div class="nav-menu" id="nav-menu" aria-hidden="true">
+    <div class="nav-media" id="nav-media-cnc" aria-hidden="true">
+      <video muted loop playsinline preload="auto" src="../assets/animation/cnc-router.mp4"></video>
+    </div>
+    <ul>
+      <li><a href="../index.html#hero">Home</a></li>
+      <li><a href="../index.html#fully-custom">About</a></li>
+      <li><a href="../showroom.html">Showroom</a></li>
+      <li><a href="#contact" id="nav-link-custom-builder">Custom Builder</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ======= PROJECT HERO PHOTO ======= -->
+  <section class="project-hero">
+    <img src="../assets/images/retro-studio.jpg" alt="Retro Studio custom arcade build">
+  </section>
+
+  <!-- ======= PROJECT DETAIL ======= -->
+  <section class="project-content">
+    <a href="../showroom.html" class="project-back">&larr; Back to Showroom</a>
+    <h2>RETRO<br>STUDIO</h2>
+    <p>Lorem ipsum dolor sit amet consectetur. Et pretium eget ultrices placerat praesent et donec nullam. Dignissim fermentum tristique posuere aliquet amet at amet malesuada consequat.</p>
+    <a href="#contact" class="btn-primary">
+      <canvas class="btn-particle-canvas"></canvas>
+      START YOUR BUILD</a>
+  </section>
+
+  <!-- ======= CONTACT FORM ======= -->
+  <section class="contact" id="contact">
+    <div class="contact-header">
+      <h2>GET IN TOUCH</h2>
+      <p>Lorem ipsum dolor sit amet consectetur. Et pretium eget ultrices placerat praesent et donec nullam. Dignissim fermentum tristique posuere aliquet amet at amet malesuada consequat.</p>
+    </div>
+    <form class="contact-form" id="contact-form" novalidate>
+
+      <div class="form-row">
+        <div class="form-field">
+          <input type="text" name="name" placeholder="Name*" required autocomplete="name">
+        </div>
+        <div class="form-field">
+          <input type="email" name="email" placeholder="Email*" required autocomplete="email">
+        </div>
+        <div class="form-field">
+          <input type="tel" name="phone" placeholder="Phone" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="form-field form-field--textarea">
+        <textarea name="message" placeholder="Message*" required></textarea>
+      </div>
+
+      <!-- Honeypot — hidden from real users, bots that auto-fill every field trip it -->
+      <div class="form-honeypot" aria-hidden="true">
+        <label for="hp-website">Leave this field blank</label>
+        <input type="text" id="hp-website" name="hp_website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary submit-btn">
+          <canvas class="btn-particle-canvas"></canvas>
+          SEND MESSAGE
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-info">
+        <p class="footer-name">&copy;<span id="footer-year"></span> Round 2 Customs, LLC. All rights reserved.</p>
+        <address class="footer-address">
+          28144 W Industrial Ave,<br>Lake Barrington, IL 60010
+        </address>
+      </div>
+      <div class="footer-social">
+        <a href="https://www.tiktok.com/@arcadehead0" class="footer-social-link" aria-label="TikTok" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.6 5.82c-.85-.9-1.32-2.07-1.32-3.29h-3.1v14.29c0 1.61-1.31 2.92-2.92 2.92s-2.92-1.31-2.92-2.92 1.31-2.92 2.92-2.92c.31 0 .6.05.88.13v-3.15a6.06 6.06 0 0 0-.88-.06 6.02 6.02 0 1 0 6.02 6.02V9.4a8.99 8.99 0 0 0 5.02 1.52V7.83c-1.31 0-2.53-.42-3.5-1.13a4.6 4.6 0 0 1-.2-.88Z"/>
+          </svg>
+        </a>
+        <a href="https://www.instagram.com/round2customs/" class="footer-social-link" aria-label="Instagram" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="4.2"/>
+            <circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61584008270668" class="footer-social-link" aria-label="Facebook" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.5 21v-7.6h2.55l.38-2.96h-2.93V8.56c0-.86.24-1.44 1.47-1.44h1.57V4.47c-.27-.04-1.2-.12-2.28-.12-2.26 0-3.8 1.38-3.8 3.91v2.18H8.99v2.96h2.47V21h3.04Z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../scripts.js"></script>
+</body>
+</html>

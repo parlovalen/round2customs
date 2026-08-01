@@ -182,22 +182,206 @@ if (logoTrack && vendorsSection) {
 
 
 // ============================================================
+// GALLERY CARD CURSOR — a category pill follows the pointer in place of
+// the native cursor while hovering a project gallery tile. One shared
+// element fixed to the viewport (appended to <body>) so it renders above
+// everything instead of being clipped by a card's own overflow:hidden.
+// ============================================================
+const galleryCards = document.querySelectorAll('.gallery-card');
+
+if (galleryCards.length) {
+  const galleryCursor = document.createElement('span');
+  galleryCursor.className = 'gallery-cursor';
+  document.body.appendChild(galleryCursor);
+
+  galleryCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      galleryCursor.textContent = card.dataset.category || '';
+      galleryCursor.classList.add('is-active');
+    });
+
+    card.addEventListener('mousemove', e => {
+      galleryCursor.style.left = `${e.clientX}px`;
+      galleryCursor.style.top = `${e.clientY}px`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      galleryCursor.classList.remove('is-active');
+    });
+  });
+}
+
+
+// ============================================================
+// GALLERY MODAL — clicking a project gallery tile opens a lightbox on
+// that tile's collection (category). Left/right arrows switch between
+// collections, not individual photos; thumbnails switch photos within
+// the current collection.
+//
+// Each tile only shows one cover photo, but its full collection can hold
+// several — listed here by category. Placeholder sets reusing existing
+// site photos until real per-collection photography is ready.
+// ============================================================
+const GALLERY_COLLECTIONS = {
+  'Pinball Gallery': [
+    { src: 'assets/images/hero-pinball.png', alt: 'Custom pinball machine build' },
+    { src: 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build' },
+    { src: 'assets/images/vpin-noire.jpg', alt: 'VPIN Noire custom pinball build' },
+  ],
+  'Retro Gallery': [
+    { src: 'assets/images/theStudio.png', alt: 'R2C studio build' },
+    { src: 'assets/images/retro-studio.jpg', alt: 'Retro Studio custom arcade build' },
+    { src: 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
+  ],
+  'Custom Builds': [
+    { src: 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
+    { src: 'assets/images/apex-cosmic.jpg', alt: 'Apex Cosmic custom arcade build' },
+    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
+  ],
+  'Cocktail Cabinets': [
+    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet' },
+    { src: 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
+    { src: 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
+  ],
+  'Restorations': [
+    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
+    { src: 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
+    { src: 'assets/images/theStudio.png', alt: 'R2C studio build' },
+  ],
+  'Prop Builds': [
+    { src: 'assets/images/mario-bros-isolated.png', alt: 'Mario Bros arcade prop build' },
+    { src: 'assets/images/mario-bros.jpg', alt: 'Mario Bros custom arcade build' },
+    { src: 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
+  ],
+};
+
+const galleryModal = document.getElementById('gallery-modal');
+
+if (galleryCards.length && galleryModal) {
+  const modalImg    = document.getElementById('gallery-modal-img');
+  const modalTitle  = document.getElementById('gallery-modal-title');
+  const modalThumbs = document.getElementById('gallery-modal-thumbs');
+  const modalPrev   = document.getElementById('gallery-modal-prev');
+  const modalNext   = document.getElementById('gallery-modal-next');
+  const modalClose  = document.getElementById('gallery-modal-close');
+
+  const collectionNames = Object.keys(GALLERY_COLLECTIONS);
+  let collectionIndex = 0;
+  let imageIndex = 0;
+
+  function showImage(i) {
+    const images = GALLERY_COLLECTIONS[collectionNames[collectionIndex]];
+    imageIndex = (i + images.length) % images.length;
+    const item = images[imageIndex];
+    modalImg.src = item.src;
+    modalImg.alt = item.alt;
+    modalThumbs.querySelectorAll('.gallery-modal-thumb').forEach((thumb, ti) => {
+      thumb.classList.toggle('is-active', ti === imageIndex);
+    });
+  }
+
+  function renderThumbs(images) {
+    modalThumbs.innerHTML = '';
+    images.forEach((item, i) => {
+      const thumb = document.createElement('button');
+      thumb.type = 'button';
+      thumb.className = 'gallery-modal-thumb';
+      thumb.innerHTML = `<img src="${item.src}" alt="${item.alt}">`;
+      thumb.addEventListener('click', () => showImage(i));
+      modalThumbs.appendChild(thumb);
+    });
+  }
+
+  // direction: 0 = no animation (opening the modal), 1 = next (slide from
+  // the right), -1 = prev (slide from the left)
+  function showCollection(ci, direction = 0) {
+    collectionIndex = (ci + collectionNames.length) % collectionNames.length;
+    const category = collectionNames[collectionIndex];
+    const images = GALLERY_COLLECTIONS[category];
+
+    modalTitle.textContent = category;
+    renderThumbs(images);
+
+    if (!direction) {
+      showImage(0);
+      return;
+    }
+
+    const exitX  = direction > 0 ? -32 : 32;
+    const enterX = -exitX;
+    const slideDuration = 250;
+
+    modalImg.style.transition = `transform ${slideDuration}ms ease, opacity ${slideDuration}ms ease`;
+    modalImg.style.transform = `translateX(${exitX}px)`;
+    modalImg.style.opacity = '0';
+
+    window.setTimeout(() => {
+      showImage(0);
+      modalImg.style.transition = 'none';
+      modalImg.style.transform = `translateX(${enterX}px)`;
+      void modalImg.offsetWidth; // force reflow so the enter position applies before animating
+      modalImg.style.transition = `transform ${slideDuration}ms ease, opacity ${slideDuration}ms ease`;
+      modalImg.style.transform = 'translateX(0)';
+      modalImg.style.opacity = '1';
+    }, slideDuration);
+  }
+
+  function openGalleryModal(category) {
+    showCollection(collectionNames.indexOf(category), 0);
+    galleryModal.classList.add('is-open');
+    galleryModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGalleryModal() {
+    galleryModal.classList.remove('is-open');
+    galleryModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  galleryCards.forEach(card => {
+    card.addEventListener('click', e => {
+      e.preventDefault();
+      openGalleryModal(card.dataset.category);
+    });
+  });
+
+  modalPrev.addEventListener('click', () => showCollection(collectionIndex - 1, -1));
+  modalNext.addEventListener('click', () => showCollection(collectionIndex + 1, 1));
+  modalClose.addEventListener('click', closeGalleryModal);
+
+  galleryModal.addEventListener('click', e => {
+    if (e.target === galleryModal) closeGalleryModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!galleryModal.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeGalleryModal();
+    if (e.key === 'ArrowLeft') showCollection(collectionIndex - 1, -1);
+    if (e.key === 'ArrowRight') showCollection(collectionIndex + 1, 1);
+  });
+}
+
+
+// ============================================================
 // NAV TOGGLE
 // ============================================================
 const navToggle = document.getElementById('nav-toggle');
 const navMenu   = document.getElementById('nav-menu');
 
-navToggle.addEventListener('click', () => {
-  const isOpen = navToggle.classList.toggle('is-open');
-  navMenu.classList.toggle('is-open', isOpen);
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-  navMenu.setAttribute('aria-hidden', String(!isOpen));
-  document.body.style.overflow = isOpen ? 'hidden' : '';
-});
+if (navToggle && navMenu) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = navToggle.classList.toggle('is-open');
+    navMenu.classList.toggle('is-open', isOpen);
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    navMenu.setAttribute('aria-hidden', String(!isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
 
-navMenu.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', closeMenu);
-});
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+}
 
 
 
@@ -241,120 +425,122 @@ function closeMenu() {
 // Drop files into assets/images/ and add entries to this array.
 // Index 2 (the 3rd slide) is the studio shot — it's also where `current`
 // starts, so the carousel opens centered on it.
-const slides = [
-  { src: 'assets/images/hero-pinball.png', alt: 'Custom pinball machine', name: 'ARCADE<br>PINBALL' },
-  { src: 'assets/images/classic-vpin.png', alt: 'Classic Virtual Pin build', name: 'CLASSIC<br>V-PIN' },
-  { src: 'assets/images/theStudio.png', alt: 'R2C studio build', name: 'THE<br>STUDIO' },
-  { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet', name: 'THE<br>APEX' },
-  { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT' },
-];
-
-let current = 2; // start on the 3rd slide
-const total  = slides.length;
-
 const carouselTrack = document.getElementById('carousel-track');
 const paginationEl  = document.getElementById('carousel-pagination');
+const carouselEl    = document.getElementById('carousel');
 
-// build one <li><img><label></li> per slide and stack them all at dead
-// center; renderCarousel() below positions each one by its distance from
-// `current`. The name label travels with its slide but only shows when
-// that slide is centered.
-const slideEls = slides.map(({ src, alt, name }) => {
-  const li = document.createElement('li');
-  li.className = 'carousel-slide';
+if (carouselTrack && paginationEl && carouselEl) {
+  const slides = [
+    { src: 'assets/images/hero-pinball.png', alt: 'Custom pinball machine', name: 'ARCADE<br>PINBALL' },
+    { src: 'assets/images/classic-vpin.png', alt: 'Classic Virtual Pin build', name: 'CLASSIC<br>V-PIN' },
+    { src: 'assets/images/theStudio.png', alt: 'R2C studio build', name: 'THE<br>STUDIO' },
+    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet', name: 'THE<br>APEX' },
+    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT' },
+  ];
 
-  const img = document.createElement('img');
-  img.src = src;
-  img.alt = alt;
-  li.appendChild(img);
+  let current = 2; // start on the 3rd slide
+  const total  = slides.length;
 
-  const label = document.createElement('div');
-  label.className = 'studio-label';
-  label.innerHTML = `<h2>${name}</h2>`;
-  li.appendChild(label);
-  li._label = label;
+  // build one <li><img><label></li> per slide and stack them all at dead
+  // center; renderCarousel() below positions each one by its distance from
+  // `current`. The name label travels with its slide but only shows when
+  // that slide is centered.
+  const slideEls = slides.map(({ src, alt, name }) => {
+    const li = document.createElement('li');
+    li.className = 'carousel-slide';
 
-  carouselTrack.appendChild(li);
-  return li;
-});
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = alt;
+    li.appendChild(img);
 
-function idx(n) { return ((n % total) + total) % total; }
+    const label = document.createElement('div');
+    label.className = 'studio-label';
+    label.innerHTML = `<h2>${name}</h2>`;
+    li.appendChild(label);
+    li._label = label;
 
-// signed distance from `current`, wrapped into range e.g. -2..2 for 5 slides
-function distanceFrom(i) {
-  let d = (i - current + total) % total;
-  if (d > total / 2) d -= total;
-  return d;
-}
-
-function renderCarousel(animate = true) {
-  slideEls.forEach((el, i) => {
-    const d = distanceFrom(i);
-    let xPercent, scale, opacity, zIndex;
-
-    if (d === 0) {
-      xPercent = 0; scale = 1; opacity = 1; zIndex = 30;
-      el.dataset.role = 'center';
-    } else if (Math.abs(d) === 1) {
-      xPercent = d * 72; scale = 0.576; opacity = 0.5; zIndex = 20;
-      el.dataset.role = d === -1 ? 'prev' : 'next';
-    } else {
-      xPercent = d * 144; scale = 0.5; opacity = 0; zIndex = 10;
-      el.dataset.role = 'far';
-    }
-
-    gsap.to(el, { xPercent, scale, opacity, zIndex, duration: animate ? 0.6 : 0, ease: 'power2.out' });
-    gsap.to(el._label, { opacity: d === 0 ? 1 : 0, duration: animate ? 0.3 : 0, ease: 'power1.out' });
+    carouselTrack.appendChild(li);
+    return li;
   });
 
-  paginationEl.querySelectorAll('.pagination-dot').forEach((dot, i) => {
-    dot.classList.toggle('is-active', i === current);
-    dot.setAttribute('aria-selected', String(i === current));
-  });
-}
+  const idx = n => ((n % total) + total) % total;
 
-function goTo(n) {
-  current = idx(n);
-  renderCarousel();
-}
-
-function initCarousel() {
-  slides.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'pagination-dot' + (i === 0 ? ' is-active' : '');
-    dot.setAttribute('role', 'tab');
-    dot.setAttribute('aria-label', `Slide ${i + 1}`);
-    dot.setAttribute('aria-selected', String(i === 0));
-    dot.addEventListener('click', () => goTo(i));
-    paginationEl.appendChild(dot);
-  });
-
-  // clicking any visible side slide brings it to center
-  slideEls.forEach((el, i) => el.addEventListener('click', () => goTo(i)));
-
-  renderCarousel(false); // set initial positions instantly, no animation
-}
-
-// Drag/swipe support — a proxy just measures the gesture; the slides
-// themselves are driven entirely by renderCarousel(), not by drag position.
-const carouselEl = document.getElementById('carousel');
-const carouselDragProxy = document.createElement('div');
-carouselDragProxy.style.visibility = 'hidden';
-carouselDragProxy.style.position = 'absolute';
-carouselEl.appendChild(carouselDragProxy);
-
-Draggable.create(carouselDragProxy, {
-  type: 'x',
-  trigger: carouselEl,
-  onDragEnd() {
-    if (this.x < -50) goTo(current + 1);
-    else if (this.x > 50) goTo(current - 1);
-    this.x = 0;
-    gsap.set(carouselDragProxy, { x: 0 });
+  // signed distance from `current`, wrapped into range e.g. -2..2 for 5 slides
+  function distanceFrom(i) {
+    let d = (i - current + total) % total;
+    if (d > total / 2) d -= total;
+    return d;
   }
-});
 
-initCarousel();
+  function renderCarousel(animate = true) {
+    slideEls.forEach((el, i) => {
+      const d = distanceFrom(i);
+      let xPercent, scale, opacity, zIndex;
+
+      if (d === 0) {
+        xPercent = 0; scale = 1; opacity = 1; zIndex = 30;
+        el.dataset.role = 'center';
+      } else if (Math.abs(d) === 1) {
+        xPercent = d * 72; scale = 0.576; opacity = 0.5; zIndex = 20;
+        el.dataset.role = d === -1 ? 'prev' : 'next';
+      } else {
+        xPercent = d * 144; scale = 0.5; opacity = 0; zIndex = 10;
+        el.dataset.role = 'far';
+      }
+
+      gsap.to(el, { xPercent, scale, opacity, zIndex, duration: animate ? 0.6 : 0, ease: 'power2.out' });
+      gsap.to(el._label, { opacity: d === 0 ? 1 : 0, duration: animate ? 0.3 : 0, ease: 'power1.out' });
+    });
+
+    paginationEl.querySelectorAll('.pagination-dot').forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === current);
+      dot.setAttribute('aria-selected', String(i === current));
+    });
+  }
+
+  function goTo(n) {
+    current = idx(n);
+    renderCarousel();
+  }
+
+  function initCarousel() {
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'pagination-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Slide ${i + 1}`);
+      dot.setAttribute('aria-selected', String(i === 0));
+      dot.addEventListener('click', () => goTo(i));
+      paginationEl.appendChild(dot);
+    });
+
+    // clicking any visible side slide brings it to center
+    slideEls.forEach((el, i) => el.addEventListener('click', () => goTo(i)));
+
+    renderCarousel(false); // set initial positions instantly, no animation
+  }
+
+  // Drag/swipe support — a proxy just measures the gesture; the slides
+  // themselves are driven entirely by renderCarousel(), not by drag position.
+  const carouselDragProxy = document.createElement('div');
+  carouselDragProxy.style.visibility = 'hidden';
+  carouselDragProxy.style.position = 'absolute';
+  carouselEl.appendChild(carouselDragProxy);
+
+  Draggable.create(carouselDragProxy, {
+    type: 'x',
+    trigger: carouselEl,
+    onDragEnd() {
+      if (this.x < -50) goTo(current + 1);
+      else if (this.x > 50) goTo(current - 1);
+      this.x = 0;
+      gsap.set(carouselDragProxy, { x: 0 });
+    }
+  });
+
+  initCarousel();
+}
 
 // ============================================================
 // CONTACT FORM — EmailJS
@@ -369,66 +555,69 @@ initCarousel();
 //   4. Go to Account → Public Key → copy it
 //   5. Replace the three placeholder strings below
 // ============================================================
-const EMAILJS_PUBLIC_KEY  = 'ZMJXhKl-QLGxzYyUC';
-const EMAILJS_SERVICE_ID  = 'service_efzlosd';
-const EMAILJS_TEMPLATE_ID = 'template_wyxcbdb';
+const form = document.getElementById('contact-form');
 
-emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+if (form) {
+  const EMAILJS_PUBLIC_KEY  = 'ZMJXhKl-QLGxzYyUC';
+  const EMAILJS_SERVICE_ID  = 'service_efzlosd';
+  const EMAILJS_TEMPLATE_ID = 'template_wyxcbdb';
 
-const form       = document.getElementById('contact-form');
-const submitBtn  = form.querySelector('.submit-btn');
+  emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
-function validateForm() {
-  let valid = true;
-  form.querySelectorAll('[required]').forEach(field => {
-    const empty = !field.value.trim();
-    field.style.borderColor = empty ? 'var(--terracotta)' : '';
-    if (empty) valid = false;
-  });
-  return valid;
-}
+  const submitBtn = form.querySelector('.submit-btn');
 
-form.querySelectorAll('[required]').forEach(field => {
-  field.addEventListener('input', () => {
-    if (field.value.trim()) field.style.borderColor = '';
-  });
-});
-
-form.addEventListener('submit', e => {
-  e.preventDefault();
-
-  // Honeypot — real users never fill this (it's visually hidden); if it
-  // has a value, silently pretend to succeed so the bot doesn't retry
-  const honeypot = form.querySelector('[name="hp_website"]');
-  if (honeypot && honeypot.value.trim()) {
-    form.innerHTML = `
-      <div class="form-success">
-        <p>Message received. We'll be in touch shortly.</p>
-      </div>
-    `;
-    return;
+  function validateForm() {
+    let valid = true;
+    form.querySelectorAll('[required]').forEach(field => {
+      const empty = !field.value.trim();
+      field.style.borderColor = empty ? 'var(--terracotta)' : '';
+      if (empty) valid = false;
+    });
+    return valid;
   }
 
-  if (!validateForm()) return;
+  form.querySelectorAll('[required]').forEach(field => {
+    field.addEventListener('input', () => {
+      if (field.value.trim()) field.style.borderColor = '';
+    });
+  });
 
-  const originalHTML = submitBtn.innerHTML;
-  submitBtn.textContent = 'SENDING…';
-  submitBtn.disabled = true;
+  form.addEventListener('submit', e => {
+    e.preventDefault();
 
-  emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form)
-    .then(() => {
+    // Honeypot — real users never fill this (it's visually hidden); if it
+    // has a value, silently pretend to succeed so the bot doesn't retry
+    const honeypot = form.querySelector('[name="hp_website"]');
+    if (honeypot && honeypot.value.trim()) {
       form.innerHTML = `
         <div class="form-success">
           <p>Message received. We'll be in touch shortly.</p>
         </div>
       `;
-    })
-    .catch(() => {
-      submitBtn.innerHTML = originalHTML;
-      submitBtn.disabled = false;
-      alert('Something went wrong — please try again or email us directly.');
-    });
-});
+      return;
+    }
+
+    if (!validateForm()) return;
+
+    const originalHTML = submitBtn.innerHTML;
+    submitBtn.textContent = 'SENDING…';
+    submitBtn.disabled = true;
+
+    emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form)
+      .then(() => {
+        form.innerHTML = `
+          <div class="form-success">
+            <p>Message received. We'll be in touch shortly.</p>
+          </div>
+        `;
+      })
+      .catch(() => {
+        submitBtn.innerHTML = originalHTML;
+        submitBtn.disabled = false;
+        alert('Something went wrong — please try again or email us directly.');
+      });
+  });
+}
 
 // ============================================================
 

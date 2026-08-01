@@ -13,9 +13,16 @@ Marketing site for Round 2 Customs, a custom arcade machine builder. Static HTML
 ## Project structure
 
 ```
-index.html          Single-page markup — nav, hero, sections, contact form, footer
+index.html          Homepage — nav, hero, sections, contact form, footer
+showroom.html        Showroom page — recent project stories grid (6 build cards), contact form
+projects/             One page per recent project story (linked from the showroom cards):
+                      vpin-classic, apex-cosmic, vpin-noire, retro-studio, steam-pedestal,
+                      retro-3rd-strike. Placeholder body copy — swap in real project stories.
+                      Each also has its own contact form.
 styles.css           All styles, including responsive breakpoints (see comments)
-scripts.js           All page behavior (nav, carousel, form, animations)
+scripts.js           All page behavior (nav, carousel, form, animations) — shared across pages,
+                      each section guards for the elements it needs so pages without a
+                      carousel/contact form don't error
 gallery.js            GSAP card-gallery demo, currently unused (display:none in CSS)
 assets/
   brand/              Logo
@@ -35,6 +42,8 @@ python3 -m http.server 8000
 Then open `http://localhost:8000`.
 
 ## Contact form (EmailJS)
+
+The contact form (`#contact`) is a global element — it's duplicated on every page (homepage, showroom, and each project detail page), each with its own EmailJS SDK `<script>` tag and `id="contact-form"`. `scripts.js` is shared across all pages and wires up whichever form it finds. Nav "Custom Builder"/"Contact" links point to `#contact` on the current page rather than back to the homepage.
 
 The form is wired to EmailJS — see the `CONTACT FORM — EmailJS` section near the bottom of `scripts.js` for the three credentials (`EMAILJS_PUBLIC_KEY`, `EMAILJS_SERVICE_ID`, `EMAILJS_TEMPLATE_ID`).
 

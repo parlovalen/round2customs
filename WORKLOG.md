@@ -1,5 +1,28 @@
 # Worklog
 
+## 2026-08-01 — Project Gallery bento section + lightbox modal
+
+- Added a "Project Gallery" section to `showroom.html`, below Recent Project Stories: a bento-style mosaic (one large tile + an uneven-then-equal 2-row column, matching a Figma layout) built with fluid flexbox ratios instead of the design's fixed pixel widths so it holds up at any viewport. Tiles show a category (e.g. "Pinball Gallery") via a pointer-following pill — a single shared `position: fixed` element (not per-tile) so it renders above everything instead of being clipped by a tile's own `overflow: hidden`.
+- Clicking a tile opens a lightbox: dark blurred backdrop, large image with a title (the collection name) top-left, thumbnail strip, and left/right pixel-arrow controls recreated from the Figma "8bit-arrow"/"close" cursor components (node 56:78) used on the studio carousel — bare icons, no button chrome, terracotta by default, white on hover.
+- Collections vs. photos, an important distinction: each tile represents a whole category, not a single photo. Arrows/keyboard cycle between *collections* (title + thumbnail strip both change, with a slide transition), while clicking a thumbnail only swaps the photo within the current collection (no slide, no title change). `GALLERY_COLLECTIONS` in `scripts.js` currently seeds each of the 6 categories with 3 placeholder photos reused from existing site assets — swap in real per-category photography when it's ready.
+- Iterated on styling per feedback: section background/tile colors flip-flopped between light and dark a few times before landing on light grey section + dark tiles; gaps standardized to 16px throughout both this section and Recent Project Stories; image hover gets a 1.12x zoom-in.
+
+## 2026-08-01 — Contact form made global
+
+- The contact form previously only existed on the homepage; every other page's "Custom Builder"/"Contact" links and CTAs routed back to `index.html#contact`. Made it a true global element instead: duplicated the full `#contact` section (form, honeypot, EmailJS SDK script tag) onto `showroom.html` and all 6 `projects/*.html` pages, and repointed their nav links and "Start Your Build" CTAs to the local `#contact` on the same page.
+- `scripts.js` already guarded the form-handling block on `document.getElementById('contact-form')`, so no JS changes were needed — it just now finds and wires up a form on every page.
+
+## 2026-08-01 — Recent project stories section + detail pages
+
+- Built the "Recent Project Stories" section from a Figma design (2-column card grid, 6 cards, dark-photo cards with the build name pinned bottom-left, terracotta border on hover). Initially placed it on the homepage; moved it to `showroom.html` instead (replacing its "coming soon" placeholder) since that's the page it's actually gallery content for — the homepage now just has a compact "Explore More Builds" teaser button linking to the showroom.
+- Each card links to a dedicated page under `projects/` — one per real project name supplied (VPIN Classic, Apex Cosmic, VPIN Noire, Retro Studio, Steam Pedestal, Retro 3rd Strike), using the matching photos dropped into `assets/images/`. Each detail page reuses the shared nav/footer, a new full-width `.project-hero` photo band, and a `.project-content` block with title, placeholder story copy (matches the site's existing lorem-ipsum convention elsewhere), a back-to-showroom link, and a "Start Your Build" CTA into the homepage contact section.
+- New CSS: `.showroom-teaser` for the homepage CTA, `.project-stories-label`/`.project-grid`/`.project-card` for the card grid (now on the showroom page), `.project-hero`/`.project-content`/`.project-back` for the detail-page template — all responsive at the existing 1024/768 breakpoints. Removed the now-unused `.showroom-grid`/`.showroom-empty` placeholder CSS.
+
+## 2026-08-01 — Showroom page
+
+- Site is now multi-page: added `showroom.html` (nav "Showroom" link now points here instead of the homepage carousel anchor). Page shell only — page header + an empty `.showroom-grid` with a placeholder message and "Get in touch" CTA, ready for real build entries later.
+- `scripts.js` is shared across pages, but several sections (studio carousel, contact form/EmailJS) assumed their elements always existed and would throw on a page that doesn't have them. Wrapped those sections in existence checks so the same script file works on pages with a subset of the homepage's sections. Nav toggle, footer year, button hover effect, parallax, and scroll-reveal were already guarded or safe to run without their target elements.
+
 ## 2026-08-01 — Mobile responsive pass, footer, contact form hardening
 
 Starting point: desktop-only design (zero media queries), pixel-grid button hover effect already in place.
