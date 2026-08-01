@@ -236,7 +236,7 @@ function renderCarousel(animate = true) {
       xPercent = 0; scale = 1; opacity = 1; zIndex = 30;
       el.dataset.role = 'center';
     } else if (Math.abs(d) === 1) {
-      xPercent = d * 72; scale = 0.576; opacity = 0.3; zIndex = 20;
+      xPercent = d * 72; scale = 0.576; opacity = 0.5; zIndex = 20;
       el.dataset.role = d === -1 ? 'prev' : 'next';
     } else {
       xPercent = d * 144; scale = 0.5; opacity = 0; zIndex = 10;
@@ -506,7 +506,16 @@ class ButtonPixelGridEffect {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const pixelEffects = [];
   document.querySelectorAll('.btn-primary').forEach(button => {
-    new ButtonPixelGridEffect(button);
+    pixelEffects.push(new ButtonPixelGridEffect(button));
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      pixelEffects.forEach(effect => effect.setupCanvas());
+    }, 200);
   });
 });
