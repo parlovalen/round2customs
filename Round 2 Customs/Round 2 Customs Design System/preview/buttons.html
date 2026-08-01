@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#000;color:#fff;font-family:var(--font-body)}
+  .wrap{padding:28px 32px;display:flex;flex-direction:column;gap:18px}
+  .btns{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{font-family:'Onest',sans-serif;text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:500;padding:20px 28px;border-radius:0;border:0;cursor:pointer;line-height:1}
+  .primary{background:#D65E38;color:#fff;box-shadow:0 0 24px rgba(214,94,56,.45)}
+  .primary:hover{background:#F07248}
+  .ghost{background:transparent;color:#fff;border:1px solid #2A2A2E}
+  .ghost:hover{border-color:#D65E38;color:#D65E38}
+  .pixel{background:transparent;color:#E7BE44;border:1px dashed #E7BE44;font-family:var(--font-pixel);font-size:9px;letter-spacing:0;padding:18px 22px;font-weight:400;text-transform:none}
+  .lbl{font-size:11px;color:var(--r2c-ash);letter-spacing:.18em;text-transform:uppercase}
+</style></head>
+<body><div class="wrap">
+  <div class="lbl">Buttons</div>
+  <div class="btns">
+    <button class="btn primary">START YOUR QUEST →</button>
+    <button class="btn ghost">VIEW BUILDS</button>
+    <button class="btn pixel">+1 CREDIT</button>
+  </div>
+  <div class="btns">
+    <button class="btn primary" disabled style="opacity:.5;box-shadow:none">SOLD OUT</button>
+    <button class="btn ghost">CONTACT</button>
+  </div>
+</div></body></html>

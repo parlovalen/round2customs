@@ -1,0 +1,15 @@
+{
+  "tool_calls": {
+    "Write": 1,
+    "mcp__workspace__bash": 3,
+    "mcp__workspace__web_fetch": 1
+  },
+  "total_tool_calls": 5,
+  "total_steps": 1,
+  "files_created": [
+    "competitor-analysis.md"
+  ],
+  "errors_encountered": 2,
+  "output_chars": 9361,
+  "transcript_chars": 0
+}

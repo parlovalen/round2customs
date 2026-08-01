@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>R2C Intel Hub</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    html, body { overflow: hidden; height: 100%; }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background: #0C0C0D;
+    }
+
+    /* Background grid */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(90deg, transparent, transparent 59px,
+          rgba(255,255,255,0.02) 59px, rgba(255,255,255,0.02) 60px),
+        repeating-linear-gradient(0deg, transparent, transparent 59px,
+          rgba(255,255,255,0.02) 59px, rgba(255,255,255,0.02) 60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .splash-header, .splash-main, .splash-footer { position: relative; z-index: 1; }
+
+    /* ── HEADER ── */
+    .splash-header {
+      flex-shrink: 0;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      padding: 0 50px;
+      border-bottom: 1px solid rgba(230,227,208,0.1);
+      gap: 24px;
+    }
+
+    .splash-logo-img {
+      height: 25px;
+      width: auto;
+      display: block;
+    }
+
+    .splash-logo-text { display: none; }
+    .splash-logo-text .mark {
+      font-family: 'Michroma', sans-serif;
+      font-size: 16px;
+      color: #E6E3D0;
+      line-height: 1;
+    }
+    .splash-logo-text .mark em { font-style: normal; color: #D65E38; }
+
+    .header-divider {
+      width: 1px;
+      height: 16px;
+      background: rgba(230,227,208,0.2);
+    }
+
+    .header-sub {
+      font-family: 'Onest', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(230,227,208,0.5);
+    }
+
+    /* ── MAIN ── */
+    .splash-main {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 80px;
+    }
+
+    .splash-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    /* ── INTRO TEXT ── */
+    .splash-intro {
+      text-align: center;
+      width: 100%;
+      max-width: 1012px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .intro-headline {
+      font-family: 'Michroma', sans-serif;
+      font-size: 32px;
+      text-transform: uppercase;
+      line-height: 1.2;
+      color: #E6E3D0;
+    }
+    .intro-headline em { font-style: normal; color: #D65E38; }
+
+    .intro-subline {
+      font-family: 'Onest', sans-serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: #818080;
+      line-height: 28px;
+      letter-spacing: 0.17px;
+    }
+
+    /* ── CARD SET ── */
+    .splash-cards-wrap {
+      width: 100%;
+    }
+
+    .splash-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid rgba(230,227,208,0.15);
+    }
+
+    /* ── CARDS ── */
+    .hub-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 32px;
+      border-right: 1px solid rgba(230,227,208,0.15);
+      border-bottom: 1px solid rgba(230,227,208,0.15);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+      cursor: pointer;
+      background: #0C0C0D;
+    }
+
+    /* Right column: no right border */
+    .hub-card:nth-child(even) { border-right: none; }
+    /* Bottom row: no bottom border */
+    .hub-card:nth-child(n+3) { border-bottom: none; }
+
+    /* Accent stripe — draws in from left on hover */
+    .hub-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--card-color, rgba(230,227,208,0.3));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .hub-card:hover::before { transform: scaleX(1); }
+
+    /* Bloom glow */
+    .hub-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 30% 0%,
+        var(--card-glow, rgba(230,227,208,0.03)) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .hub-card:hover::after { opacity: 1; }
+    .hub-card:hover { background: rgba(255,255,255,0.02); }
+
+    .hub-card.today       { --card-color: #D65E38; --card-glow: rgba(214,94,56,0.06); }
+    .hub-card.trends      { --card-color: #E7BE44; --card-glow: rgba(231,190,68,0.06); }
+    .hub-card.competitive { --card-color: #D65E38; --card-glow: rgba(214,94,56,0.06); }
+    .hub-card.content     { --card-color: #59A9CC; --card-glow: rgba(89,169,204,0.06); }
+
+    /* Card content */
+    .hub-card-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hub-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Icon box */
+    .hub-card-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+    .hub-card-icon i { font-size: 20px; }
+
+    .hub-card.today .hub-card-icon       { color: #D65E38; border-color: rgba(214,94,56,0.3);   background: rgba(214,94,56,0.06); }
+    .hub-card.trends .hub-card-icon      { color: #E7BE44; border-color: rgba(231,190,68,0.3);  background: rgba(231,190,68,0.06); }
+    .hub-card.competitive .hub-card-icon { color: #D65E38; border-color: rgba(214,94,56,0.3);   background: rgba(214,94,56,0.06); }
+    .hub-card.content .hub-card-icon     { color: #59A9CC; border-color: rgba(89,169,204,0.3);  background: rgba(89,169,204,0.06); }
+
+    .hub-card-title {
+      font-family: 'Michroma', sans-serif;
+      font-size: 20px;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .hub-card-desc {
+      font-family: 'Onest', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: #818080;
+      line-height: 28px;
+      letter-spacing: 0.17px;
+    }
+
+
+    /* ── FOOTER ── */
+    .splash-footer {
+      flex-shrink: 0;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 50px;
+      border-top: 1px solid rgba(230,227,208,0.1);
+      background: #0C0C0D;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Onest', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(230,227,208,0.5);
+    }
+    .footer-item i { width: 16px; height: 16px; }
+    .footer-item.synced { color: #59CC98; opacity: 1; }
+
+    .footer-right {
+      font-family: 'Onest', sans-serif;
+      font-size: 13px;
+      color: rgba(230,227,208,0.5);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="splash-header">
+    <img
+      class="splash-logo-img"
+      src="../Round%202%20Customs%20Design%20System/assets/r2c-logo.svg"
+      alt="Round 2 Customs"
+      onerror="this.style.display='none'; document.querySelector('.splash-logo-text').style.display='block'">
+    <div class="splash-logo-text">
+      <div class="mark">ROUND <em>2</em> CUSTOMS</div>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-sub">Intelligence Hub</div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main class="splash-main">
+  <div class="splash-content">
+
+    <div class="splash-intro">
+      <div class="intro-headline">Your market, <em>always in view.</em></div>
+      <div class="intro-subline">All your automated reports — competitor analysis, market trends, and content strategy — surfaced in one place.</div>
+    </div>
+
+    <div class="splash-cards-wrap">
+      <div class="splash-cards">
+
+        <a href="today.html" class="hub-card today">
+          <div class="hub-card-top">
+            <div class="hub-card-header">
+              <div class="hub-card-icon"><i data-lucide="activity"></i></div>
+              <div class="hub-card-title">R2C Today</div>
+            </div>
+            <div class="hub-card-desc">Daily snapshot of R2C's market position — key metrics, overnight changes, and priority alerts from across all intelligence modules.</div>
+          </div>
+        </a>
+
+        <a href="trends.html" class="hub-card trends">
+          <div class="hub-card-top">
+            <div class="hub-card-header">
+              <div class="hub-card-icon"><i data-lucide="trending-up"></i></div>
+              <div class="hub-card-title">Market Intelligence</div>
+            </div>
+            <div class="hub-card-desc">Platform-by-platform trend analysis across YouTube, TikTok, Instagram, and more. Ranked content opportunities with demand and velocity scores.</div>
+          </div>
+        </a>
+
+        <a href="competitive.html" class="hub-card competitive">
+          <div class="hub-card-top">
+            <div class="hub-card-header">
+              <div class="hub-card-icon"><i data-lucide="crosshair"></i></div>
+              <div class="hub-card-title">Competitor Analysis</div>
+            </div>
+            <div class="hub-card-desc">Deep profiles on 7 competing custom arcade manufacturers. Gaps, pain points, pricing, and strategic positioning — updated monthly.</div>
+          </div>
+        </a>
+
+        <a href="content.html" class="hub-card content">
+          <div class="hub-card-top">
+            <div class="hub-card-header">
+              <div class="hub-card-icon"><i data-lucide="calendar-days"></i></div>
+              <div class="hub-card-title">Content Schedule</div>
+            </div>
+            <div class="hub-card-desc">2-week social media content plan with ranked ideas for TikTok, Instagram, and Facebook. Platform-specific formats, hooks, and opportunity scores.</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="splash-footer">
+    <div class="footer-left">
+      <div class="footer-item synced">
+        <i data-lucide="check-circle-2"></i>
+        2 reports synced
+      </div>
+      <div class="footer-item">
+        <i data-lucide="calendar"></i>
+        Reports as of May 2, 2026
+      </div>
+      <div class="footer-item">
+        <i data-lucide="refresh-cw"></i>
+        Next refresh: May 16, 2026
+      </div>
+    </div>
+    <div class="footer-right">R2C Intel Hub v1.0 — May 2026</div>
+  </footer>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

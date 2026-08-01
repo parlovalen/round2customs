@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#000;color:#fff;font-family:var(--font-body);overflow:hidden}
+  .stage{position:relative;height:340px;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .smoke{position:absolute;inset:0;pointer-events:none}
+  .smoke::before,.smoke::after{content:"";position:absolute;width:480px;height:380px;border-radius:50%;filter:blur(80px);opacity:.45}
+  .smoke::before{left:-100px;top:-20px;background:#D63384}
+  .smoke::after{right:-100px;top:-20px;background:#59A9CC}
+  .center{position:relative;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 24px}
+  .eb{font-family:'Onest',sans-serif;font-size:11px;letter-spacing:.32em;color:#D65E38;font-weight:500;text-transform:uppercase}
+  .h{font-family:'Michroma',sans-serif;font-size:56px;letter-spacing:.06em;line-height:1;margin:0}
+  .h .red{color:#D65E38}
+  .sub{color:#C9C9CE;font-size:14px;max-width:480px;line-height:1.6;margin:0}
+</style></head>
+<body>
+<div class="stage">
+  <div class="smoke"></div>
+  <div class="center">
+    <div class="eb">Insert Coin</div>
+    <h1 class="h">PRESS <span class="red">START</span></h1>
+    <p class="sub">Handcrafted, premium arcade machines tailored to your style.</p>
+  </div>
+</div>
+</body></html>

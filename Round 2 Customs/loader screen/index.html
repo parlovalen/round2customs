@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Round 2 Customs — Insert Coin</title>
+<meta name="description" content="Round 2 Customs — clear the logo before the clock runs out." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Onest:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div id="stage">
+    <div id="cabinet">
+      <canvas id="game" aria-label="Round 2 Customs arcade game"></canvas>
+
+      <div id="hint" class="pixel-font">
+        <span class="hint-item"><span class="key">◄</span><span class="key">►</span><span>MOVE</span></span>
+        <span class="hint-sep">/</span>
+        <span class="hint-item" id="hintShoot"><span class="key">SPACE</span><span>SHOOT</span></span>
+        <span class="hint-sep">/</span>
+        <span class="hint-item"><span class="key">P</span><span>PAUSE</span></span>
+        <span class="hint-sep">/</span>
+        <span class="hint-item"><span class="key">ESC</span><span>ENTER SITE</span></span>
+        <span class="hint-sep">/</span>
+        <span class="hint-item"><span class="key">M</span><span>MUTE</span></span>
+      </div>
+
+      <button id="skipBtn" class="pixel-font" type="button">ENTER SITE ►</button>
+    </div>
+
+    <p id="fallback" class="pixel-font">
+      THIS GAME NEEDS A KEYBOARD.<br />
+      <a href="#" id="fallbackLink">TAP HERE TO ENTER SITE</a>
+    </p>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

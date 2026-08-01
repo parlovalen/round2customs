@@ -1,0 +1,177 @@
+/* =============================================================
+   ROUND 2 CUSTOMS — Colors & Type
+   Premium custom arcade cabinets. Dark backgrounds, neon accents.
+   ============================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Onest:wght@300;400;500;600;700&display=swap');
+
+/* Optional pixel/retro accent face — used sparingly (e.g. CRT email line on
+   business card). Press Start 2P is a free pixel font that matches the
+   look of the pixel email line on the brand collateral. */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  /* ---------- BRAND COLORS ----------
+     Pulled from the logo, business card and banner.
+     The brand lives on near-black with neon accents. */
+
+  /* Backgrounds — true arcade-cabinet black */
+  --r2c-black:        #000000;   /* primary canvas */
+  --r2c-ink:          #0A0A0B;   /* near-black surface */
+  --r2c-pitch:        #0C0C0D;   /* surface tier between ink + graphite */
+  --r2c-graphite:     #141416;   /* card / panel */
+  --r2c-slate:        #1F1F22;   /* elevated panel */
+  --r2c-line:         #2A2A2E;   /* hairline border on dark */
+
+  /* Foregrounds */
+  --r2c-bone:         #FFFFFF;   /* primary text on dark */
+  --r2c-parchment:    #E6E3D0;   /* warm off-white \u2014 alt body text / arcade marquee */
+  --r2c-fog:          #C9C9CE;   /* secondary text */
+  --r2c-ash:          #8A8A92;   /* tertiary / meta */
+  --r2c-dim:          #5A5A62;   /* disabled */
+
+  /* Neon accent palette (from logo + business card pixel underline) */
+  --r2c-orange:       #D65E38;   /* PRIMARY brand accent — logo "2" */
+  --r2c-orange-hot:   #F07248;   /* hover / glow */
+  --r2c-orange-deep:  #A8442A;   /* pressed / shadow */
+
+  --r2c-red:          #D52B1E;   /* danger / "GAME OVER" red */
+  --r2c-yellow:       #E7BE44;   /* coin / cursor yellow */
+  --r2c-blue:         #59A9CC;   /* CRT cyan / instagram blue */
+  --r2c-magenta:      #D63384;   /* banner smoke pink */
+  --r2c-green:        #59CC98;   /* "1UP" / success */
+
+  /* Semantic */
+  --color-bg:           var(--r2c-black);
+  --color-bg-elevated:  var(--r2c-graphite);
+  --color-bg-panel:     var(--r2c-slate);
+  --color-border:       var(--r2c-line);
+  --color-border-strong:#3A3A40;
+
+  --color-fg:           var(--r2c-bone);
+  --color-fg-muted:     var(--r2c-fog);
+  --color-fg-subtle:    var(--r2c-ash);
+  --color-fg-disabled:  var(--r2c-dim);
+
+  --color-accent:       var(--r2c-orange);
+  --color-accent-hover: var(--r2c-orange-hot);
+  --color-accent-press: var(--r2c-orange-deep);
+
+  --color-success:      var(--r2c-green);
+  --color-warning:      var(--r2c-yellow);
+  --color-danger:       var(--r2c-red);
+  --color-info:         var(--r2c-blue);
+
+  /* Glow shadows — neon-on-dark signature */
+  --glow-orange:  0 0 0 1px rgba(214,94,56,.55), 0 0 24px rgba(214,94,56,.45);
+  --glow-blue:    0 0 0 1px rgba(89,169,204,.55), 0 0 24px rgba(89,169,204,.45);
+  --glow-yellow:  0 0 0 1px rgba(231,190,68,.55), 0 0 22px rgba(231,190,68,.40);
+  --glow-red:     0 0 0 1px rgba(213,43,30,.55), 0 0 22px rgba(213,43,30,.40);
+
+  /* Elevation (subtle on dark — mostly inner glows) */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.6);
+  --shadow-md: 0 6px 18px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.5);
+  --shadow-lg: 0 24px 60px rgba(0,0,0,.7),  0 6px 18px rgba(0,0,0,.55);
+  --shadow-inset: inset 0 1px 0 rgba(255,255,255,.05);
+
+  /* ---------- TYPE ---------- */
+  --font-display: 'Michroma', 'Eurostile', 'Bank Gothic', 'Arial Narrow', sans-serif;
+  --font-body:    'Onest', 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-pixel:   'Press Start 2P', 'VT323', monospace; /* sparingly */
+  --font-mono:    ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+  /* Type scale — display headers all-caps, wide-tracked */
+  --fs-display:   clamp(48px, 7vw, 96px);
+  --fs-h1:        clamp(36px, 4.5vw, 56px);
+  --fs-h2:        clamp(28px, 3vw, 40px);
+  --fs-h3:        22px;
+  --fs-h4:        18px;
+  --fs-eyebrow:   12px;   /* small caps / "INSERT COIN" labels */
+  --fs-body-lg:   18px;
+  --fs-body:      16px;
+  --fs-body-sm:   14px;
+  --fs-caption:   12px;
+
+  --lh-tight:     1.05;
+  --lh-snug:      1.2;
+  --lh-normal:    1.55;
+  --lh-loose:     1.7;
+
+  --tracking-tight:  -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.08em;
+  --tracking-wider:   0.18em;   /* eyebrow labels */
+  --tracking-widest:  0.32em;   /* "INSERT COIN" style */
+
+  /* ---------- SPACING / RADII ---------- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+
+  --radius-none: 0;
+  --radius-sm:   2px;
+  --radius-md:   4px;     /* default — subtly squared, like cabinet bezels */
+  --radius-lg:   8px;
+  --radius-pill: 999px;
+}
+
+/* =============================================================
+   SEMANTIC ELEMENT STYLES
+   ============================================================= */
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, .display, .eyebrow {
+  font-family: var(--font-display);
+  font-weight: 400;            /* Michroma only ships at 400 */
+  text-transform: uppercase;
+  color: var(--color-fg);
+  letter-spacing: var(--tracking-wide);
+  line-height: var(--lh-tight);
+}
+
+.display    { font-size: var(--fs-display); letter-spacing: var(--tracking-wide); }
+h1, .h1     { font-size: var(--fs-h1); }
+h2, .h2     { font-size: var(--fs-h2); }
+h3, .h3     { font-size: var(--fs-h3); letter-spacing: var(--tracking-wider); }
+h4, .h4     { font-size: var(--fs-h4); letter-spacing: var(--tracking-wider); }
+
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: var(--tracking-widest);
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+p, li, label, input, textarea, select, button {
+  font-family: var(--font-body);
+}
+
+p { margin: 0 0 var(--space-4); color: var(--color-fg-muted); }
+p.lead { font-size: var(--fs-body-lg); color: var(--color-fg); }
+small, .caption { font-size: var(--fs-caption); color: var(--color-fg-subtle); }
+
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { color: var(--color-accent-hover); }
+
+code, pre, .mono { font-family: var(--font-mono); font-size: 14px; }
+.pixel { font-family: var(--font-pixel); letter-spacing: 0; text-transform: none; }
+
+/* utility */
+.uppercase { text-transform: uppercase; letter-spacing: var(--tracking-wider); }
