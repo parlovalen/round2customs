@@ -10,6 +10,69 @@ if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 
 
 // ============================================================
+// IMAGE PARALLAX — hero + split-section photos drift vertically
+// relative to the viewport as the page scrolls. The offset is written
+// to a --parallax-y custom property consumed by each <img>'s own
+// transform, so it layers on top of that image's existing crop/scale
+// instead of overwriting it, and stays within the crop's overscan
+// buffer so no edge is ever revealed.
+// ============================================================
+const parallaxImgs = document.querySelectorAll('.hero-image img, .split-image img');
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PARALLAX_MAX = 36; // px, stays within each image's overscan buffer
+
+if (parallaxImgs.length && !prefersReducedMotion) {
+  let parallaxTicking = false;
+
+  function applyParallax() {
+    const vh = window.innerHeight;
+    parallaxImgs.forEach(img => {
+      const container = img.parentElement;
+      const rect = container.getBoundingClientRect();
+      const centerOffset = (rect.top + rect.height / 2) - vh / 2;
+      const y = Math.max(-PARALLAX_MAX, Math.min(PARALLAX_MAX, -centerOffset * 0.08));
+      img.style.setProperty('--parallax-y', `${y.toFixed(1)}px`);
+    });
+    parallaxTicking = false;
+  }
+
+  function requestParallax() {
+    if (!parallaxTicking) {
+      requestAnimationFrame(applyParallax);
+      parallaxTicking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestParallax, { passive: true });
+  window.addEventListener('resize', requestParallax);
+  applyParallax();
+}
+
+
+// ============================================================
+// SCROLL REVEAL — section text slides + fades in on viewport entry
+// ============================================================
+const revealEls = document.querySelectorAll('.hero-text, .section-text, .contact-header');
+
+if (revealEls.length) {
+  if (!('IntersectionObserver' in window)) {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  } else {
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+  }
+}
+
+
+// ============================================================
 // GRID LINES — one elongated highlight per line, drifting on scroll
 // in opposing directions
 // ============================================================
@@ -300,13 +363,15 @@ initCarousel();
 //   1. Create a free account at https://www.emailjs.com
 //   2. Add an Email Service (Gmail, Outlook, etc.) → copy the Service ID
 //   3. Create an Email Template → copy the Template ID
-//      Template variables to use: {{from_name}}, {{from_email}}, {{phone}}, {{message}}
+//      sendForm() reads each field's `name` attribute directly, so the
+//      template variables must match the <input>/<textarea> name= values
+//      in the form: {{name}}, {{email}}, {{phone}}, {{message}}
 //   4. Go to Account → Public Key → copy it
 //   5. Replace the three placeholder strings below
 // ============================================================
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+const EMAILJS_PUBLIC_KEY  = 'ZMJXhKl-QLGxzYyUC';
+const EMAILJS_SERVICE_ID  = 'service_efzlosd';
+const EMAILJS_TEMPLATE_ID = 'template_wyxcbdb';
 
 emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
