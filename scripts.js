@@ -50,9 +50,295 @@ if (parallaxImgs.length && !prefersReducedMotion) {
 
 
 // ============================================================
+// PROJECT HERO PARALLAX — the hero photo drifts upward faster than the
+// page scrolls, so it slides over the giant background wordmark as soon
+// as the user starts scrolling instead of moving in lockstep with it.
+// Driven directly by scrollY (the hero sits at the top of the page) rather
+// than the viewport-center-relative technique above, which needs a section
+// to be mid-viewport to produce any offset.
+// ============================================================
+const phImage = document.querySelector('.ph-image img');
+const PH_PARALLAX_MAX = 180; // px, stays within the image's 130%/-15% overscan buffer
+const PH_PARALLAX_FACTOR = 0.4;
+
+if (phImage && !prefersReducedMotion) {
+  let phTicking = false;
+
+  function applyPhParallax() {
+    const y = -Math.min(PH_PARALLAX_MAX, window.scrollY * PH_PARALLAX_FACTOR);
+    phImage.style.setProperty('--ph-parallax-y', `${y.toFixed(1)}px`);
+    phTicking = false;
+  }
+
+  function requestPhParallax() {
+    if (!phTicking) {
+      requestAnimationFrame(applyPhParallax);
+      phTicking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestPhParallax, { passive: true });
+  applyPhParallax();
+}
+
+
+// ============================================================
+// WORD FILL REVEAL — the intro paragraph starts grey and fills in white
+// one word at a time, driven by how far the paragraph has travelled
+// through the viewport rather than by a timer, so the fill tracks the
+// user's scroll position (and unfills when they scroll back up).
+// ============================================================
+// Runs on any .intro-copy element, so the intro statement and the
+// testimonial share one implementation.
+const wordFillEls = document.querySelectorAll('.intro-copy');
+
+if (wordFillEls.length) {
+  const wordFills = Array.from(wordFillEls).map(el => {
+    // wrap each word in its own span so they can be lit individually
+    const words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    const spans = words.map((word, i) => {
+      const span = document.createElement('span');
+      span.className = 'intro-word';
+      span.textContent = word;
+      el.appendChild(span);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+      return span;
+    });
+    return { el, spans };
+  });
+
+  let wordFillTicking = false;
+
+  function applyWordFill() {
+    const vh = window.innerHeight;
+
+    wordFills.forEach(({ el, spans }) => {
+      const rect = el.getBoundingClientRect();
+
+      // fill runs from the paragraph's top hitting 80% of the viewport
+      // through to its bottom clearing 45% — a comfortable read-along pace
+      const start = vh * 0.8;
+      const end = vh * 0.45;
+      const progress = (start - rect.top) / (start - end + rect.height);
+      const lit = Math.round(Math.max(0, Math.min(1, progress)) * spans.length);
+
+      spans.forEach((span, i) => span.classList.toggle('is-lit', i < lit));
+    });
+
+    wordFillTicking = false;
+  }
+
+  function requestWordFill() {
+    if (!wordFillTicking) {
+      requestAnimationFrame(applyWordFill);
+      wordFillTicking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestWordFill, { passive: true });
+  window.addEventListener('resize', requestWordFill);
+  applyWordFill();
+}
+
+
+// ============================================================
+// DESIGN SECTION PARALLAX — the CAD mockup travels up over the heading
+// and copy as the section crosses the viewport, so the two overlap
+// progressively rather than sitting in fixed positions.
+// ============================================================
+const dsImage = document.getElementById('ds-image');
+const DS_PARALLAX_RANGE = 300; // px either side of centre across the section
+
+if (dsImage && !prefersReducedMotion) {
+  const dsSection = dsImage.closest('.ds');
+  let dsTicking = false;
+
+  function applyDsParallax() {
+    const rect = dsSection.getBoundingClientRect();
+    const vh = window.innerHeight;
+
+    // 0 as the section's top reaches the bottom of the viewport,
+    // 1 once its bottom has passed the top
+    const progress = (vh - rect.top) / (vh + rect.height);
+    const clamped = Math.max(0, Math.min(1, progress));
+    const y = (0.5 - clamped) * 2 * DS_PARALLAX_RANGE;
+
+    dsImage.style.setProperty('--ds-parallax-y', `${y.toFixed(1)}px`);
+    dsTicking = false;
+  }
+
+  function requestDsParallax() {
+    if (!dsTicking) {
+      requestAnimationFrame(applyDsParallax);
+      dsTicking = true;
+    }
+  }
+
+  window.addEventListener('scroll', requestDsParallax, { passive: true });
+  window.addEventListener('resize', requestDsParallax);
+  applyDsParallax();
+}
+
+
+// ============================================================
+// PRODUCT VIEWER — one pill expanded at a time, stepped by clicking a
+// pill or with the up/down arrows, with the stage image crossfading to
+// match. Panels animate via max-height, so the open one is measured on
+// each change (and on resize, since the copy reflows).
+// ============================================================
+// Initialised per .pv section rather than by ID, so the component can
+// appear more than once on a page with each instance tracking its own
+// open pill.
+document.querySelectorAll('.pv').forEach(pvSection => {
+  const pvList  = pvSection.querySelector('.pv-list');
+  const pvStage = pvSection.querySelector('.pv-stage');
+  if (!pvList || !pvStage) return;
+
+  const pvItems  = Array.from(pvList.querySelectorAll('.pv-item'));
+  const pvCover  = pvStage.querySelector('.pv-cover');
+  // the alt layout shows its copy in a box over the media instead of in
+  // an accordion panel under each pill
+  const pvCaptions = Array.from(pvSection.querySelectorAll('.pv-caption'));
+  // a stage slide can be an <img> or a <video>, one per pill
+  const pvImages = Array.from(pvStage.querySelectorAll('img:not(.pv-cover), video'));
+
+  // -1 = nothing expanded, which is the state the section loads in
+  let pvCurrent = pvItems.findIndex(item => item.classList.contains('is-active'));
+
+  function setPvActive(index) {
+    pvCurrent = index < 0 ? -1 : (index + pvItems.length) % pvItems.length;
+
+    pvItems.forEach((item, i) => {
+      const isActive = i === pvCurrent;
+      const panel = item.querySelector('.pv-panel');
+      item.classList.toggle('is-active', isActive);
+      item.querySelector('.pv-pill').setAttribute('aria-expanded', String(isActive));
+      // only the accordion layout has a panel to measure
+      if (panel) panel.style.maxHeight = isActive ? `${panel.scrollHeight}px` : '';
+    });
+
+    pvCaptions.forEach((caption, i) => {
+      caption.classList.toggle('is-active', i === pvCurrent);
+    });
+
+    // the cover holds the stage while nothing is expanded
+    if (pvCover) pvCover.classList.toggle('is-active', pvCurrent < 0);
+
+    pvImages.forEach((media, i) => {
+      const isActive = i === pvCurrent;
+      media.classList.toggle('is-active', isActive);
+
+      // video slides only play while they're the one on stage
+      if (media.tagName === 'VIDEO') {
+        if (isActive) {
+          media.currentTime = 0;
+          media.play();
+        } else {
+          media.pause();
+        }
+      }
+    });
+  }
+
+  pvItems.forEach((item, i) => {
+    item.querySelector('.pv-pill').addEventListener('click', () => setPvActive(i));
+
+    // collapse back to the all-closed state
+    const close = item.querySelector('.pv-close');
+    if (close) close.addEventListener('click', () => setPvActive(-1));
+  });
+
+  pvCaptions.forEach(caption => {
+    const close = caption.querySelector('.pv-close');
+    if (close) close.addEventListener('click', () => setPvActive(-1));
+  });
+
+  // stepping from the closed state enters the list at whichever end the
+  // arrow points from
+  function stepPv(dir) {
+    setPvActive(pvCurrent < 0 ? (dir > 0 ? 0 : pvItems.length - 1) : pvCurrent + dir);
+  }
+
+  const pvPrev = pvSection.querySelector('.pv-arrow--prev');
+  const pvNext = pvSection.querySelector('.pv-arrow--next');
+  if (pvPrev) pvPrev.addEventListener('click', () => stepPv(-1));
+  if (pvNext) pvNext.addEventListener('click', () => stepPv(1));
+
+  window.addEventListener('resize', () => setPvActive(pvCurrent));
+  setPvActive(pvCurrent);
+});
+
+
+// ============================================================
+// PRODUCT STICKY BAR — appears once the hero has scrolled past, with the
+// current in-page section highlighted in the tabs row (Apple product-page
+// pattern).
+// ============================================================
+const productBar = document.getElementById('product-bar');
+const phHeroEl   = document.getElementById('ph-hero');
+const mainNavbar = document.getElementById('navbar');
+
+if (productBar && phHeroEl) {
+  function updateProductBarVisibility() {
+    const heroBottom = phHeroEl.offsetTop + phHeroEl.offsetHeight;
+    const navbarH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--navbar-h')) || 76;
+    productBar.classList.toggle('is-visible', window.scrollY > heroBottom - navbarH);
+  }
+
+  // Once the product bar is showing, the main navbar slides away on
+  // scroll-down and slides back in (pushing the product bar back down
+  // with it) on scroll-up — same collapse pattern as Apple product pages.
+  let lastScrollY = window.scrollY;
+
+  function updateNavCollapse() {
+    const scrollY = window.scrollY;
+    const delta = scrollY - lastScrollY;
+
+    if (Math.abs(delta) > 4) {
+      if (productBar.classList.contains('is-visible') && delta > 0) {
+        document.body.classList.add('nav-collapsed');
+      } else if (delta < 0) {
+        document.body.classList.remove('nav-collapsed');
+      }
+      lastScrollY = scrollY;
+    }
+  }
+
+  function onProductBarScroll() {
+    updateProductBarVisibility();
+    if (mainNavbar) updateNavCollapse();
+  }
+
+  window.addEventListener('scroll', onProductBarScroll, { passive: true });
+  window.addEventListener('resize', updateProductBarVisibility);
+  updateProductBarVisibility();
+
+  const productBarLinks = productBar.querySelectorAll('a[data-cs-target]');
+  const productBarSections = Array.from(productBarLinks)
+    .map(link => document.getElementById(link.dataset.csTarget))
+    .filter(Boolean);
+
+  if (productBarSections.length && 'IntersectionObserver' in window) {
+    const productBarObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          productBarLinks.forEach(link => {
+            link.classList.toggle('is-active', link.dataset.csTarget === entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+
+    productBarSections.forEach(section => productBarObserver.observe(section));
+  }
+}
+
+
+// ============================================================
 // SCROLL REVEAL — section text slides + fades in on viewport entry
 // ============================================================
-const revealEls = document.querySelectorAll('.hero-text, .section-text, .contact-header');
+const revealEls = document.querySelectorAll('.hero-text, .section-text, .contact-header, .ph-title, .ph-image, .ph-body .btn-primary');
 
 if (revealEls.length) {
   if (!('IntersectionObserver' in window)) {
@@ -182,34 +468,9 @@ if (logoTrack && vendorsSection) {
 
 
 // ============================================================
-// GALLERY CARD CURSOR — a category pill follows the pointer in place of
-// the native cursor while hovering a project gallery tile. One shared
-// element fixed to the viewport (appended to <body>) so it renders above
-// everything instead of being clipped by a card's own overflow:hidden.
+// GALLERY CARDS — tiles are wired to the lightbox below.
 // ============================================================
 const galleryCards = document.querySelectorAll('.gallery-card');
-
-if (galleryCards.length) {
-  const galleryCursor = document.createElement('span');
-  galleryCursor.className = 'gallery-cursor';
-  document.body.appendChild(galleryCursor);
-
-  galleryCards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      galleryCursor.textContent = card.dataset.category || '';
-      galleryCursor.classList.add('is-active');
-    });
-
-    card.addEventListener('mousemove', e => {
-      galleryCursor.style.left = `${e.clientX}px`;
-      galleryCursor.style.top = `${e.clientY}px`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      galleryCursor.classList.remove('is-active');
-    });
-  });
-}
 
 
 // ============================================================
@@ -221,37 +482,45 @@ if (galleryCards.length) {
 // Each tile only shows one cover photo, but its full collection can hold
 // several — listed here by category. Placeholder sets reusing existing
 // site photos until real per-collection photography is ready.
+//
+// Paths below are written relative to the site root, so pages nested in a
+// subdirectory (projects/*.html) need a prefix. It's derived from how that
+// page links styles.css — '' at the root, '../' one level down — rather
+// than hardcoded, so the same list works from any depth.
 // ============================================================
+const ASSET_PREFIX = (document.querySelector('link[rel="stylesheet"][href$="styles.css"]')
+  ?.getAttribute('href') || '').replace('styles.css', '');
+
 const GALLERY_COLLECTIONS = {
   'Pinball Gallery': [
-    { src: 'assets/images/hero-pinball.png', alt: 'Custom pinball machine build' },
-    { src: 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build' },
-    { src: 'assets/images/vpin-noire.jpg', alt: 'VPIN Noire custom pinball build' },
+    { src: ASSET_PREFIX + 'assets/images/hero-pinball.png', alt: 'Custom pinball machine build' },
+    { src: ASSET_PREFIX + 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build' },
+    { src: ASSET_PREFIX + 'assets/images/vpin-noire.jpg', alt: 'VPIN Noire custom pinball build' },
   ],
   'Retro Gallery': [
-    { src: 'assets/images/theStudio.png', alt: 'R2C studio build' },
-    { src: 'assets/images/retro-studio.jpg', alt: 'Retro Studio custom arcade build' },
-    { src: 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/theStudio.png', alt: 'R2C studio build' },
+    { src: ASSET_PREFIX + 'assets/images/retro-studio.jpg', alt: 'Retro Studio custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
   ],
   'Custom Builds': [
-    { src: 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
-    { src: 'assets/images/apex-cosmic.jpg', alt: 'Apex Cosmic custom arcade build' },
-    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
+    { src: ASSET_PREFIX + 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
+    { src: ASSET_PREFIX + 'assets/images/apex-cosmic.jpg', alt: 'Apex Cosmic custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
   ],
   'Cocktail Cabinets': [
-    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet' },
-    { src: 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
-    { src: 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/the-loft.png', alt: 'The Loft custom cabinet' },
+    { src: ASSET_PREFIX + 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
+    { src: ASSET_PREFIX + 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
   ],
   'Restorations': [
-    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
-    { src: 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
-    { src: 'assets/images/theStudio.png', alt: 'R2C studio build' },
+    { src: ASSET_PREFIX + 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
+    { src: ASSET_PREFIX + 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/theStudio.png', alt: 'R2C studio build' },
   ],
   'Prop Builds': [
-    { src: 'assets/images/mario-bros-isolated.png', alt: 'Mario Bros arcade prop build' },
-    { src: 'assets/images/mario-bros.jpg', alt: 'Mario Bros custom arcade build' },
-    { src: 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/mario-bros-isolated.png', alt: 'Mario Bros arcade prop build' },
+    { src: ASSET_PREFIX + 'assets/images/mario-bros.jpg', alt: 'Mario Bros custom arcade build' },
+    { src: ASSET_PREFIX + 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
   ],
 };
 
@@ -622,20 +891,182 @@ if (form) {
 // ============================================================
 
 // ============================================================
-
+// CASE STUDY — VPIN Noire project page
 // ============================================================
 
-// ============================================================
+// ------------------------------------------------------------
+// Before / after slider (Custom Artwork section)
+// ------------------------------------------------------------
+const csBaSlider = document.getElementById('cs-ba-slider');
+const csBaHandle  = document.getElementById('cs-ba-handle');
 
-// ============================================================
+if (csBaSlider && csBaHandle) {
+  const frame    = csBaSlider.querySelector('.cs-ba-frame');
+  const afterWrap = csBaSlider.querySelector('.cs-ba-after-wrap');
 
-// ============================================================
+  function setSlider(percent) {
+    const clamped = Math.max(0, Math.min(100, percent));
+    afterWrap.style.width = `${clamped}%`;
+    csBaHandle.style.left = `${clamped}%`;
+    csBaHandle.setAttribute('aria-valuenow', String(Math.round(clamped)));
+  }
 
-// ============================================================
+  function percentFromClientX(clientX) {
+    const rect = frame.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * 100;
+  }
 
-// ============================================================
+  let dragging = false;
 
-// ============================================================
+  function onPointerMove(e) {
+    if (!dragging) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    setSlider(percentFromClientX(clientX));
+  }
+
+  function stopDragging() {
+    dragging = false;
+  }
+
+  csBaHandle.addEventListener('pointerdown', () => { dragging = true; });
+  frame.addEventListener('pointerdown', e => {
+    dragging = true;
+    setSlider(percentFromClientX(e.clientX));
+  });
+  window.addEventListener('pointermove', onPointerMove);
+  window.addEventListener('pointerup', stopDragging);
+
+  csBaHandle.addEventListener('keydown', e => {
+    const current = parseFloat(csBaHandle.style.left) || 50;
+    if (e.key === 'ArrowLeft')  { setSlider(current - 5); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { setSlider(current + 5); e.preventDefault(); }
+  });
+
+  setSlider(50);
+}
+
+
+// ------------------------------------------------------------
+// Stat counters (CNC callout + Build Statistics) — count up once
+// when the tile scrolls into view
+// ------------------------------------------------------------
+const csStatEls = document.querySelectorAll('[data-count-to]');
+
+if (csStatEls.length) {
+  function animateStat(el) {
+    const target = parseInt(el.dataset.countTo, 10);
+    const suffix = el.dataset.suffix || '';
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      el.textContent = target.toLocaleString() + suffix;
+      return;
+    }
+
+    const duration = 1200;
+    const start = performance.now();
+
+    function tick(now) {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(target * eased).toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    csStatEls.forEach(animateStat);
+  } else {
+    const statObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStat(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    csStatEls.forEach(el => statObserver.observe(el));
+  }
+}
+
+
+// ------------------------------------------------------------
+// FAQ accordion
+// ------------------------------------------------------------
+const csFaqItems = document.querySelectorAll('.cs-faq-item');
+
+if (csFaqItems.length) {
+  csFaqItems.forEach(item => {
+    const question = item.querySelector('.cs-faq-question');
+    const answer   = item.querySelector('.cs-faq-answer');
+
+    question.addEventListener('click', () => {
+      const isOpen = item.classList.toggle('is-open');
+      question.setAttribute('aria-expanded', String(isOpen));
+      answer.style.maxHeight = isOpen ? `${answer.scrollHeight}px` : '';
+    });
+  });
+}
+
+
+// ------------------------------------------------------------
+// Build gallery masonry lightbox — flat click-to-enlarge, reuses the
+// .gallery-modal component styling from the showroom's project gallery
+// ------------------------------------------------------------
+const csMasonry = document.getElementById('cs-masonry');
+const csGalleryModal = document.getElementById('cs-gallery-modal');
+
+if (csMasonry && csGalleryModal) {
+  const csItems = Array.from(csMasonry.querySelectorAll('.cs-masonry-item'));
+  const csModalImg   = document.getElementById('cs-gallery-modal-img');
+  const csModalPrev  = document.getElementById('cs-gallery-modal-prev');
+  const csModalNext  = document.getElementById('cs-gallery-modal-next');
+  const csModalClose = document.getElementById('cs-gallery-modal-close');
+
+  let csIndex = 0;
+
+  function showCsImage(i) {
+    csIndex = (i + csItems.length) % csItems.length;
+    const img = csItems[csIndex].querySelector('img');
+    csModalImg.src = img.src;
+    csModalImg.alt = img.alt;
+  }
+
+  function openCsModal(i) {
+    showCsImage(i);
+    csGalleryModal.classList.add('is-open');
+    csGalleryModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCsModal() {
+    csGalleryModal.classList.remove('is-open');
+    csGalleryModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  csItems.forEach((item, i) => {
+    item.addEventListener('click', () => openCsModal(i));
+  });
+
+  csModalPrev.addEventListener('click', () => showCsImage(csIndex - 1));
+  csModalNext.addEventListener('click', () => showCsImage(csIndex + 1));
+  csModalClose.addEventListener('click', closeCsModal);
+
+  csGalleryModal.addEventListener('click', e => {
+    if (e.target === csGalleryModal) closeCsModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!csGalleryModal.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeCsModal();
+    if (e.key === 'ArrowLeft') showCsImage(csIndex - 1);
+    if (e.key === 'ArrowRight') showCsImage(csIndex + 1);
+  });
+}
+
 
 // ============================================================
 // BUTTON PIXEL GRID EFFECT (EASED + REVERSE)

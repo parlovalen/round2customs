@@ -10,11 +10,13 @@
   --gray-inactive: #3d3d3d;
 
   --font-display: 'Halyard Display', sans-serif;
-  --font-body: 'Gabarito', sans-serif;
+  /* Gotham via the Adobe Fonts kit (weights 300-800 + italics) */
+  --font-body: 'gotham', sans-serif;
 
   --page-pad: 120px;
   --section-py: 80px;
   --gap: 24px;
+  --navbar-h: 76px; /* scrolled-state navbar height — .navbar.is-scrolled .nav-inner padding (16px * 2) + .nav-toggle (44px) */
 
   --btn-gradient: linear-gradient(181.14deg, rgba(255,255,255,0.07) 15.71%, rgba(242,242,242,0.07) 92.36%);
   --field-gradient: linear-gradient(180.6deg, rgba(255,255,255,0.07) 15.71%, rgba(242,242,242,0.07) 92.36%);
@@ -29,6 +31,7 @@ body {
   background: var(--bg);
   color: var(--white);
   font-family: var(--font-body);
+  font-weight: 300;
   font-size: 16px;
   line-height: 26px;
   letter-spacing: 0.16px;
@@ -127,6 +130,19 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+/* Set by the product-bar scroll handler on the VPIN Noire page — slides
+   the navbar away on scroll-down past the hero, and pushes the product
+   bar back down to navbar-height when it returns on scroll-up. */
+body.nav-collapsed .navbar {
+  transform: translateY(-100%);
+}
+
+body.nav-collapsed .product-bar {
+  top: 20px;
 }
 
 .nav-inner {
@@ -860,14 +876,19 @@ h2 {
   flex-direction: column;
   gap: 32px;
   padding: 120px var(--page-pad);
-  background: #f2f2f2;
+  background: var(--bg);
 }
 
 .project-gallery h2 {
   font-size: 24px;
   line-height: normal;
   letter-spacing: 0.48px;
-  color: #000000;
+  color: var(--terracotta);
+}
+
+/* the VPIN Noire page runs its heading white rather than accented */
+body.page-vpin-noire .project-gallery h2 {
+  color: var(--white);
 }
 
 .gallery-grid {
@@ -891,43 +912,17 @@ h2 {
   flex: 1;
   min-width: 0;
   border-radius: 16px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   overflow: hidden;
   background: var(--bg);
-  cursor: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, border-width 0.3s ease;
 }
 
-/* Category pill that follows the pointer in place of the native cursor
-   while hovering a gallery tile. Fixed to the viewport (not the card) so
-   it renders above everything instead of being clipped by the card's own
-   overflow:hidden — a single shared element, positioned via JS. */
-.gallery-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: translate(-50%, -50%);
-  z-index: 500;
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 16px;
-  border-radius: 60px;
-  background: #d65e38;
-  color: var(--white);
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 0.55px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease;
-}
-
-.gallery-cursor.is-active {
-  opacity: 1;
-  visibility: visible;
+/* matches the Recent Project Stories card hover */
+.gallery-card:hover {
+  border-color: #d65e38;
+  border-width: 2px;
 }
 
 .gallery-card img {
@@ -1177,6 +1172,1331 @@ h2 {
 
 .project-back:hover {
   color: var(--terracotta);
+}
+
+/* ============================================================
+   PRODUCT STICKY BAR — VPIN Noire
+   Apple product-page pattern: a second sticky bar directly under the
+   global nav, hidden until the hero scrolls past, showing the product
+   name and in-page section tabs on one row (no buttons).
+   ============================================================ */
+.product-bar {
+  /* fixed, not sticky — a sticky bar stays in normal flow and would
+     occupy its own height between the navbar and the hero even while
+     invisible, pushing the hero down. */
+  position: fixed;
+  top: calc(var(--navbar-h) + 20px);
+  left: 0;
+  right: 0;
+  z-index: 190;
+  width: 66.6667%; /* 8/12 columns */
+  margin: 0 auto;
+  border-radius: 60px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, top 0.3s ease;
+}
+
+.product-bar.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.product-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 18px 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.product-bar-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.product-bar-name {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 0.5px;
+  color: var(--white);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.product-bar-tabs {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-shrink: 0;
+}
+
+.product-bar-tabs a {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.product-bar-tabs a:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.product-bar-tabs a.is-active {
+  color: var(--white);
+}
+
+/* ============================================================
+   PROJECT HERO — VPIN Noire
+   Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=73-341
+   Frame is a fixed 1440x861 composition (not a fluid page-pad section).
+   Horizontal placement (left/width) is that frame's exact px value
+   converted to a % of the hero's own width, so it stays fluid at any
+   viewport; vertical placement (top/height) uses the frame's fixed px
+   values directly. The Figma frame itself clips the cutout image ~181px
+   short of its full height (visible in the source as the machine's front
+   legs being cut off) — the hero here is taller than that 861px frame
+   specifically so the image renders in full instead of clipping.
+   The photo gets a scroll-linked parallax offset (see PROJECT HERO
+   PARALLAX in scripts.js) so it slides over the wordmark behind it at a
+   different rate than the page scrolls, rather than staying locked to it.
+   ============================================================ */
+.ph-hero {
+  position: relative;
+  height: 1066px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.ph-title {
+  position: absolute;
+  top: 96px;     /* Figma 110px, shifted up 14px with the rest of the group */
+  left: 17.85%;  /* 257px / 1440px */
+  width: 82.15%;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(56px, 12.8vw, 184px);
+  line-height: 0.914;
+  letter-spacing: 2px;
+  color: var(--white);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ph-body {
+  position: absolute;
+  top: 306px;    /* Figma 320px, shifted up 14px with the rest of the group */
+  left: 17.85%;  /* 257px / 1440px */
+  width: 26.5%;  /* 382px / 1440px */
+  min-width: 300px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.ph-text p {
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0.16px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.ph-image {
+  position: absolute;
+  top: 167px;    /* Figma 181px, shifted up 14px with the rest of the group */
+  left: 25.4%;   /* 366px / 1440px */
+  width: 49.2%;  /* 708px / 1440px */
+  height: 861px; /* fixed px — the hero is taller than the original 861px
+                    frame specifically so this doesn't get clipped */
+  z-index: 4;    /* above the title and body copy */
+  /* the cutout overlaps the body copy/CTA, and its transparent areas would
+     otherwise swallow clicks on the button underneath */
+  pointer-events: none;
+}
+
+.ph-image img {
+  display: block;
+  height: 100%;
+  width: auto;
+  max-width: none;
+  margin: 0 auto;
+  transform: translateY(var(--ph-parallax-y, 0px));
+  will-change: transform;
+}
+
+/* On-load reveal — same slide-up + fade as the homepage hero
+   (.hero-text), staggered across the hero's four elements. The rise is
+   applied to .ph-image (the container) rather than its <img>, since the
+   image's own transform is already driven by the parallax handler. */
+.ph-title,
+.ph-image,
+.ph-body .btn-primary {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.ph-title.is-visible,
+.ph-image.is-visible,
+.ph-body .btn-primary.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ph-title { transition-delay: 0.1s; }
+.ph-image { transition-delay: 0.4s; }
+.ph-text  { transition-delay: 0.7s; }
+.ph-body .btn-primary { transition-delay: 1s; }
+
+/* ============================================================
+   CASE STUDY — VPIN Noire project page
+   One-off narrative build-out (see WORKLOG.md). All section text
+   blocks reuse .section-text for the shared scroll-reveal treatment.
+   ============================================================ */
+
+/* Cinematic intro — scroll-driven word-by-word fill */
+.cs-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: 0 var(--page-pad) calc(var(--section-py) * 1.5);
+}
+
+.intro-copy {
+  max-width: 1100px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(24px, 3.2vw, 44px);
+  line-height: 1.35;
+  letter-spacing: 0.2px;
+}
+
+/* Each word is wrapped in its own span by scripts.js, then lit one at a
+   time as the section scrolls through the viewport. */
+.intro-copy .intro-word {
+  color: rgba(255, 255, 255, 0.2);
+  transition: color 0.4s ease;
+}
+
+.intro-copy .intro-word.is-lit {
+  color: var(--white);
+}
+
+.intro-images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.intro-images img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* ============================================================
+   DESIGN SECTION
+   Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=77-380
+   1440x1091 frame: centred heading at y132, copy 668px wide, and the
+   mockup (1180x885) at y217 — wide enough that it overlaps the copy,
+   which is the point: it parallaxes up over the text on scroll.
+   ============================================================ */
+.ds {
+  position: relative;
+  height: 1091px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.ds-text {
+  position: absolute;
+  top: 132px;
+  left: 50%;
+  /* keeps the .section-text scroll-reveal offset while staying centred */
+  transform: translateX(-50%) translateY(28px);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 var(--page-pad);
+  text-align: center;
+}
+
+.ds-text.is-visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ds-text p {
+  max-width: 668px;
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0.16px;
+  color: var(--white);
+}
+
+.ds-image {
+  position: absolute;
+  top: 217px;
+  left: 50%;
+  z-index: 2;
+  width: 1180px;
+  max-width: 100%;
+  height: 885px;
+  transform: translateX(-50%) translateY(var(--ds-parallax-y, 0px));
+  will-change: transform;
+}
+
+.ds-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* image fades into the page at its base, per the design */
+.ds-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 84%, var(--bg) 100%);
+}
+
+/* ============================================================
+   PRODUCT VIEWER
+   Apple product-page pattern — a vertical pill stack where one item is
+   expanded at a time to reveal its copy, stepped by clicking a pill or
+   with the up/down arrows, alongside a stage image that crossfades to
+   match the active pill.
+   ============================================================ */
+.pv {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: var(--section-py) var(--page-pad);
+  /* sits behind the pure-black .pv-inner card, so the grey only shows
+     around its edges */
+  background: linear-gradient(to bottom, var(--bg), #101010);
+}
+
+.pv-inner {
+  display: grid;
+  grid-template-columns: 4fr 8fr; /* 4/12 controls, 8/12 stage */
+  grid-template-rows: auto 1fr;
+  gap: 80px 40px;
+  align-items: start;
+  padding: 40px;
+  border-radius: 24px;
+  background: var(--bg);
+}
+
+/* header sits above the controls in the left column; the stage spans
+   both rows alongside it */
+.pv-header {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+/* the accordion viewer's header is a small in-card label; the alt's is a
+   full section heading, so it keeps the standard h2 sizing */
+.pv:not(.pv-alt) .pv-header h2 {
+  font-size: 28px;
+  line-height: normal;
+  letter-spacing: 0.56px;
+}
+
+.pv-alt .pv-header {
+  gap: 24px;
+}
+
+.pv-alt .pv-header p {
+  max-width: 620px;
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0.16px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pv-controls {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.pv-arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 6px;
+}
+
+.pv-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pv-arrow:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.pv-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.pv-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.pv-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  max-height: 56px;
+  padding: 14px 24px 14px 16px;
+  border-radius: 60px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+  text-align: left;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.2s ease, max-height 0.3s ease,
+              padding 0.3s ease, opacity 0.2s ease;
+}
+
+/* The active item's pill collapses away so only its description shows —
+   the panel copy leads with the feature name, so the pill would just be
+   repeating it. */
+.pv-item.is-active .pv-pill {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pv-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* "+" glyph, drawn with two bars inside a ring — becomes a solid
+   terracotta dot once its pill is the active one */
+.pv-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.pv-icon::before,
+.pv-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: var(--white);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.25s ease;
+}
+
+.pv-icon::before { width: 10px; height: 1.5px; }
+.pv-icon::after  { width: 1.5px; height: 10px; }
+
+.pv-item.is-active .pv-icon {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+}
+
+.pv-item.is-active .pv-icon::before,
+.pv-item.is-active .pv-icon::after {
+  opacity: 0;
+}
+
+.pv-panel {
+  position: relative;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.35s ease;
+  opacity: 0;
+}
+
+.pv-item.is-active .pv-panel {
+  opacity: 1;
+}
+
+/* Close button, pinned to the top-right of the expanded panel — the panel
+   copy is inset on that side so the two never collide. */
+.pv-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pv-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+}
+
+.pv-panel p {
+  position: relative;
+  padding: 20px 52px 20px 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 15px;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 460px;
+}
+
+.pv-panel strong {
+  font-weight: 600;
+  color: var(--white);
+}
+
+.pv-stage {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: relative;
+  height: 560px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.pv-stage img,
+.pv-stage video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Ken Burns — the slide on stage drifts and slowly pushes in. The
+   animation owns `transform` while active, so it replaces the base
+   rule's scale-in settle rather than fighting it; re-adding .is-active
+   on a pill change restarts it from the top. */
+.pv-stage img.is-active,
+.pv-stage video.is-active {
+  opacity: 1;
+  animation: pv-ken-burns 12s ease-out forwards;
+}
+
+/* pan + a slow pull back; the scale never drops to 1 so the drift can't
+   expose an edge of the frame */
+@keyframes pv-ken-burns {
+  from { transform: scale(1.2) translate(-3%, -2%); }
+  to   { transform: scale(1.06) translate(3%, 2%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv-stage img.is-active,
+  .pv-stage video.is-active {
+    animation: none;
+    transform: scale(1);
+  }
+}
+
+/* the cover shot is composed to sit whole in the frame — everything else
+   fills the stage */
+.pv-stage .pv-cover {
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------------
+   Product viewer — ALT layout
+   Media sits alone in an unstyled container with a caption box floating
+   over it; the pills sit in a row below the container as selectors
+   rather than expanding accordions.
+   ------------------------------------------------------------ */
+.pv-alt {
+  background: var(--bg);
+  /* spacing is set per-child below rather than by a uniform flex gap,
+     so the pills can sit closer to the media than the header does */
+  gap: 0;
+}
+
+/* the whole section runs at 10/12, centred — header, media, and pills all
+   share the same measure so they stay aligned */
+.pv-alt .pv-header,
+.pv-alt .pv-inner,
+.pv-alt .pv-controls {
+  width: 83.3333%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pv-alt .pv-inner {
+  display: block;
+  position: relative;
+  margin-top: 48px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.pv-alt .pv-stage {
+  width: 100%;
+  height: 620px;
+  border-radius: 16px;
+}
+
+/* caption box floats over the lower-left of the media */
+.pv-captions {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pv-caption {
+  position: relative;
+  max-width: 520px;
+  padding: 22px 52px 22px 26px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s;
+  pointer-events: auto;
+}
+
+/* all captions stack in the same spot; only the active one shows */
+.pv-caption + .pv-caption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.pv-caption.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.pv-caption p {
+  font-size: 15px;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.pv-caption strong {
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* pills sit below the container, in a row */
+.pv-alt .pv-controls {
+  grid-column: auto;
+  grid-row: auto;
+  margin-top: 32px;
+  align-items: center;
+}
+
+.pv-alt .pv-arrows {
+  display: none;
+}
+
+/* the list itself is the chrome — a single glassy bar holding the pills,
+   with the active one sitting inside it as a white thumb */
+.pv-alt .pv-list {
+  flex: 0 0 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 60px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* pills are bare inside the bar */
+.pv-alt .pv-pill {
+  padding: 10px 28px;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.pv-alt .pv-item {
+  width: auto;
+}
+
+/* alt uses a real line icon per stage instead of the shared "+" ring, so
+   the ring's border and bars are cleared. Strokes are currentColor, so
+   they follow the pill's text — light on the bar, black on the active
+   white pill. */
+.pv-alt .pv-icon {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 0;
+  background: none;
+}
+
+.pv-alt .pv-icon::before,
+.pv-alt .pv-icon::after {
+  display: none;
+}
+
+/* outranks the shared `.pv-item.is-active .pv-icon` accent fill, which
+   would otherwise paint a terracotta block behind the line icon */
+.pv-alt .pv-item.is-active .pv-icon {
+  background: none;
+  border-color: transparent;
+}
+
+/* the pill is a selector now — it never collapses into a panel */
+.pv-alt .pv-item.is-active .pv-pill {
+  max-height: 56px;
+  padding: 10px 28px;
+  opacity: 1;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+/* Shared photo-grid pattern — Design, Materials, Construction, Finishing */
+.cs-design,
+.cs-materials,
+.cs-construction,
+.cs-finishing {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cs-photo-grid--five {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.cs-photo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cs-photo-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #111;
+}
+
+.cs-photo-card figcaption {
+  font-size: 13px;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Stat tiles — shared by the CNC callout + Build Statistics */
+.cs-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.cs-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: 0 var(--page-pad) 220px;
+}
+
+/* the stats row spans the full content width, one equal column per stat,
+   each stat's number and label centred on each other */
+.cs-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 32px;
+}
+
+.cs-stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-stats-grid .cs-stat-tile {
+  position: relative;
+  align-items: center;
+  text-align: center;
+}
+
+/* hairline rule between stats — sits in the gap, skipped on the first
+   tile of each row so no divider hangs off the left edge */
+.cs-stats-grid .cs-stat-tile::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -16px;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cs-stats-grid .cs-stat-tile:first-child::before {
+  display: none;
+}
+
+/* Proxima Nova rather than Halyard here — the kit only carries Halyard
+   in 400/700, so a true light weight isn't available on the display face. */
+.cs-stat-number {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: 0.5px;
+  color: var(--terracotta);
+}
+
+.cs-stat-label {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Before / after slider — Custom Artwork */
+.cs-artwork {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-ba-slider {
+  width: 100%;
+}
+
+.cs-ba-frame {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  border-radius: 8px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.cs-ba-before,
+.cs-ba-after {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.cs-ba-after-wrap {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
+.cs-ba-after-wrap .cs-ba-after {
+  width: 200%;
+  max-width: none;
+}
+
+.cs-ba-label {
+  position: absolute;
+  bottom: 24px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--white);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 14px;
+  border-radius: 60px;
+  pointer-events: none;
+}
+
+.cs-ba-label--before { left: 24px; }
+.cs-ba-label--after { right: 24px; }
+
+.cs-ba-handle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  background: var(--white);
+  transform: translateX(-50%);
+  cursor: ew-resize;
+}
+
+.cs-ba-handle-grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--terracotta);
+  border: 3px solid var(--white);
+}
+
+.cs-ba-handle-grip::before,
+.cs-ba-handle-grip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.cs-ba-handle-grip::before {
+  left: 10px;
+  border-right: 6px solid var(--white);
+  transform: translateY(-50%);
+}
+
+.cs-ba-handle-grip::after {
+  right: 10px;
+  border-left: 6px solid var(--white);
+  transform: translateY(-50%);
+}
+
+/* Final reveal */
+.cs-reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-reveal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 260px;
+  gap: 16px;
+}
+
+.cs-reveal-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.cs-reveal-lg {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Interactive features */
+.cs-features {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 40px;
+}
+
+.cs-feature-grid li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.4px;
+}
+
+.cs-feature-icon {
+  flex-shrink: 0;
+  color: var(--terracotta);
+}
+
+/* Behind the details */
+.cs-details {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-details-list {
+  gap: 80px;
+}
+
+/* Client testimonial */
+.cs-testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+/* matches the intro statement's treatment — large display type at a
+   generous measure, left-aligned, rather than a centred pull-quote */
+.cs-quote {
+  position: relative;
+  max-width: 1100px;
+}
+
+/* type comes from .intro-copy, which also drives the word-by-word fill */
+.cs-quote p {
+  margin-bottom: 32px;
+}
+
+.cs-quote-mark {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 96px;
+  line-height: 1;
+  color: var(--terracotta);
+  margin-bottom: 8px;
+}
+
+.cs-quote cite {
+  display: block;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.15px;
+  color: var(--terracotta);
+}
+
+/* Process timeline */
+.cs-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-timeline-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding-left: 32px;
+}
+
+.cs-timeline-list::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 5px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cs-timeline-list li {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.3px;
+}
+
+.cs-timeline-list li::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: -32px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--terracotta);
+}
+
+/* Build gallery masonry */
+.cs-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-masonry {
+  columns: 4;
+  column-gap: 16px;
+}
+
+.cs-masonry-item {
+  display: block;
+  width: 100%;
+  margin-bottom: 16px;
+  break-inside: avoid;
+  border-radius: 6px;
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: #111;
+}
+
+.cs-masonry-item:nth-child(3n) img { aspect-ratio: 1 / 1; }
+.cs-masonry-item:nth-child(3n+1) img { aspect-ratio: 3 / 4; }
+.cs-masonry-item:nth-child(3n+2) img { aspect-ratio: 4 / 3; }
+
+.cs-masonry-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.cs-masonry-item:hover img {
+  transform: scale(1.06);
+}
+
+/* Specs table — grouped rows in two columns, accent group headings and
+   dashed rules between rows */
+.cs-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+/* same small left-aligned label as the Build Gallery heading */
+.cs-specs-header h2 {
+  font-size: 24px;
+  line-height: normal;
+  letter-spacing: 0.48px;
+}
+
+.cs-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 72px;
+}
+
+.cs-spec-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cs-spec-table th,
+.cs-spec-table td {
+  padding: 13px 0;
+  text-align: left;
+  vertical-align: top;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* label column is fixed so values line up down the table */
+.cs-spec-table th {
+  width: 38%;
+  padding-right: 24px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cs-spec-table td {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cs-spec-table tr {
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+}
+
+.cs-spec-group th {
+  width: auto;
+  padding: 32px 0 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.cs-spec-group {
+  border-bottom-style: solid;
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+/* the first group in a column shouldn't push itself down */
+.cs-spec-col > .cs-spec-table:first-child .cs-spec-group th {
+  padding-top: 0;
+}
+
+/* FAQ accordion */
+.cs-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad);
+}
+
+.cs-faq-list {
+  display: flex;
+  flex-direction: column;
+  max-width: 820px;
+}
+
+.cs-faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.cs-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 22px 0;
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: 0.2px;
+  color: var(--white);
+}
+
+.cs-faq-toggle {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-left: 24px;
+}
+
+.cs-faq-toggle::before,
+.cs-faq-toggle::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: var(--terracotta);
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease;
+}
+
+.cs-faq-toggle::before { width: 16px; height: 2px; }
+.cs-faq-toggle::after { width: 2px; height: 16px; }
+
+.cs-faq-item.is-open .cs-faq-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  opacity: 0;
+}
+
+.cs-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.cs-faq-answer p {
+  padding-bottom: 22px;
+  font-size: 15px;
+  line-height: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 640px;
+}
+
+/* Related projects */
+.cs-related {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding: var(--section-py) var(--page-pad) calc(var(--section-py) * 1.5);
+}
+
+.cs-related-grid {
+  grid-template-columns: repeat(3, 1fr);
 }
 
 /* ============================================================
@@ -1480,6 +2800,45 @@ h2 {
   .gallery-row--top { height: 420px; }
 
   .gallery-modal-image { height: 460px; }
+
+  /* Product sticky bar */
+  .product-bar { width: calc(100% - 2 * var(--page-pad)); }
+
+  /* Build statistics */
+  .cs-stats-grid { gap: 24px; }
+  .cs-stat-number { font-size: 46px; }
+
+  /* Design */
+  .ds { height: 820px; }
+  .ds-text { top: 90px; gap: 20px; }
+  .ds-image { top: 170px; width: 100%; height: 660px; }
+
+  /* Product viewer */
+  .pv-inner { grid-template-columns: minmax(280px, 1fr) 1fr; gap: 20px 28px; padding: 28px; }
+  .pv-stage { height: 440px; }
+
+  /* alt runs full width below desktop — 8/12 gets too narrow to read */
+  .pv-alt .pv-header,
+  .pv-alt .pv-inner,
+  .pv-alt .pv-controls { width: 100%; }
+  .pv-alt .pv-stage { height: 460px; }
+
+  /* Project hero (VPIN Noire) — same layout, scaled ~0.72x + headroom so
+     the image still renders in full at this frame height */
+  .ph-hero { height: 790px; }
+  .ph-title { top: 70px; }
+  .ph-body { top: 220px; min-width: 260px; gap: 24px; }
+  .ph-image { top: 120px; height: 620px; }
+
+  /* Case study */
+  .cs-photo-grid { grid-template-columns: repeat(2, 1fr); }
+  .cs-photo-grid--five { grid-template-columns: repeat(3, 1fr); }
+  .cs-reveal-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 220px; }
+  .cs-reveal-lg { grid-column: span 2; grid-row: span 1; }
+  .cs-feature-grid { grid-template-columns: repeat(2, 1fr); }
+  .cs-ba-frame { height: 420px; }
+  .cs-masonry { columns: 3; }
+  .cs-related-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* --- Mobile --- */
@@ -1488,6 +2847,7 @@ h2 {
     --page-pad: 24px;
     --section-py: 48px;
     --gap: 16px;
+    --navbar-h: 68px;
   }
 
   /* Nav */
@@ -1653,6 +3013,97 @@ h2 {
   /* Footer */
   .site-footer { padding: 40px var(--page-pad); gap: 28px; }
   .footer-top { flex-direction: column; align-items: flex-start; gap: 24px; }
+
+  /* Product sticky bar */
+  .product-bar { width: calc(100% - 2 * var(--page-pad)); }
+  .product-bar-inner { gap: 24px; padding: 14px 20px; }
+  .product-bar-tabs { gap: 20px; }
+
+  /* Project hero (VPIN Noire) — drop the layered layout, stack in flow */
+  .ph-hero {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    gap: 24px;
+    padding: 48px var(--page-pad);
+  }
+  .ph-title {
+    position: static;
+    order: 0;
+    font-size: clamp(32px, 11vw, 48px);
+    line-height: 1;
+    letter-spacing: 1px;
+    white-space: normal;
+  }
+  .ph-image {
+    position: static;
+    order: 1;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+  }
+  .ph-image img { transform: none; }
+  .ph-body {
+    position: static;
+    order: 2;
+    transform: none;
+    max-width: none;
+    gap: 20px;
+  }
+  .ph-text p { font-size: 15px; line-height: 24px; }
+
+  /* Case study */
+  .cs-intro { gap: 32px; }
+  .intro-images { grid-template-columns: 1fr; }
+
+  /* Product viewer — stack the stage above the pills, drop the arrows
+     (the pills themselves are the control at this size) */
+  /* single column — reset the desktop grid placement so the rows flow
+     header, stage, controls */
+  .pv-inner { grid-template-columns: 1fr; grid-template-rows: none; gap: 24px; padding: 24px; }
+  .pv-header { grid-column: auto; grid-row: auto; }
+  .pv-controls { grid-column: auto; grid-row: auto; }
+  .pv-stage { grid-column: auto; grid-row: auto; height: 320px; }
+  .pv-arrows { display: none; }
+  .pv-pill { font-size: 15px; padding: 12px 20px 12px 14px; }
+  .pv-panel p { max-width: none; }
+  .cs-photo-grid,
+  .cs-photo-grid--five { grid-template-columns: 1fr 1fr; }
+  .cs-reveal-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+  .cs-reveal-lg { grid-column: span 1; grid-row: span 1; }
+  .cs-feature-grid { grid-template-columns: 1fr; gap: 16px; }
+  /* Design */
+  .ds { height: 560px; }
+  .ds-text { top: 56px; gap: 16px; }
+  .ds-text p { font-size: 15px; line-height: 24px; }
+  .ds-image { top: 190px; height: 360px; }
+
+  /* specs collapse to one column, label above value */
+  .cs-specs-grid { grid-template-columns: 1fr; }
+  .cs-spec-table th,
+  .cs-spec-table td { display: block; width: 100%; padding-right: 0; }
+  .cs-spec-table th { padding: 14px 0 2px; }
+  .cs-spec-table td { padding: 0 0 14px; }
+  .cs-spec-group th { padding: 28px 0 10px; }
+  .cs-spec-col + .cs-spec-col .cs-spec-table:first-child .cs-spec-group th { padding-top: 28px; }
+
+  .cs-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 20px; }
+  /* two columns — the divider belongs between the pair, so hide it on
+     every odd tile rather than only the first */
+  .cs-stats-grid .cs-stat-tile::before { left: -10px; height: 40px; }
+  .cs-stats-grid .cs-stat-tile:nth-child(odd)::before { display: none; }
+  .cs-stat-number { font-size: 42px; }
+  .cs-ba-frame { height: 320px; }
+  .cs-ba-handle-grip { width: 36px; height: 36px; }
+  .cs-masonry { columns: 2; }
+  .cs-details-list { gap: 32px; }
+  .cs-related-grid { grid-template-columns: 1fr; }
+  .cs-timeline-list li { font-size: 17px; }
 }
 
 /* --- Small phones --- */
