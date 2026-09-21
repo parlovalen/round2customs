@@ -1069,6 +1069,118 @@ if (csMasonry && csGalleryModal) {
 
 
 // ============================================================
+// RELATED PROJECTS CAROUSEL — bottom of every case study.
+// Looping carousel of the showroom's project tiles (minus the page you're on).
+// Slots 0-3 are visible: 1 and 2 fully opaque, 0 and 3 faded. Clicking a
+// faded tile steps the carousel that way; pagination dots jump straight to
+// a project. `current` is the tile sitting in slot 1.
+// ============================================================
+const rpTrack = document.getElementById('rp-track');
+const rpPagination = document.getElementById('rp-pagination');
+
+if (rpTrack && rpPagination) {
+  const RP_PROJECTS = [
+    { slug: 'vpin-classic',     img: 'classic-vpin.png',       alt: 'VPIN Classic custom pinball build',     name: 'VPIN<br>CLASSIC' },
+    { slug: 'apex-cosmic',      img: 'apex-cosmic.jpg',        alt: 'Cosmic Apex custom arcade build',       name: 'COSMIC<br>APEX' },
+    { slug: 'vpin-modern',      img: 'vpin-noire.jpg',         alt: 'VPIN Modern custom pinball build',      name: 'VPIN<br>MODERN' },
+    { slug: 'retro-studio',     img: 'retro-studio.jpg',       alt: 'Retro Studio custom arcade build',      name: 'RETRO<br>STUDIO' },
+    { slug: 'steam-pedestal',   img: 'steam-pedestal.jpg',     alt: 'Steam Deck Pedestal custom arcade build', name: 'STEAM DECK<br>PEDESTAL' },
+    { slug: 'retro-3rd-strike', img: 'retro-3rd-strike.jpg',   alt: 'Retro 3rd Strike custom arcade build',  name: 'RETRO<br>3RD STRIKE' },
+  ];
+
+  const pageSlug = location.pathname.split('/').pop().replace(/\.html$/, '');
+  const rpItems = RP_PROJECTS.filter(p => p.slug !== pageSlug);
+  const rpCount = rpItems.length;
+
+  // The visible window is 4 slots wide, so a loop of just `rpCount` tiles has
+  // no spare tile to wait off-canvas — the one leaving the left edge would
+  // have to fly across the screen to re-enter on the right. The ring is
+  // therefore doubled (each project appears twice) so the tile that wraps
+  // around always does so far outside the visible slots.
+  const rpTotal = rpCount * 2;
+  const rpHalf = rpTotal / 2;
+  let rpCurrent = 0; // unbounded step counter; the ring position is rpCurrent mod rpTotal
+
+  const rpTiles = Array.from({ length: rpTotal }, (_, n) => {
+    const p = rpItems[n % rpCount];
+    const li = document.createElement('li');
+    li.className = 'rp-tile';
+    li.innerHTML = `
+      <a class="project-card" href="${ASSET_PREFIX}projects/${p.slug}.html">
+        <img src="${ASSET_PREFIX}assets/images/${p.img}" alt="${p.alt}" loading="lazy">
+        <div class="project-card-fade"></div>
+        <span class="project-card-name">${p.name}</span>
+      </a>`;
+    rpTrack.appendChild(li);
+    return li;
+  });
+
+  function renderRp(instant) {
+    rpTiles.forEach((li, i) => {
+      // signed distance from `current`, wrapped into -half..half; slot 1 = current
+      const r = (((i - rpCurrent + rpHalf) % rpTotal) + rpTotal) % rpTotal - rpHalf;
+      const slot = r + 1;
+      if (instant) li.style.transition = 'none';
+      li.dataset.slot = String(slot);
+      li.style.setProperty('--d', String(Math.max(-1, Math.min(4, slot))));
+      li.dataset.role = slot === 0 ? 'prev' : slot === 3 ? 'next' : 'center';
+      const visible = slot >= 0 && slot <= 3;
+      li.setAttribute('aria-hidden', String(!visible));
+      li.querySelector('a').tabIndex = visible ? 0 : -1;
+    });
+    if (instant) {
+      void rpTrack.offsetWidth; // apply the positions before transitions come back
+      rpTiles.forEach(li => { li.style.transition = ''; });
+    }
+    rpPagination.querySelectorAll('.pagination-dot').forEach((dot, i) => {
+      const active = i === (((rpCurrent % rpCount) + rpCount) % rpCount);
+      dot.classList.toggle('is-active', active);
+      dot.setAttribute('aria-selected', String(active));
+    });
+  }
+
+  const rpGoTo = n => { rpCurrent = n; renderRp(false); };
+
+  rpItems.forEach((p, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'pagination-dot';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `Show ${p.slug.replace(/-/g, ' ')}`);
+    // step the short way round to the chosen project
+    dot.addEventListener('click', () => {
+      let delta = (((i - rpCurrent) % rpCount) + rpCount) % rpCount;
+      if (delta > rpCount / 2) delta -= rpCount;
+      rpGoTo(rpCurrent + delta);
+    });
+    rpPagination.appendChild(dot);
+  });
+
+  // faded outer tiles step the carousel instead of following the link
+  rpTiles.forEach(li => {
+    li.querySelector('a').addEventListener('click', e => {
+      // on phones only slot 1 is a live link; both neighbours (0 and 2) step the carousel
+      const phone = window.matchMedia('(max-width: 768px)').matches;
+      const slot = li.dataset.slot;
+      if (li.dataset.role === 'prev') { e.preventDefault(); rpGoTo(rpCurrent - 1); }
+      else if (li.dataset.role === 'next' || (phone && slot === '2')) { e.preventDefault(); rpGoTo(rpCurrent + 1); }
+    });
+  });
+
+  // swipe on touch screens
+  let rpTouchX = null;
+  rpTrack.addEventListener('touchstart', e => { rpTouchX = e.touches[0].clientX; }, { passive: true });
+  rpTrack.addEventListener('touchend', e => {
+    if (rpTouchX === null) return;
+    const dx = e.changedTouches[0].clientX - rpTouchX;
+    if (Math.abs(dx) > 50) rpGoTo(rpCurrent + (dx < 0 ? 1 : -1));
+    rpTouchX = null;
+  });
+
+  renderRp(true);
+}
+
+
+// ============================================================
 // BUTTON PIXEL GRID EFFECT (EASED + REVERSE)
 // ============================================================
 class ButtonPixelGridEffect {

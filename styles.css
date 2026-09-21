@@ -752,11 +752,13 @@ h2 {
 
 /* 8-bit arrow cursors on the side slides, from the Figma "8bit-arrow" component
    (node 56:78) — solid terracotta staircase-pixel chevron, no outline. */
-.carousel-slide[data-role="prev"]:hover {
+.carousel-slide[data-role="prev"]:hover,
+.rp-tile[data-role="prev"]:hover {
   cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI2NyIgdmlld0JveD0iMTAgMTAgMjQwIDE2OCI+CjxwYXRoIGQ9Ik04MiAxNzhIMTA2VjE1NEg4MlYxNzhaTTU4IDE1NEg4MlYxMzBINThWMTU0Wk0zNCAxMzBINThWMTA2SDI1MFY4Mkg1OFY1OEgzNFY4MkgxMFYxMDZIMzRWMTMwWk01OCA1OEg4MlYzNEg1OFY1OFpNODIgMzRIMTA2VjEwSDgyVjM0WiIgZmlsbD0iI0Q2NUUzOCIvPgo8L3N2Zz4K") 0 34, pointer;
 }
 
-.carousel-slide[data-role="next"]:hover {
+.carousel-slide[data-role="next"]:hover,
+.rp-tile[data-role="next"]:hover {
   cursor: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5NiIgaGVpZ2h0PSI2NyIgdmlld0JveD0iMTAgMTAgMjQwIDE2OCI+CjxwYXRoIGQ9Ik0xNzggMTc4SDE1NFYxNTRIMTc4VjE3OFpNMjAyIDE1NEgxNzhWMTMwSDIwMlYxNTRaTTIyNiAxMzBIMjAyVjEwNkgxMFY4MkgyMDJWNThIMjI2VjgySDI1MFYxMDZIMjI2VjEzMFpNMjAyIDU4SDE3OFYzNEgyMDJWNThaTTE3OCAzNEgxNTRWMTBIMTc4VjM0WiIgZmlsbD0iI0Q2NUUzOCIvPgo8L3N2Zz4K") 96 34, pointer;
 }
 
@@ -1375,8 +1377,8 @@ body.page-vpin-noire .project-gallery h2 {
 
 .ph-image {
   position: absolute;
-  top: 167px;    /* Figma 181px, shifted up 14px with the rest of the group */
-  left: 29%;
+  top: 187px;   /* Figma 181px; nudged from 167px to sit lower */
+  left: 36%;     /* nudged right from 29% */
   width: 49.2%;  /* 708px / 1440px */
   height: 861px; /* fixed px — the hero is taller than the original 861px
                     frame specifically so this doesn't get clipped */
@@ -3279,7 +3281,7 @@ body.page-vpin-noire .project-gallery h2 {
   .ph-hero { height: 790px; }
   .ph-title { top: 70px; }
   .ph-body { top: 220px; min-width: 260px; gap: 24px; }
-  .ph-image { top: 120px; height: 620px; }
+  .ph-image { top: 140px; height: 620px; }
 
   /* Case study */
   .cs-photo-grid { grid-template-columns: repeat(2, 1fr); }
@@ -3636,4 +3638,133 @@ body.page-vpin-noire .project-gallery h2 {
 @media (max-width: 768px) {
   .ds.ds--static { height: auto; padding-top: 56px; }
   .ds--static .ds-image { top: auto; height: auto; margin-top: 40px; }
+}
+
+/* ============================================================
+   PROJECT HERO — STACKED (two-line) TITLE
+   Long project names break onto two lines at the shared title size
+   instead of shrinking. The body copy and CTA drop by one title line
+   (line-height .914 x the title's font-size) so they clear the second line.
+   ============================================================ */
+.ph-hero--stacked .ph-body {
+  top: calc(306px + 0.914 * clamp(56px, 11.2vw, 160px));
+}
+
+@media (max-width: 1024px) {
+  .ph-hero--stacked .ph-body {
+    top: calc(220px + 0.914 * clamp(56px, 11.2vw, 160px));
+  }
+}
+
+/* ============================================================
+   PROJECT HERO — LOWERED IMAGE (.ph-hero--img-low)
+   Hero photo sits 170px lower and 40px further right; the hero grows by
+   the same 170px so the image isn't clipped at the bottom.
+   ============================================================ */
+.ph-hero--img-low {
+  height: 1236px;
+}
+
+.ph-hero--img-low .ph-image {
+  top: 357px;
+  left: calc(36% + 40px);
+}
+
+@media (max-width: 1024px) {
+  .ph-hero--img-low { height: 960px; }
+  .ph-hero--img-low .ph-image { top: 310px; }
+}
+
+@media (max-width: 768px) {
+  .ph-hero--img-low { height: auto; }
+}
+
+/* ============================================================
+   RELATED PROJECTS CAROUSEL (.rp) — bottom of every case study
+   Showroom project tiles (588px wide, same look) as a looping carousel.
+   The two middle tiles sit centred and fully opaque; the tiles either
+   side are faded and run off canvas. Clicking a faded tile advances the
+   carousel that way (8-bit arrow cursors and pagination dots are the home
+   page studio carousel's). Built by RELATED PROJECTS CAROUSEL in scripts.js.
+   ============================================================ */
+.rp {
+  --rp-gap: 16px;
+  --rp-w: min(588px, 46vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  padding: 60px 0 var(--section-py);
+  overflow: hidden;
+}
+
+.rp .project-stories-label {
+  align-self: flex-start;
+  padding-left: var(--page-pad);
+  color: var(--white);
+}
+
+.rp-viewport {
+  position: relative;
+  width: 100%;
+  height: 220px;
+}
+
+.rp-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* every tile starts at the page centre; --d (its slot 0-3) slides it into
+   place: slots 1 and 2 are the centred pair, 0 and 3 sit either side */
+.rp-tile {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--rp-w);
+  height: 100%;
+  transform: translateX(calc(-1 * var(--rp-w) - var(--rp-gap) / 2 + (var(--d, 1) - 1) * (var(--rp-w) + var(--rp-gap))));
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.6s ease;
+  /* the ring holds extra tiles waiting off-canvas — only slots 0-3 show */
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rp-tile[data-slot="1"],
+.rp-tile[data-slot="2"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.rp-tile[data-slot="0"],
+.rp-tile[data-slot="3"] {
+  opacity: 0.35;
+  pointer-events: auto;
+}
+
+.rp-tile .project-card {
+  height: 100%;
+  cursor: inherit;
+}
+
+/* side tiles show the 8-bit arrow cursor; the two middle tiles are plain links */
+.rp-tile[data-role="center"] .project-card {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .rp-viewport { height: 200px; }
+
+  /* one tile wide with the neighbours peeking in at the sides */
+  .rp { --rp-w: 72vw; }
+  .rp-tile {
+    transform: translateX(calc(-0.5 * var(--rp-w) + (var(--d, 1) - 1) * (var(--rp-w) + var(--rp-gap))));
+  }
+
+  .rp-tile[data-slot="2"] { opacity: 0.35; }
+  .rp-tile[data-slot="3"] { opacity: 0; pointer-events: none; }
 }

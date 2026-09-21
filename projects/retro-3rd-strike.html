@@ -66,8 +66,8 @@
        Giant wordmark sits behind the text/photo; the photo parallaxes at a
        different rate than the page scroll, sliding over the wordmark as the
        user starts scrolling instead of moving in lockstep with it. ======= -->
-  <section class="ph-hero" id="ph-hero">
-    <h1 class="ph-title" style="--ph-title-size: 9.3vw" aria-hidden="true">RETRO 3RD STRIKE</h1>
+  <section class="ph-hero ph-hero--stacked" id="ph-hero">
+    <h1 class="ph-title" aria-hidden="true">RETRO 3RD<br>STRIKE</h1>
     <div class="ph-body">
       <div class="section-text ph-text">
         <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -77,7 +77,7 @@
         START YOUR BUILD</a>
     </div>
     <div class="ph-image" id="ph-image">
-      <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike custom arcade build">
+      <img src="../assets/images/projects/retro%203rd%20strike/retro-3rd-strike-hero.webp" alt="Retro 3rd Strike custom arcade build">
     </div>
   </section>
 
@@ -202,26 +202,26 @@
     <div class="gallery-grid">
       <div class="gallery-row gallery-row--top">
         <a href="#" class="gallery-card gallery-card--large" data-photo="0">
-              <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike build photo">
+              <img src="../assets/images/projects/retro 3rd strike/gallery/gallery-1-web.jpg" alt="Retro 3rd Strike build photo 1">
         </a>
         <div class="gallery-col">
           <div class="gallery-row gallery-row--split">
             <a href="#" class="gallery-card" data-photo="1">
-              <img src="../assets/images/about/shop-1.jpg" alt="Round 2 Customs shop exterior">
+              <img src="../assets/images/projects/retro 3rd strike/gallery/gallery-2-web.jpg" alt="Retro 3rd Strike build photo 2">
             </a>
             <a href="#" class="gallery-card" data-photo="2">
-              <img src="../assets/images/about/shop-2.jpg" alt="Round 2 Customs shop storage">
+              <img src="../assets/images/projects/retro 3rd strike/gallery/gallery-3-web.jpg" alt="Retro 3rd Strike build photo 3">
             </a>
           </div>
           <div class="gallery-row">
             <a href="#" class="gallery-card" data-photo="3">
-              <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike build photo">
+              <img src="../assets/images/projects/retro 3rd strike/gallery/gallery-4-web.jpg" alt="Retro 3rd Strike build photo 4">
             </a>
             <a href="#" class="gallery-card" data-photo="4">
-              <img src="../assets/images/about/shop-1.jpg" alt="Round 2 Customs shop exterior">
+              <img src="../assets/images/projects/retro 3rd strike/gallery/gallery-5-web.jpg" alt="Retro 3rd Strike build photo 5">
             </a>
             <a href="#" class="gallery-card" data-photo="5">
-              <img src="../assets/images/about/shop-2.jpg" alt="Round 2 Customs shop storage">
+              <img src="../assets/images/projects/retro 3rd strike/gallery/gallery-6-web.jpg" alt="Retro 3rd Strike build photo 6">
             </a>
           </div>
         </div>
@@ -232,28 +232,32 @@
   <script type="application/json" id="project-photos" data-title="Retro 3rd Strike">
 [
   {
-    "src": "assets/images/retro-3rd-strike.jpg",
-    "alt": "Retro 3rd Strike build photo"
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-1-web.jpg",
+    "alt": "Retro 3rd Strike build photo 1"
   },
   {
-    "src": "assets/images/about/shop-1.jpg",
-    "alt": "Round 2 Customs shop exterior"
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-2-web.jpg",
+    "alt": "Retro 3rd Strike build photo 2"
   },
   {
-    "src": "assets/images/about/shop-2.jpg",
-    "alt": "Round 2 Customs shop storage"
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-3-web.jpg",
+    "alt": "Retro 3rd Strike build photo 3"
   },
   {
-    "src": "assets/images/retro-3rd-strike.jpg",
-    "alt": "Retro 3rd Strike build photo"
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-4-web.jpg",
+    "alt": "Retro 3rd Strike build photo 4"
   },
   {
-    "src": "assets/images/about/shop-1.jpg",
-    "alt": "Round 2 Customs shop exterior"
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-5-web.jpg",
+    "alt": "Retro 3rd Strike build photo 5"
   },
   {
-    "src": "assets/images/about/shop-2.jpg",
-    "alt": "Round 2 Customs shop storage"
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-6-web.jpg",
+    "alt": "Retro 3rd Strike build photo 6"
+  },
+  {
+    "src": "assets/images/projects/retro 3rd strike/gallery/gallery-7-web.jpg",
+    "alt": "Retro 3rd Strike build photo 7"
   }
 ]
   </script>
@@ -386,6 +390,15 @@
           </div>
       </div>
     </div>
+  </section>
+
+  <!-- ======= RELATED PROJECTS CAROUSEL — see RELATED PROJECTS CAROUSEL in scripts.js ======= -->
+  <section class="rp" id="related-projects" aria-label="More project stories">
+    <p class="project-stories-label">MORE PROJECT STORIES</p>
+    <div class="rp-viewport">
+      <ul class="rp-track" id="rp-track"></ul>
+    </div>
+    <div class="carousel-pagination" id="rp-pagination" role="tablist" aria-label="Project stories"></div>
   </section>
 
   <!-- ======= CONTACT FORM ======= -->
