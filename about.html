@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RETRO 3RD STRIKE — Round 2 Customs</title>
-  <meta name="description" content="Retro 3rd Strike custom arcade build, by Round 2 Customs.">
+  <title>About — Round 2 Customs</title>
+  <meta name="description" content="Round 2 Customs is a custom arcade and pinball cabinet builder in Lake Barrington, IL. Design, fabrication, wiring, and finishing, all done in-house.">
 
   <!-- Halyard Display (headings) + Gotham (body) via Adobe Fonts -->
   <link rel="stylesheet" href="https://use.typekit.net/sjv2mus.css">
 
 
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="styles.css">
 
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 </head>
-<body class="page-vpin-noire">
+<body>
 
   <div class="grid-line grid-line--left" aria-hidden="true"></div>
   <div class="grid-line grid-line--right" aria-hidden="true"></div>
@@ -24,8 +24,8 @@
   <!-- ======= NAV ======= -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="../index.html" class="nav-logo" aria-label="Round 2 Customs — home">
-        <img src="../assets/brand/r2c-logo.svg" alt="Round 2 Customs">
+      <a href="index.html" class="nav-logo" aria-label="Round 2 Customs — home">
+        <img src="assets/brand/r2c-logo.svg" alt="Round 2 Customs">
       </a>
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span>
@@ -38,98 +38,112 @@
   <!-- NAV OVERLAY MENU -->
   <div class="nav-menu" id="nav-menu" aria-hidden="true">
     <ul>
-      <li><a href="../index.html#hero">Home</a></li>
-      <li><a href="../about.html">About</a></li>
-      <li><a href="../showroom.html">Showroom</a></li>
+      <li><a href="index.html#hero">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="showroom.html">Showroom</a></li>
       <li><a href="#contact" id="nav-link-custom-builder">Custom Builder<span class="nav-badge">Coming Soon</span></a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
 
-  <!-- ======= PRODUCT STICKY BAR — appears once the hero is scrolled past ======= -->
-  <!-- TEMPORARILY HIDDEN — remove the inline display:none to bring it back -->
-  <div class="product-bar" id="product-bar" style="display: none;">
-    <div class="product-bar-inner">
-      <span class="product-bar-name">Retro 3rd Strike</span>
-      <nav class="product-bar-tabs">
-        <a href="#ds" data-cs-target="ds">Design</a>
-        <a href="#pv-alt" data-cs-target="pv-alt">Manufacturing</a>
-        <a href="#build-gallery" data-cs-target="build-gallery">Gallery</a>
-        <a href="#cs-specs" data-cs-target="cs-specs">Specs</a>
-        <a href="#cs-faq" data-cs-target="cs-faq">FAQ</a>
-      </nav>
-    </div>
-  </div>
-
-  <!-- ======= PROJECT HERO — RETRO 3RD STRIKE
-       Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=73-341
-       Giant wordmark sits behind the text/photo; the photo parallaxes at a
-       different rate than the page scroll, sliding over the wordmark as the
-       user starts scrolling instead of moving in lockstep with it. ======= -->
-  <section class="ph-hero" id="ph-hero">
-    <h1 class="ph-title" style="--ph-title-size: 9.3vw" aria-hidden="true">RETRO 3RD STRIKE</h1>
-    <div class="ph-body">
-      <div class="section-text ph-text">
-        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  <!-- ======= HERO — ORIGIN STORY ======= -->
+  <section class="hero hero--about" id="origin-story">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>ORIGIN<br>STORY</h1>
+        <p>United by a love for gaming, design, and premium craftsmanship, we set out to raise the bar in an industry flooded with flimsy, low-quality arcade cabinets. Our background in electrical engineering and woodworking is a perfect blend that led us to create high-end, custom arcade machines that look stunning, perform flawlessly, and stand the test of time.</p>
       </div>
-      <a href="#contact" class="btn-primary">
-        <canvas class="btn-particle-canvas"></canvas>
-        START YOUR BUILD</a>
     </div>
-    <div class="ph-image" id="ph-image">
-      <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike custom arcade build">
+    <div class="hero-image">
+      <img src="assets/images/about-hero.png" alt="Custom arcade cabinet, from concept sketch to finished build">
+      <div class="hero-image-fade"></div>
     </div>
   </section>
 
-  <!-- BUILD STATISTICS removed until real numbers are available — restore from vpin-modern.html -->
-
-  <!-- ======= CINEMATIC INTRO
-       Large statement paragraph that fills in word-by-word as the section
-       scrolls through the viewport (words are wrapped by JS — see
-       WORD FILL REVEAL in scripts.js), then two shop photos below. ======= -->
-  <section class="cs-intro" id="cs-intro">
-    <p class="intro-copy" id="intro-copy">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex.</p>
-    <div class="intro-images">
-      <img src="../assets/images/projects/vpin%20modern/storage-shop-1.JPG" alt="Round 2 Customs storage shop">
-      <img src="../assets/images/projects/vpin%20modern/storage-shop-2.JPG" alt="Round 2 Customs storage shop, work in progress">
+  <!-- ======= WHAT SETS US APART ======= -->
+  <section class="about-apart">
+    <p class="project-stories-label">WHAT SETS US APART</p>
+    <div class="about-apart-grid">
+      <div class="about-apart-card">
+        <img src="assets/images/about/apart-timeless.jpg" alt="">
+        <div class="about-apart-text">
+          <p class="about-apart-headline">TIMELESS NOSTALGIA MEETS<br>MODERN PERFORMANCE</p>
+          <div class="about-apart-desc-wrap">
+            <p>Cabinet lines and control layouts that echo the originals, built around displays, force feedback, and electronics those originals never had.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-apart-card">
+        <img src="assets/images/about/apart-roof.jpg" alt="">
+        <div class="about-apart-text">
+          <p class="about-apart-headline">EVERY CABINET UNDER<br>THE SAME ROOF</p>
+          <div class="about-apart-desc-wrap">
+            <p>Design, CNC fabrication, wiring, and finishing all happen in our Lake Barrington shop, so nothing is outsourced or handed off.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-apart-card">
+        <img src="assets/images/about/apart-commercial.jpg" alt="">
+        <div class="about-apart-text">
+          <p class="about-apart-headline">COMMERCIAL-GRADE, NO<br>MATTER WHO YOU ARE</p>
+          <div class="about-apart-desc-wrap">
+            <p>We don't build a lighter version for home clients. Every cabinet leaves built to the same standard, whether it's headed to a venue or a living room.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-apart-card">
+        <img src="assets/images/about/apart-tastes.jpg" alt="">
+        <div class="about-apart-text">
+          <p class="about-apart-headline">MADE TO YOUR TASTES<br>AND REQUIREMENTS</p>
+          <div class="about-apart-desc-wrap">
+            <p>Every build starts as a conversation about what you actually want, not a spec sheet you pick from.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ======= DESIGN
-       Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=77-380
-       Centred heading + copy, with the CAD mockup below rising over them
-       on scroll (see DESIGN SECTION PARALLAX in scripts.js). The image
-       fades to black at its base, per the design. ======= -->
-  <section class="ds" id="ds">
-    <div class="section-text ds-text">
-      <h2>DESIGN</h2>
-      <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.</p>
-    </div>
-    <div class="ds-image" id="ds-image">
-      <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike design">
+  <!-- ======= WHO WE BUILD FOR ======= -->
+  <section class="about-audience">
+    <p class="project-stories-label">WHO WE BUILD FOR</p>
+    <div class="about-audience-grid">
+      <div class="about-audience-card">
+        <img src="assets/images/about/audience-commercial.jpg" alt="">
+        <div class="about-audience-text">
+          <h3>COMMERCIAL</h3>
+          <div class="about-audience-desc-wrap">
+            <p>Bars, breweries, FECs, and arcades running cabinets on a schedule they can't afford to miss. We build to commercial-grade specs from the start, so what we deliver holds up under real, daily traffic instead of home use.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-audience-card">
+        <img src="assets/images/about/audience-home.jpg" alt="">
+        <div class="about-audience-text">
+          <h3>HOME</h3>
+          <div class="about-audience-desc-wrap">
+            <p>For collectors and enthusiasts, we build arcade cabinets with the same quality materials and construction standards as our commercial cabinets but customized around your space, your games and your personal style.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ======= PRODUCT VIEWER (ALT)
-       Same data as the build-process viewer above, laid out differently:
-       the media sits alone in the container with a caption box floating
-       over it, and the pills sit in a row underneath acting as selectors
-       rather than expanding accordions. ======= -->
-  <section class="pv pv-alt" id="pv-alt">
+  <!-- ======= IN-HOUSE, START TO FINISH ======= -->
+  <section class="pv pv-alt" id="in-house">
     <div class="section-text pv-header">
-      <h2>MANUFACTURING</h2>
+      <h2>IN-HOUSE, START TO FINISH</h2>
       <p>Every machine is designed, cut, wired and assembled in our Lake Barrington shop with no outsourcing.</p>
     </div>
     <div class="pv-inner">
       <div class="pv-stage">
         <!-- shown only while nothing is selected -->
-        <img class="pv-cover" src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike custom arcade build">
+        <img class="pv-cover" src="assets/images/projects/vpin%20modern/vpin-noir-cover.png" alt="Custom cabinet cover">
         <!-- one per pill, in the same order as the list -->
-        <img class="is-active" src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike cabinet modelled in CAD">
-        <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike CNC manufacturing stage">
-        <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike wiring stage">
-        <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike assembly stage">
-        <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike delivered">
+        <img class="is-active" src="assets/images/projects/vpin%20modern/vpin-noir-cad.jpg" alt="Cabinet modelled in CAD">
+        <video src="assets/images/projects/vpin%20modern/manufacturing-video.mp4" muted loop playsinline preload="metadata" aria-label="CNC manufacturing stage"></video>
+        <img src="assets/images/projects/vpin%20modern/vpin-noir-wiring.JPG" alt="Wiring stage">
+        <img src="assets/images/projects/vpin%20modern/vpin-noir-assembly.JPG" alt="Assembly stage">
+        <img src="assets/images/projects/vpin%20modern/vpin-noir-delivery.JPG" alt="Delivered cabinet">
       </div>
       <div class="pv-captions">
         <div class="pv-caption is-active">
@@ -193,49 +207,43 @@
     </div>
   </section>
 
-  <!-- ======= PROJECT GALLERY
-       Same bento module as the showroom page. Tiles show the first photos
-       of #project-photos; the lightbox opens on the clicked one and the
-       arrows/thumbs cover the full list — see GALLERY MODAL in scripts.js. ======= -->
-  <section class="project-gallery project-gallery--photos" id="build-gallery">
-    <h2>BUILD GALLERY</h2>
+  <!-- ======= THE SHOP — gallery component, same as the case-study pages ======= -->
+  <section class="project-gallery project-gallery--photos" id="the-shop">
+    <h2>THE SHOP</h2>
     <div class="gallery-grid">
       <div class="gallery-row gallery-row--top">
         <a href="#" class="gallery-card gallery-card--large" data-photo="0">
-              <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike build photo">
+              <img src="assets/images/about/shop-1.jpg" alt="Round 2 Customs shop exterior">
         </a>
         <div class="gallery-col">
           <div class="gallery-row gallery-row--split">
             <a href="#" class="gallery-card" data-photo="1">
-              <img src="../assets/images/about/shop-1.jpg" alt="Round 2 Customs shop exterior">
+              <img src="assets/images/about/shop-2.jpg" alt="Round 2 Customs shop storage">
             </a>
             <a href="#" class="gallery-card" data-photo="2">
-              <img src="../assets/images/about/shop-2.jpg" alt="Round 2 Customs shop storage">
+              <img src="assets/images/about/shop-3.JPG" alt="A cabinet under construction on the shop floor">
             </a>
           </div>
           <div class="gallery-row">
             <a href="#" class="gallery-card" data-photo="3">
-              <img src="../assets/images/retro-3rd-strike.jpg" alt="Retro 3rd Strike build photo">
+              <img src="assets/images/about/shop-4.JPG" alt="Cabinet wiring in progress">
             </a>
             <a href="#" class="gallery-card" data-photo="4">
-              <img src="../assets/images/about/shop-1.jpg" alt="Round 2 Customs shop exterior">
+              <img src="assets/images/about/shop-5.jpg" alt="A finished cabinet ready for delivery">
             </a>
             <a href="#" class="gallery-card" data-photo="5">
-              <img src="../assets/images/about/shop-2.jpg" alt="Round 2 Customs shop storage">
+              <img src="assets/images/about/shop-6.JPG" alt="A finished cabinet built in the shop">
             </a>
           </div>
         </div>
       </div>
     </div>
+    <p class="about-shop-address">28144 W Industrial Ave, Lake Barrington, IL 60010 — every cabinet is cut, wired, and finished under this roof.</p>
   </section>
 
-  <script type="application/json" id="project-photos" data-title="Retro 3rd Strike">
+  <script type="application/json" id="project-photos" data-title="The Shop">
 [
   {
-    "src": "assets/images/retro-3rd-strike.jpg",
-    "alt": "Retro 3rd Strike build photo"
-  },
-  {
     "src": "assets/images/about/shop-1.jpg",
     "alt": "Round 2 Customs shop exterior"
   },
@@ -244,16 +252,20 @@
     "alt": "Round 2 Customs shop storage"
   },
   {
-    "src": "assets/images/retro-3rd-strike.jpg",
-    "alt": "Retro 3rd Strike build photo"
+    "src": "assets/images/about/shop-3.JPG",
+    "alt": "A cabinet under construction on the shop floor"
   },
   {
-    "src": "assets/images/about/shop-1.jpg",
-    "alt": "Round 2 Customs shop exterior"
+    "src": "assets/images/about/shop-4.JPG",
+    "alt": "Cabinet wiring in progress"
   },
   {
-    "src": "assets/images/about/shop-2.jpg",
-    "alt": "Round 2 Customs shop storage"
+    "src": "assets/images/about/shop-5.jpg",
+    "alt": "A finished cabinet ready for delivery"
+  },
+  {
+    "src": "assets/images/about/shop-6.JPG",
+    "alt": "A finished cabinet built in the shop"
   }
 ]
   </script>
@@ -284,114 +296,10 @@
     </button>
   </div>
 
-  <!-- ======= SPECS ======= -->
-  <section class="cs-specs" id="cs-specs">
-    <div class="section-text cs-specs-header">
-      <h2>SPECIFICATIONS</h2>
-    </div>
-    <div class="cs-specs-grid">
-      <div class="cs-spec-col">
-      <table class="cs-spec-table">
-        <tbody>
-          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">Cabinet</th></tr>
-          <tr><th scope="row">Type</th><td>TBD</td></tr>
-          <tr><th scope="row">Material</th><td>TBD</td></tr>
-          <tr><th scope="row">Finish</th><td>TBD</td></tr>
-          <tr><th scope="row">Base</th><td>TBD</td></tr>
-          <tr><th scope="row">Build time</th><td>TBD</td></tr>
-        </tbody>
-      </table>
-      <table class="cs-spec-table">
-        <tbody>
-          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">Displays</th></tr>
-          <tr><th scope="row">Playfield</th><td>TBD</td></tr>
-          <tr><th scope="row">Backglass</th><td>TBD</td></tr>
-          <tr><th scope="row">Scoreboard</th><td>TBD</td></tr>
-        </tbody>
-      </table>
-      </div>
-      <div class="cs-spec-col">
-      <table class="cs-spec-table">
-        <tbody>
-          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">Controls</th></tr>
-          <tr><th scope="row">Buttons</th><td>TBD</td></tr>
-          <tr><th scope="row">Plunger</th><td>TBD</td></tr>
-          <tr><th scope="row">Sensors</th><td>TBD</td></tr>
-          <tr><th scope="row">Feedback</th><td>TBD</td></tr>
-        </tbody>
-      </table>
-      <table class="cs-spec-table">
-        <tbody>
-          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">System</th></tr>
-          <tr><th scope="row">Tables</th><td>TBD</td></tr>
-          <tr><th scope="row">Audio</th><td>TBD</td></tr>
-          <tr><th scope="row">Connectivity</th><td>TBD</td></tr>
-          <tr><th scope="row">Access</th><td>TBD</td></tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= FAQ ======= -->
-  <section class="cs-faq" id="cs-faq">
-    <div class="section-text cs-faq-header">
-      <h2>COMMON QUESTIONS</h2>
-    </div>
-    <div class="cs-faq-list">
-      <div class="cs-faq-col">
-  <div class="cs-faq-item">
-            <button type="button" class="cs-faq-question" aria-expanded="false">
-              Can I customize the artwork?
-              <span class="cs-faq-toggle" aria-hidden="true"></span>
-            </button>
-            <div class="cs-faq-answer"><p>Yes — every cabinet's graphics are custom, from full-wrap illustration to a minimal wordmark treatment.</p></div>
-          </div>
-  <div class="cs-faq-item">
-            <button type="button" class="cs-faq-question" aria-expanded="false">
-              Can you build different sizes?
-              <span class="cs-faq-toggle" aria-hidden="true"></span>
-            </button>
-            <div class="cs-faq-answer"><p>We build to the space, not a fixed catalog size — cabinet width, depth, and control deck layout can all be adjusted for the room it's going into.</p></div>
-          </div>
-  <div class="cs-faq-item">
-            <button type="button" class="cs-faq-question" aria-expanded="false">
-              Can I add more games later?
-              <span class="cs-faq-toggle" aria-hidden="true"></span>
-            </button>
-            <div class="cs-faq-answer"><p>Our cabinets ship with an expandable game library, and adding more later is just a software update — no hardware changes required.</p></div>
-          </div>
-      </div>
-      <div class="cs-faq-col">
-  <div class="cs-faq-item">
-            <button type="button" class="cs-faq-question" aria-expanded="false">
-              Can I choose different controls?
-              <span class="cs-faq-toggle" aria-hidden="true"></span>
-            </button>
-            <div class="cs-faq-answer"><p>Button feel, joystick style and control layout can all be tuned to preference during the build.</p></div>
-          </div>
-  <div class="cs-faq-item">
-            <button type="button" class="cs-faq-question" aria-expanded="false">
-              How long does a build take?
-              <span class="cs-faq-toggle" aria-hidden="true"></span>
-            </button>
-            <div class="cs-faq-answer"><p>Most builds take 4-6 weeks from signed concept to delivery.</p></div>
-          </div>
-  <div class="cs-faq-item">
-            <button type="button" class="cs-faq-question" aria-expanded="false">
-              Can you ship nationwide?
-              <span class="cs-faq-toggle" aria-hidden="true"></span>
-            </button>
-            <div class="cs-faq-answer"><p>Yes — every cabinet is crated and shipped fully assembled or in a protected two-piece configuration depending on destination.</p></div>
-          </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ======= CONTACT FORM ======= -->
   <section class="contact" id="contact">
     <div class="contact-header">
-      <h2>GET IN TOUCH</h2>
+      <h2>LET'S START YOUR BUILD</h2>
       <p>Whatever brought you here, an idea, a favorite game, a space that needs one more thing in it, tell us about it and we'll make your vision come to life together.</p>
     </div>
     <form class="contact-form" id="contact-form" novalidate>
@@ -427,6 +335,22 @@
     </form>
   </section>
 
+  <!-- ======= LATEST WORK ======= -->
+  <section class="about-latest">
+    <div class="about-latest-image">
+      <img src="assets/images/about/latest-work.jpg" alt="Custom 4-player pedestal arcade cabinet running Teenage Mutant Ninja Turtles: Shredder's Revenge" loading="lazy">
+    </div>
+    <div class="about-latest-content">
+      <div class="about-latest-text">
+        <h2>CHECK OUT OUR LATEST WORK</h2>
+        <p>Every cabinet we ship starts as a conversation and ends in our shop. See what we've been building lately.</p>
+      </div>
+      <a href="showroom.html" class="btn-primary">
+        <canvas class="btn-particle-canvas"></canvas>
+        SEE THE SHOWROOM</a>
+    </div>
+  </section>
+
   <!-- ======= FOOTER ======= -->
   <footer class="site-footer">
     <div class="footer-top">
@@ -458,6 +382,6 @@
     </div>
   </footer>
 
-  <script src="../scripts.js"></script>
+  <script src="scripts.js"></script>
 </body>
 </html>

@@ -150,7 +150,7 @@ if (wordFillEls.length) {
 const dsImage = document.getElementById('ds-image');
 const DS_PARALLAX_RANGE = 300; // px either side of centre across the section
 
-if (dsImage && !prefersReducedMotion) {
+if (dsImage && !prefersReducedMotion && !dsImage.closest('.ds--static')) {
   const dsSection = dsImage.closest('.ds');
   let dsTicking = false;
 
@@ -524,6 +524,16 @@ const GALLERY_COLLECTIONS = {
   ],
 };
 
+// Case-study pages carry their own photo list (#project-photos, JSON array
+// of {src, alt} relative to the site root). The first five feed the bento
+// tiles; the lightbox opens on the clicked photo and arrows/thumbs move
+// through the whole list. Pages without it keep the showroom's
+// category-collection behaviour.
+const projectPhotosEl = document.getElementById('project-photos');
+const PROJECT_PHOTOS = projectPhotosEl
+  ? JSON.parse(projectPhotosEl.textContent).map(p => ({ ...p, src: ASSET_PREFIX + p.src }))
+  : null;
+
 const galleryModal = document.getElementById('gallery-modal');
 
 if (galleryCards.length && galleryModal) {
@@ -534,12 +544,15 @@ if (galleryCards.length && galleryModal) {
   const modalNext   = document.getElementById('gallery-modal-next');
   const modalClose  = document.getElementById('gallery-modal-close');
 
-  const collectionNames = Object.keys(GALLERY_COLLECTIONS);
+  const collections = PROJECT_PHOTOS
+    ? { [projectPhotosEl.dataset.title || '']: PROJECT_PHOTOS }
+    : GALLERY_COLLECTIONS;
+  const collectionNames = Object.keys(collections);
   let collectionIndex = 0;
   let imageIndex = 0;
 
   function showImage(i) {
-    const images = GALLERY_COLLECTIONS[collectionNames[collectionIndex]];
+    const images = collections[collectionNames[collectionIndex]];
     imageIndex = (i + images.length) % images.length;
     const item = images[imageIndex];
     modalImg.src = item.src;
@@ -563,16 +576,16 @@ if (galleryCards.length && galleryModal) {
 
   // direction: 0 = no animation (opening the modal), 1 = next (slide from
   // the right), -1 = prev (slide from the left)
-  function showCollection(ci, direction = 0) {
+  function showCollection(ci, direction = 0, startIndex = 0) {
     collectionIndex = (ci + collectionNames.length) % collectionNames.length;
     const category = collectionNames[collectionIndex];
-    const images = GALLERY_COLLECTIONS[category];
+    const images = collections[category];
 
     modalTitle.textContent = category;
     renderThumbs(images);
 
     if (!direction) {
-      showImage(0);
+      showImage(startIndex);
       return;
     }
 
@@ -595,8 +608,8 @@ if (galleryCards.length && galleryModal) {
     }, slideDuration);
   }
 
-  function openGalleryModal(category) {
-    showCollection(collectionNames.indexOf(category), 0);
+  function openGalleryModal(category, startIndex = 0) {
+    showCollection(collectionNames.indexOf(category), 0, startIndex);
     galleryModal.classList.add('is-open');
     galleryModal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -611,12 +624,21 @@ if (galleryCards.length && galleryModal) {
   galleryCards.forEach(card => {
     card.addEventListener('click', e => {
       e.preventDefault();
-      openGalleryModal(card.dataset.category);
+      if (PROJECT_PHOTOS) {
+        openGalleryModal(collectionNames[0], Number(card.dataset.photo) || 0);
+      } else {
+        openGalleryModal(card.dataset.category);
+      }
     });
   });
 
-  modalPrev.addEventListener('click', () => showCollection(collectionIndex - 1, -1));
-  modalNext.addEventListener('click', () => showCollection(collectionIndex + 1, 1));
+  // Project mode: arrows step through photos; showroom: through collections.
+  const step = dir => PROJECT_PHOTOS
+    ? showImage(imageIndex + dir)
+    : showCollection(collectionIndex + dir, dir);
+
+  modalPrev.addEventListener('click', () => step(-1));
+  modalNext.addEventListener('click', () => step(1));
   modalClose.addEventListener('click', closeGalleryModal);
 
   galleryModal.addEventListener('click', e => {
@@ -626,8 +648,8 @@ if (galleryCards.length && galleryModal) {
   document.addEventListener('keydown', e => {
     if (!galleryModal.classList.contains('is-open')) return;
     if (e.key === 'Escape') closeGalleryModal();
-    if (e.key === 'ArrowLeft') showCollection(collectionIndex - 1, -1);
-    if (e.key === 'ArrowRight') showCollection(collectionIndex + 1, 1);
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
   });
 }
 
@@ -653,28 +675,6 @@ if (navToggle && navMenu) {
 }
 
 
-
-
-// ============================================================
-// NAV MEDIA — Custom Builder CNC video
-// ============================================================
-const cncMediaEl = document.getElementById('nav-media-cnc');
-const customBuilderLink = document.getElementById('nav-link-custom-builder');
-
-if (cncMediaEl && customBuilderLink) {
-  const cncVideo = cncMediaEl.querySelector('video');
-
-  customBuilderLink.addEventListener('mouseenter', () => {
-    cncMediaEl.classList.add('is-active');
-    cncVideo.currentTime = 0;
-    cncVideo.play();
-  });
-
-  customBuilderLink.addEventListener('mouseleave', () => {
-    cncMediaEl.classList.remove('is-active');
-    cncVideo.pause();
-  });
-}
 
 function closeMenu() {
   navToggle.classList.remove('is-open');

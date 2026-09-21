@@ -16,7 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 </head>
-<body>
+<body class="page-vpin-noire">
 
   <div class="grid-line grid-line--left" aria-hidden="true"></div>
   <div class="grid-line grid-line--right" aria-hidden="true"></div>
@@ -37,38 +37,376 @@
 
   <!-- NAV OVERLAY MENU -->
   <div class="nav-menu" id="nav-menu" aria-hidden="true">
-    <div class="nav-media" id="nav-media-cnc" aria-hidden="true">
-      <video muted loop playsinline preload="auto" src="../assets/animation/cnc-router.mp4"></video>
-    </div>
     <ul>
       <li><a href="../index.html#hero">Home</a></li>
-      <li><a href="../index.html#fully-custom">About</a></li>
+      <li><a href="../about.html">About</a></li>
       <li><a href="../showroom.html">Showroom</a></li>
-      <li><a href="#contact" id="nav-link-custom-builder">Custom Builder</a></li>
+      <li><a href="#contact" id="nav-link-custom-builder">Custom Builder<span class="nav-badge">Coming Soon</span></a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
 
-  <!-- ======= PROJECT HERO PHOTO ======= -->
-  <section class="project-hero">
-    <img src="../assets/images/classic-vpin.png" alt="VPIN Classic custom pinball build">
+  <!-- ======= PRODUCT STICKY BAR — appears once the hero is scrolled past ======= -->
+  <!-- TEMPORARILY HIDDEN — remove the inline display:none to bring it back -->
+  <div class="product-bar" id="product-bar" style="display: none;">
+    <div class="product-bar-inner">
+      <span class="product-bar-name">VPIN Classic</span>
+      <nav class="product-bar-tabs">
+        <a href="#ds" data-cs-target="ds">Design</a>
+        <a href="#pv-alt" data-cs-target="pv-alt">Manufacturing</a>
+        <a href="#build-gallery" data-cs-target="build-gallery">Gallery</a>
+        <a href="#cs-specs" data-cs-target="cs-specs">Specs</a>
+        <a href="#cs-faq" data-cs-target="cs-faq">FAQ</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ======= PROJECT HERO — VPIN CLASSIC
+       Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=73-341
+       Giant wordmark sits behind the text/photo; the photo parallaxes at a
+       different rate than the page scroll, sliding over the wordmark as the
+       user starts scrolling instead of moving in lockstep with it. ======= -->
+  <section class="ph-hero" id="ph-hero">
+    <h1 class="ph-title" aria-hidden="true">VPIN CLASSIC</h1>
+    <div class="ph-body">
+      <div class="section-text ph-text">
+        <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+      <a href="#contact" class="btn-primary">
+        <canvas class="btn-particle-canvas"></canvas>
+        START YOUR BUILD</a>
+    </div>
+    <div class="ph-image" id="ph-image">
+      <img src="../assets/images/projects/vpin%20classic/vpin-classic-hero.png" alt="VPIN Classic custom pinball build">
+    </div>
   </section>
 
-  <!-- ======= PROJECT DETAIL ======= -->
-  <section class="project-content">
-    <a href="../showroom.html" class="project-back">&larr; Back to Showroom</a>
-    <h2>VPIN<br>CLASSIC</h2>
-    <p>Lorem ipsum dolor sit amet consectetur. Et pretium eget ultrices placerat praesent et donec nullam. Dignissim fermentum tristique posuere aliquet amet at amet malesuada consequat.</p>
-    <a href="#contact" class="btn-primary">
-      <canvas class="btn-particle-canvas"></canvas>
-      START YOUR BUILD</a>
+  <!-- BUILD STATISTICS removed until real numbers are available — restore from vpin-modern.html -->
+
+  <!-- ======= CINEMATIC INTRO
+       Large statement paragraph that fills in word-by-word as the section
+       scrolls through the viewport (words are wrapped by JS — see
+       WORD FILL REVEAL in scripts.js), then two shop photos below. ======= -->
+  <section class="cs-intro" id="cs-intro">
+    <p class="intro-copy" id="intro-copy">Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex.</p>
+    <div class="intro-images">
+      <img src="../assets/images/projects/vpin%20classic/intro-1.jpg" alt="VPIN Classic client photo">
+      <img src="../assets/images/projects/vpin%20classic/intro-2.jpg" alt="VPIN Classic client photo">
+    </div>
+  </section>
+
+  <!-- ======= DESIGN
+       Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=77-380
+       Centred heading + copy, with the CAD mockup below rising over them
+       on scroll (see DESIGN SECTION PARALLAX in scripts.js). The image
+       fades to black at its base, per the design. ======= -->
+  <section class="ds" id="ds">
+    <div class="section-text ds-text">
+      <h2>DESIGN</h2>
+      <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.</p>
+    </div>
+    <div class="ds-image" id="ds-image">
+      <img src="../assets/images/projects/vpin%20classic/vpin-classic-design.png" alt="VPIN Classic design">
+    </div>
+  </section>
+
+  <!-- ======= PRODUCT VIEWER (ALT)
+       Same data as the build-process viewer above, laid out differently:
+       the media sits alone in the container with a caption box floating
+       over it, and the pills sit in a row underneath acting as selectors
+       rather than expanding accordions. ======= -->
+  <section class="pv pv-alt" id="pv-alt">
+    <div class="section-text pv-header">
+      <h2>MANUFACTURING</h2>
+      <p>Every machine is designed, cut, wired and assembled in our Lake Barrington shop with no outsourcing.</p>
+    </div>
+    <div class="pv-inner">
+      <div class="pv-stage">
+        <!-- shown only while nothing is selected -->
+        <img class="pv-cover" src="../assets/images/classic-vpin.png" alt="VPIN Classic custom pinball build">
+        <!-- one per pill, in the same order as the list -->
+        <img class="is-active" src="../assets/images/projects/vpin%20classic/cad.png" alt="VPIN Classic cabinet modelled in CAD">
+        <video src="../assets/images/projects/vpin%20classic/machining.mp4" style="object-position: center 90%" muted loop playsinline preload="metadata" aria-label="VPIN Classic CNC manufacturing stage"></video>
+        <!-- HIDDEN: wiring stage
+        <img src="../assets/images/classic-vpin.png" alt="VPIN Classic wiring stage">
+        -->
+        <img src="../assets/images/projects/vpin%20classic/gallery/gallery-7.JPG" alt="VPIN Classic assembly stage">
+        <img src="../assets/images/projects/vpin%20classic/gallery/gallery-8.JPG" alt="VPIN Classic delivered">
+      </div>
+      <div class="pv-captions">
+        <div class="pv-caption is-active">
+          <p>Every project starts with detailed CAD models of every part, so each cut, joint and fit is worked out before we touch a single panel.</p>
+        </div>
+        <div class="pv-caption">
+          <p>Every part is CNC-cut from cabinet-grade panels off the same digital file, so tolerances stay identical from the first part to the last.</p>
+        </div>
+        <!-- HIDDEN: wiring caption
+        <div class="pv-caption">
+          <p>The control panel is wired by hand, with every button, switch and sensor tied back to a single labeled harness, so anything on the panel can be serviced without disturbing anything else.</p>
+        </div>
+        -->
+        <div class="pv-caption">
+          <p>Panels are hand assembled into boxes, components are installed and t-moulding and plexiglass is added to finish the look.</p>
+        </div>
+        <div class="pv-caption">
+          <p>Every cabinet is tested end to end and crated, then arrives set up and playable — levelled on its feet and ready for its first game.</p>
+        </div>
+      </div>
+    </div>
+    <div class="pv-controls">
+      <div class="pv-arrows">
+        <button type="button" class="pv-arrow pv-arrow--prev" aria-label="Previous stage">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <button type="button" class="pv-arrow pv-arrow--next" aria-label="Next stage">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+      <ul class="pv-list">
+          <li class="pv-item is-active">
+            <button type="button" class="pv-pill" aria-expanded="true">
+              <svg class="pv-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="13" rx="1.5"/><path d="M8.5 20.5h7M12 16.5v4"/></svg>
+              <span class="pv-label">CAD</span>
+            </button>
+          </li>
+          <li class="pv-item">
+            <button type="button" class="pv-pill" aria-expanded="false">
+              <svg class="pv-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 2.5h19"/><path d="M8.5 2.5v5h7v-5"/><path d="M7.3 7.5h9.4v3H7.3z"/><path d="M10.7 10.5v7h2.6v-7"/><path d="m10.7 14.6 2.6-1.6m-2.6 3.9 2.6-1.6"/><path d="M2.5 14.5h7.2v4h4.6v-4h7.2"/><path d="M2.5 21h19"/></svg>
+              <span class="pv-label">Machining</span>
+            </button>
+          </li>
+          <!-- HIDDEN: wiring tab
+          <li class="pv-item">
+            <button type="button" class="pv-pill" aria-expanded="false">
+              <svg class="pv-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2.5v6M15 2.5v6"/><path d="M5.5 8.5h13v3a6.5 6.5 0 0 1-13 0z"/><path d="M12 18v3.5"/></svg>
+              <span class="pv-label">Wiring</span>
+            </button>
+          </li>
+          -->
+          <li class="pv-item">
+            <button type="button" class="pv-pill" aria-expanded="false">
+              <svg class="pv-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 6.2a4.6 4.6 0 0 1-5.7 5.7l-7.5 7.5a2.1 2.1 0 1 1-3-3l7.5-7.5a4.6 4.6 0 0 1 5.7-5.7l-2.8 2.8.9 2.9 2.9.9z"/></svg>
+              <span class="pv-label">Assembly</span>
+            </button>
+          </li>
+          <li class="pv-item">
+            <button type="button" class="pv-pill" aria-expanded="false">
+              <svg class="pv-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v10h-11z"/><path d="M13.5 10h3.6l2.9 3v3.5h-6.5z"/><circle cx="6.5" cy="18" r="1.9"/><circle cx="16.8" cy="18" r="1.9"/></svg>
+              <span class="pv-label">Delivery</span>
+            </button>
+          </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======= PROJECT GALLERY
+       Same bento module as the showroom page. Tiles show the first photos
+       of #project-photos; the lightbox opens on the clicked one and the
+       arrows/thumbs cover the full list — see GALLERY MODAL in scripts.js. ======= -->
+  <section class="project-gallery project-gallery--photos" id="build-gallery">
+    <h2>BUILD GALLERY</h2>
+    <div class="gallery-grid">
+      <div class="gallery-row gallery-row--top">
+        <a href="#" class="gallery-card gallery-card--large" data-photo="0">
+              <img src="../assets/images/projects/vpin classic/gallery/gallery-1.jpg" alt="VPIN Classic build photo 1">
+        </a>
+        <div class="gallery-col">
+          <div class="gallery-row gallery-row--split">
+            <a href="#" class="gallery-card" data-photo="1">
+              <img src="../assets/images/projects/vpin classic/gallery/gallery-2.JPG" alt="VPIN Classic build photo 2">
+            </a>
+            <a href="#" class="gallery-card" data-photo="2">
+              <img src="../assets/images/projects/vpin classic/gallery/gallery-3.jpg" alt="VPIN Classic build photo 3">
+            </a>
+          </div>
+          <div class="gallery-row">
+            <a href="#" class="gallery-card" data-photo="3">
+              <img src="../assets/images/projects/vpin classic/gallery/gallery-4.JPG" alt="VPIN Classic build photo 4">
+            </a>
+            <a href="#" class="gallery-card" data-photo="4">
+              <img src="../assets/images/projects/vpin classic/gallery/gallery-5.JPG" alt="VPIN Classic build photo 5">
+            </a>
+            <a href="#" class="gallery-card" data-photo="5">
+              <img src="../assets/images/projects/vpin classic/gallery/gallery-6.JPG" alt="VPIN Classic build photo 6">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="project-photos" data-title="VPIN Classic">
+[
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-1.jpg",
+    "alt": "VPIN Classic build photo 1"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-2.JPG",
+    "alt": "VPIN Classic build photo 2"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-3.jpg",
+    "alt": "VPIN Classic build photo 3"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-4.JPG",
+    "alt": "VPIN Classic build photo 4"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-5.JPG",
+    "alt": "VPIN Classic build photo 5"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-6.JPG",
+    "alt": "VPIN Classic build photo 6"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-7.JPG",
+    "alt": "VPIN Classic build photo 7"
+  },
+  {
+    "src": "assets/images/projects/vpin classic/gallery/gallery-8.JPG",
+    "alt": "VPIN Classic build photo 8"
+  }
+]
+  </script>
+
+  <!-- ======= PROJECT GALLERY MODAL ======= -->
+  <div class="gallery-modal" id="gallery-modal" aria-hidden="true">
+    <button type="button" class="gallery-modal-close" id="gallery-modal-close" aria-label="Close">
+      <svg width="28" height="28" viewBox="0 0 168 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 168H0V144H24V168ZM168 144V168H144V144H168ZM48 144H24V120H48V144ZM144 120V144H120V120H144ZM72 120H48V96H72V120ZM120 96V120H96V96H120ZM96 72V96H72V72H96ZM72 72H48V48H72V72ZM120 48V72H96V48H120ZM48 48H24V24H48V48ZM144 24V48H120V24H144ZM24 24H0V0H24V24ZM168 0V24H144V0H168Z" fill="currentColor"/>
+      </svg>
+    </button>
+    <button type="button" class="gallery-modal-arrow gallery-modal-arrow--prev" id="gallery-modal-prev" aria-label="Previous image">
+      <svg width="48" height="34" viewBox="10 10 240 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M82 178H106V154H82V178ZM58 154H82V130H58V154ZM34 130H58V106H250V82H58V58H34V82H10V106H34V130ZM58 58H82V34H58V58ZM82 34H106V10H82V34Z" fill="currentColor"/>
+      </svg>
+    </button>
+    <p class="gallery-modal-title" id="gallery-modal-title"></p>
+    <div class="gallery-modal-content">
+      <div class="gallery-modal-image">
+        <img id="gallery-modal-img" src="" alt="">
+      </div>
+      <div class="gallery-modal-thumbs" id="gallery-modal-thumbs"></div>
+    </div>
+    <button type="button" class="gallery-modal-arrow gallery-modal-arrow--next" id="gallery-modal-next" aria-label="Next image">
+      <svg width="48" height="34" viewBox="10 10 240 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M178 178H154V154H178V178ZM202 154H178V130H202V154ZM226 130H202V106H10V82H202V58H226V82H250V106H226V130ZM202 58H178V34H202V58ZM178 34H154V10H178V34Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ======= SPECS ======= -->
+  <section class="cs-specs" id="cs-specs">
+    <div class="section-text cs-specs-header">
+      <h2>SPECIFICATIONS</h2>
+    </div>
+    <div class="cs-specs-grid">
+      <div class="cs-spec-col">
+      <table class="cs-spec-table">
+        <tbody>
+          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">Cabinet</th></tr>
+          <tr><th scope="row">Type</th><td>TBD</td></tr>
+          <tr><th scope="row">Material</th><td>TBD</td></tr>
+          <tr><th scope="row">Finish</th><td>TBD</td></tr>
+          <tr><th scope="row">Base</th><td>TBD</td></tr>
+          <tr><th scope="row">Build time</th><td>TBD</td></tr>
+        </tbody>
+      </table>
+      <table class="cs-spec-table">
+        <tbody>
+          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">Displays</th></tr>
+          <tr><th scope="row">Playfield</th><td>TBD</td></tr>
+          <tr><th scope="row">Backglass</th><td>TBD</td></tr>
+          <tr><th scope="row">Scoreboard</th><td>TBD</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="cs-spec-col">
+      <table class="cs-spec-table">
+        <tbody>
+          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">Controls</th></tr>
+          <tr><th scope="row">Buttons</th><td>TBD</td></tr>
+          <tr><th scope="row">Plunger</th><td>TBD</td></tr>
+          <tr><th scope="row">Sensors</th><td>TBD</td></tr>
+          <tr><th scope="row">Feedback</th><td>TBD</td></tr>
+        </tbody>
+      </table>
+      <table class="cs-spec-table">
+        <tbody>
+          <tr class="cs-spec-group"><th colspan="2" scope="colgroup">System</th></tr>
+          <tr><th scope="row">Tables</th><td>TBD</td></tr>
+          <tr><th scope="row">Audio</th><td>TBD</td></tr>
+          <tr><th scope="row">Connectivity</th><td>TBD</td></tr>
+          <tr><th scope="row">Access</th><td>TBD</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= FAQ ======= -->
+  <section class="cs-faq" id="cs-faq">
+    <div class="section-text cs-faq-header">
+      <h2>COMMON QUESTIONS</h2>
+    </div>
+    <div class="cs-faq-list">
+      <div class="cs-faq-col">
+  <div class="cs-faq-item">
+            <button type="button" class="cs-faq-question" aria-expanded="false">
+              Can I customize the artwork?
+              <span class="cs-faq-toggle" aria-hidden="true"></span>
+            </button>
+            <div class="cs-faq-answer"><p>Yes — every cabinet's graphics are custom, from full-wrap illustration to a minimal wordmark treatment.</p></div>
+          </div>
+  <div class="cs-faq-item">
+            <button type="button" class="cs-faq-question" aria-expanded="false">
+              Can you build different sizes?
+              <span class="cs-faq-toggle" aria-hidden="true"></span>
+            </button>
+            <div class="cs-faq-answer"><p>We build to the space, not a fixed catalog size — cabinet width, depth, and control deck layout can all be adjusted for the room it's going into.</p></div>
+          </div>
+  <div class="cs-faq-item">
+            <button type="button" class="cs-faq-question" aria-expanded="false">
+              Can I add more games later?
+              <span class="cs-faq-toggle" aria-hidden="true"></span>
+            </button>
+            <div class="cs-faq-answer"><p>Our cabinets ship with an expandable game library, and adding more later is just a software update — no hardware changes required.</p></div>
+          </div>
+      </div>
+      <div class="cs-faq-col">
+  <div class="cs-faq-item">
+            <button type="button" class="cs-faq-question" aria-expanded="false">
+              Can I choose different controls?
+              <span class="cs-faq-toggle" aria-hidden="true"></span>
+            </button>
+            <div class="cs-faq-answer"><p>Button feel, joystick style and control layout can all be tuned to preference during the build.</p></div>
+          </div>
+  <div class="cs-faq-item">
+            <button type="button" class="cs-faq-question" aria-expanded="false">
+              How long does a build take?
+              <span class="cs-faq-toggle" aria-hidden="true"></span>
+            </button>
+            <div class="cs-faq-answer"><p>Most builds take 4-6 weeks from signed concept to delivery.</p></div>
+          </div>
+  <div class="cs-faq-item">
+            <button type="button" class="cs-faq-question" aria-expanded="false">
+              Can you ship nationwide?
+              <span class="cs-faq-toggle" aria-hidden="true"></span>
+            </button>
+            <div class="cs-faq-answer"><p>Yes — every cabinet is crated and shipped fully assembled or in a protected two-piece configuration depending on destination.</p></div>
+          </div>
+      </div>
+    </div>
   </section>
 
   <!-- ======= CONTACT FORM ======= -->
   <section class="contact" id="contact">
     <div class="contact-header">
       <h2>GET IN TOUCH</h2>
-      <p>Lorem ipsum dolor sit amet consectetur. Et pretium eget ultrices placerat praesent et donec nullam. Dignissim fermentum tristique posuere aliquet amet at amet malesuada consequat.</p>
+      <p>Whatever brought you here, an idea, a favorite game, a space that needs one more thing in it, tell us about it and we'll make your vision come to life together.</p>
     </div>
     <form class="contact-form" id="contact-form" novalidate>
 
