@@ -1535,6 +1535,11 @@ body.page-vpin-noire .project-gallery h2 {
   object-fit: contain;
 }
 
+/* wider rising image box for pages whose design photo needs more width */
+.ds--wide .ds-image {
+  width: 1272px;
+}
+
 /* image fades into the page at its base, per the design */
 .ds-image::after {
   content: '';
