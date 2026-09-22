@@ -182,6 +182,49 @@ if (dsImage && !prefersReducedMotion && !dsImage.closest('.ds--static')) {
 
 
 // ============================================================
+// MATERIALS FAN — cards start fanned/overlapping at center and spread
+// apart horizontally (and un-rotate) as the section scrolls through the
+// viewport, driven by --fan-progress on the stage element.
+// ============================================================
+const materialsStage = document.getElementById('materials-fan-stage');
+
+if (materialsStage) {
+  if (prefersReducedMotion) {
+    materialsStage.style.setProperty('--fan-progress', '1');
+  } else {
+    const materialsSection = materialsStage.closest('.materials-fan');
+    let materialsTicking = false;
+
+    function applyMaterialsFan() {
+      const rect = materialsSection.getBoundingClientRect();
+      const vh = window.innerHeight;
+
+      // 0 as the section's top reaches the bottom of the viewport, 1 once
+      // its center reaches the viewport center — fans open on the way in
+      // and stays open on the way past. The extra vh * 0.15 delays the
+      // start slightly, so cards stay fanned a beat before spreading.
+      const progress = (vh - rect.top - vh * 0.15) / (vh * 0.7 + rect.height * 0.3);
+      const clamped = Math.max(0, Math.min(1, progress));
+
+      materialsStage.style.setProperty('--fan-progress', clamped.toFixed(3));
+      materialsTicking = false;
+    }
+
+    function requestMaterialsFan() {
+      if (!materialsTicking) {
+        requestAnimationFrame(applyMaterialsFan);
+        materialsTicking = true;
+      }
+    }
+
+    window.addEventListener('scroll', requestMaterialsFan, { passive: true });
+    window.addEventListener('resize', requestMaterialsFan);
+    applyMaterialsFan();
+  }
+}
+
+
+// ============================================================
 // PRODUCT VIEWER — one pill expanded at a time, stepped by clicking a
 // pill or with the up/down arrows, with the stage image crossfading to
 // match. Panels animate via max-height, so the open one is measured on

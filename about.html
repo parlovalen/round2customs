@@ -50,7 +50,7 @@
   <section class="hero hero--about" id="origin-story">
     <div class="hero-content">
       <div class="hero-text">
-        <h1>ORIGIN<br>STORY</h1>
+        <h1>THE ORIGIN<br>STORY</h1>
         <p>United by a love for gaming, design, and premium craftsmanship, we set out to raise the bar in an industry flooded with flimsy, low-quality arcade cabinets. Our background in electrical engineering and woodworking is a perfect blend that led us to create high-end, custom arcade machines that look stunning, perform flawlessly, and stand the test of time.</p>
       </div>
     </div>
@@ -208,6 +208,35 @@
     </div>
   </section>
 
+  <!-- ======= MATERIALS
+       Cards start fanned/overlapping at center; as the section scrolls
+       through the viewport they spread apart horizontally, driven by
+       --fan-progress (0→1) — see MATERIALS FAN in scripts.js. ======= -->
+  <section class="materials-fan" id="materials">
+    <div class="section-text materials-fan-text">
+      <span class="eyebrow">THE MATERIALS</span>
+      <h2>BUILT FROM THE BEST</h2>
+      <p>Every finish is chosen for how it holds up, not just how it looks — from walnut veneer to commercial-grade laminate and vinyl.</p>
+    </div>
+    <div class="materials-fan-stage" id="materials-fan-stage">
+      <div class="material-card" style="--i: 0; z-index: 1;">
+        <img src="assets/images/about/materials/walnut-web.webp" alt="Walnut finish swatch">
+      </div>
+      <div class="material-card" style="--i: 1; z-index: 2;">
+        <img src="assets/images/about/materials/melamine-web.webp" alt="Melamine finish swatch">
+      </div>
+      <div class="material-card" style="--i: 2; z-index: 3;">
+        <img src="assets/images/about/materials/grey-web.webp" alt="Grey finish swatch">
+      </div>
+      <div class="material-card" style="--i: 3; z-index: 4;">
+        <img src="assets/images/about/materials/white-web.webp" alt="White finish swatch">
+      </div>
+      <div class="material-card" style="--i: 4; z-index: 5;">
+        <img src="assets/images/about/materials/vinyl-web.webp" alt="Vinyl finish swatch">
+      </div>
+    </div>
+  </section>
+
   <!-- ======= THE SHOP — gallery component, same as the case-study pages ======= -->
   <section class="project-gallery project-gallery--photos" id="the-shop">
     <h2>THE SHOP</h2>
@@ -296,6 +325,22 @@
     </button>
   </div>
 
+  <!-- ======= LATEST WORK ======= -->
+  <section class="about-latest">
+    <div class="about-latest-image">
+      <img src="assets/images/about/latest-work.jpg" alt="Custom 4-player pedestal arcade cabinet running Teenage Mutant Ninja Turtles: Shredder's Revenge" loading="lazy">
+    </div>
+    <div class="about-latest-content">
+      <div class="about-latest-text">
+        <h2>CHECK OUT OUR LATEST WORK</h2>
+        <p>Every cabinet we ship starts as a conversation and ends in our shop. See what we've been building lately.</p>
+      </div>
+      <a href="showroom.html" class="btn-primary">
+        <canvas class="btn-particle-canvas"></canvas>
+        SEE THE SHOWROOM</a>
+    </div>
+  </section>
+
   <!-- ======= CONTACT FORM ======= -->
   <section class="contact" id="contact">
     <div class="contact-header">
@@ -333,22 +378,6 @@
         </button>
       </div>
     </form>
-  </section>
-
-  <!-- ======= LATEST WORK ======= -->
-  <section class="about-latest">
-    <div class="about-latest-image">
-      <img src="assets/images/about/latest-work.jpg" alt="Custom 4-player pedestal arcade cabinet running Teenage Mutant Ninja Turtles: Shredder's Revenge" loading="lazy">
-    </div>
-    <div class="about-latest-content">
-      <div class="about-latest-text">
-        <h2>CHECK OUT OUR LATEST WORK</h2>
-        <p>Every cabinet we ship starts as a conversation and ends in our shop. See what we've been building lately.</p>
-      </div>
-      <a href="showroom.html" class="btn-primary">
-        <canvas class="btn-particle-canvas"></canvas>
-        SEE THE SHOWROOM</a>
-    </div>
   </section>
 
   <!-- ======= FOOTER ======= -->

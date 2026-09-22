@@ -2952,7 +2952,7 @@ body.page-vpin-noire .project-gallery h2 {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 60px var(--page-pad);
+  padding: 100px var(--page-pad);
   background: var(--bg);
 }
 
@@ -3070,6 +3070,64 @@ body.page-vpin-noire .project-gallery h2 {
 .about-audience-card:hover .about-audience-desc-wrap p {
   opacity: 1;
   transition: opacity 0.3s ease 0.1s;
+}
+
+/* ============================================================
+   MATERIALS FAN
+   Cards sit stacked/overlapping at center by default; --fan-progress
+   (set on .materials-fan-stage by MATERIALS FAN in scripts.js as the
+   section scrolls through the viewport) drives each card's spread and
+   rotation apart from 0 (fanned) to 1 (fully spread, flat).
+   ============================================================ */
+.materials-fan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 88px;
+  padding: var(--section-py) var(--page-pad);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.materials-fan-text {
+  align-items: center;
+  max-width: 800px;
+  text-align: center;
+}
+
+.materials-fan-text h2 {
+  white-space: nowrap;
+}
+
+.materials-fan-stage {
+  --fan-progress: 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 420px;
+}
+
+.material-card {
+  position: absolute;
+  width: 160px;
+  aspect-ratio: 299 / 931;
+  border-radius: 12px;
+  overflow: hidden;
+  transform: translateX(calc((var(--i) - 2) * (28px + var(--fan-progress) * 192px)));
+}
+
+.material-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .materials-fan-stage { height: 320px; }
+  .material-card { width: 120px; }
 }
 
 .about-apart {
