@@ -100,21 +100,30 @@
        Centred heading + copy, with the CAD mockup below rising over them
        on scroll (see DESIGN SECTION PARALLAX in scripts.js). The image
        fades to black at its base, per the design. ======= -->
-  <section class="ds" id="ds">
+  <section class="ds ds--contain ds--dual" id="ds">
     <div class="section-text ds-text">
       <h2>DESIGN</h2>
       <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud.</p>
     </div>
-    <div class="ds-image" id="ds-image">
-      <img src="../assets/images/retro-studio.jpg" alt="Retro Studio design">
+    <div class="ds-images">
+      <div class="ds-image" id="ds-image">
+        <img src="../assets/images/projects/retro%20studio/retro-studio-cad-dark.jpg" alt="Retro Studio cabinet modelled in CAD">
+      </div>
+      <div class="ds-image">
+        <img src="../assets/images/projects/retro%20studio/retro-studio-machining-dark-2.jpg" alt="Retro Studio CNC machining stage">
+      </div>
     </div>
   </section>
 
-  <!-- ======= PRODUCT VIEWER (ALT)
+  <section class="cs-full-photo">
+    <img src="../assets/images/projects/retro%20studio/retro-studio-living-room.jpg" alt="Retro Studio cabinet in a living room">
+  </section>
+
+  <!-- ======= PRODUCT VIEWER (ALT) — HIDDEN FOR NOW
        Same data as the build-process viewer above, laid out differently:
        the media sits alone in the container with a caption box floating
        over it, and the pills sit in a row underneath acting as selectors
-       rather than expanding accordions. ======= -->
+       rather than expanding accordions. Restore by uncommenting. =======
   <section class="pv pv-alt" id="pv-alt">
     <div class="section-text pv-header">
       <h2>MANUFACTURING</h2>
@@ -122,9 +131,7 @@
     </div>
     <div class="pv-inner">
       <div class="pv-stage">
-        <!-- shown only while nothing is selected -->
         <img class="pv-cover" src="../assets/images/retro-studio.jpg" alt="Retro Studio custom arcade build">
-        <!-- one per pill, in the same order as the list -->
         <img class="is-active" src="../assets/images/retro-studio.jpg" alt="Retro Studio cabinet modelled in CAD">
         <img src="../assets/images/projects/retro%20studio/retro-studio-machining-opt.jpg" alt="Retro Studio CNC manufacturing stage">
         <img src="../assets/images/retro-studio.jpg" alt="Retro Studio wiring stage">
@@ -192,6 +199,7 @@
       </ul>
     </div>
   </section>
+  -->
 
   <!-- ======= PROJECT GALLERY
        Same bento module as the showroom page. Tiles show the first photos

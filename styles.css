@@ -1530,6 +1530,11 @@ body.page-vpin-noire .project-gallery h2 {
   object-fit: cover;
 }
 
+/* fits the whole image inside the rising container instead of cropping it */
+.ds--contain .ds-image img {
+  object-fit: contain;
+}
+
 /* image fades into the page at its base, per the design */
 .ds-image::after {
   content: '';
@@ -1537,6 +1542,15 @@ body.page-vpin-noire .project-gallery h2 {
   inset: 0;
   pointer-events: none;
   background: linear-gradient(to bottom, transparent 84%, var(--bg) 100%);
+}
+
+/* edge-to-edge single photo, used as a placeholder section on case-study
+   pages until real content fills that slot */
+.cs-full-photo img {
+  display: block;
+  width: 100%;
+  max-height: 900px;
+  object-fit: cover;
 }
 
 /* ============================================================
@@ -3627,6 +3641,60 @@ body.page-vpin-noire .project-gallery h2 {
 }
 
 .ds--static .ds-image::after {
+  display: none;
+}
+
+/* ============================================================
+   DESIGN — DUAL STACKED IMAGES (.ds--dual)
+   Stacks two .ds-image boxes below the copy in normal flow instead of
+   the single absolutely-positioned/parallax image, each kept at the
+   same fixed size as the default .ds-image box.
+   ============================================================ */
+.ds.ds--dual {
+  height: auto;
+  padding: 90px 0 60px;
+}
+
+.ds--dual .ds-text {
+  position: relative;
+  top: auto;
+  left: auto;
+  margin: 0 auto;
+  transform: translateY(28px);
+}
+
+.ds--dual .ds-text.is-visible {
+  transform: translateY(0);
+}
+
+.ds--dual .ds-images {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.ds--dual .ds-image {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 1180px;
+  max-width: 100%;
+  height: auto;
+  transform: none;
+  will-change: auto;
+}
+
+.ds--dual .ds-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+.ds--dual .ds-image::after {
   display: none;
 }
 
