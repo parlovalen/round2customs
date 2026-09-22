@@ -700,8 +700,8 @@ const carouselEl    = document.getElementById('carousel');
 
 if (carouselTrack && paginationEl && carouselEl) {
   const slides = [
-    { src: 'assets/images/hero-pinball.png', alt: 'Custom pinball machine', name: 'ARCADE<br>PINBALL' },
-    { src: 'assets/images/classic-vpin.png', alt: 'Classic Virtual Pin build', name: 'CLASSIC<br>V-PIN' },
+    { src: 'assets/images/hero-pinball.png', alt: 'VPIN Modern custom pinball build', name: 'VPIN<br>MODERN', link: 'projects/vpin-modern.html' },
+    { src: 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build', name: 'VPIN<br>CLASSIC', link: 'projects/vpin-classic.html' },
     { src: 'assets/images/theStudio.png', alt: 'R2C studio build', name: 'THE<br>STUDIO' },
     { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet', name: 'THE<br>APEX' },
     { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT' },
@@ -784,8 +784,15 @@ if (carouselTrack && paginationEl && carouselEl) {
       paginationEl.appendChild(dot);
     });
 
-    // clicking any visible side slide brings it to center
-    slideEls.forEach((el, i) => el.addEventListener('click', () => goTo(i)));
+    // clicking a side slide brings it to center; clicking the already-
+    // centered slide navigates to its case study, if it has one
+    slideEls.forEach((el, i) => el.addEventListener('click', () => {
+      if (distanceFrom(i) === 0 && slides[i].link) {
+        window.location.href = ASSET_PREFIX + slides[i].link;
+      } else {
+        goTo(i);
+      }
+    }));
 
     renderCarousel(false); // set initial positions instantly, no animation
   }
@@ -1325,4 +1332,29 @@ document.addEventListener('DOMContentLoaded', () => {
       pixelEffects.forEach(effect => effect.setupCanvas());
     }, 200);
   });
+});
+
+
+// ============================================================
+// FOOTER PHONE REVEAL
+// The number never sits in the HTML source — it's built here and only
+// swapped in once the visitor clicks the button, so simple scrapers that
+// don't execute JS only ever see "Reveal Phone Number".
+// ============================================================
+document.querySelectorAll('[data-footer-phone]').forEach(btn => {
+  // digits, reversed, so a raw-text search of this file doesn't turn up
+  // the number either
+  const reversed = '0065743748';
+
+  btn.addEventListener('click', () => {
+    const digits = reversed.split('').reverse().join('');
+    const formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+
+    const link = document.createElement('a');
+    link.className = 'footer-phone-link';
+    link.href = `tel:+1${digits}`;
+    link.textContent = formatted;
+
+    btn.replaceWith(link);
+  }, { once: true });
 });

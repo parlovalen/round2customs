@@ -2745,6 +2745,40 @@ body.page-vpin-noire .project-gallery h2 {
   text-align: left;
 }
 
+/* button reveals the number only once clicked — see FOOTER PHONE REVEAL in
+   scripts.js — so basic scrapers that don't run JS never see the digits */
+.footer-phone-btn {
+  align-self: flex-start;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 22px;
+  letter-spacing: 0.13px;
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.footer-phone-btn:hover {
+  color: var(--terracotta);
+}
+
+.footer-phone-link {
+  font-size: 13px;
+  line-height: 22px;
+  letter-spacing: 0.13px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.2s ease;
+}
+
+.footer-phone-link:hover {
+  color: var(--terracotta);
+}
+
 .footer-social {
   display: flex;
   align-items: center;
