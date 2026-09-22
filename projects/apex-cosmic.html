@@ -36,7 +36,7 @@
   </nav>
 
   <!-- NAV OVERLAY MENU -->
-  <div class="nav-menu" id="nav-menu" aria-hidden="true">
+  <div class="nav-menu" id="nav-menu" aria-hidden="true" inert>
     <ul>
       <li><a href="../index.html#hero">Home</a></li>
       <li><a href="../about.html">About</a></li>
@@ -45,6 +45,8 @@
       <li><a id="nav-link-custom-builder" role="button" tabindex="0" aria-label="Custom Builder — coming soon">Custom Builder<span class="nav-badge">Coming Soon</span></a></li>
     </ul>
   </div>
+
+  <main id="main-content">
 
   <!-- ======= PRODUCT STICKY BAR — appears once the hero is scrolled past ======= -->
   <!-- TEMPORARILY HIDDEN — remove the inline display:none to bring it back -->
@@ -67,7 +69,8 @@
        different rate than the page scroll, sliding over the wordmark as the
        user starts scrolling instead of moving in lockstep with it. ======= -->
   <section class="ph-hero" id="ph-hero">
-    <h1 class="ph-title" aria-hidden="true">COSMIC APEX</h1>
+    <h1 class="sr-only">Cosmic Apex</h1>
+    <p class="ph-title" aria-hidden="true">COSMIC APEX</p>
     <div class="ph-body">
       <div class="section-text ph-text">
         <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
@@ -284,7 +287,7 @@
   </script>
 
   <!-- ======= PROJECT GALLERY MODAL ======= -->
-  <div class="gallery-modal" id="gallery-modal" aria-hidden="true">
+  <div class="gallery-modal" id="gallery-modal" aria-hidden="true" inert>
     <button type="button" class="gallery-modal-close" id="gallery-modal-close" aria-label="Close">
       <svg width="28" height="28" viewBox="0 0 168 168" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M24 168H0V144H24V168ZM168 144V168H144V144H168ZM48 144H24V120H48V144ZM144 120V144H120V120H144ZM72 120H48V96H72V120ZM120 96V120H96V96H120ZM96 72V96H72V72H96ZM72 72H48V48H72V72ZM120 48V72H96V48H120ZM48 48H24V24H48V48ZM144 24V48H120V24H144ZM24 24H0V0H24V24ZM168 0V24H144V0H168Z" fill="currentColor"/>
@@ -460,6 +463,8 @@
       </div>
     </form>
   </section>
+
+  </main>
 
   <!-- ======= FOOTER ======= -->
   <footer class="site-footer">

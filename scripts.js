@@ -655,12 +655,17 @@ if (galleryCards.length && galleryModal) {
     showCollection(collectionNames.indexOf(category), 0, startIndex);
     galleryModal.classList.add('is-open');
     galleryModal.setAttribute('aria-hidden', 'false');
+    galleryModal.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
   }
 
   function closeGalleryModal() {
     galleryModal.classList.remove('is-open');
     galleryModal.setAttribute('aria-hidden', 'true');
+    // keeps its links/buttons out of the tab order while hidden, so
+    // aria-hidden doesn't hide focusable content from assistive tech
+    // while a keyboard user can still tab into it
+    galleryModal.setAttribute('inert', '');
     document.body.style.overflow = '';
   }
 
@@ -709,6 +714,10 @@ if (navToggle && navMenu) {
     navMenu.classList.toggle('is-open', isOpen);
     navToggle.setAttribute('aria-expanded', String(isOpen));
     navMenu.setAttribute('aria-hidden', String(!isOpen));
+    // keeps the menu's links out of the tab order while closed, so
+    // aria-hidden doesn't hide focusable content from assistive tech
+    // while a keyboard user can still tab into it
+    navMenu.toggleAttribute('inert', !isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
@@ -727,6 +736,7 @@ function closeMenu() {
   navMenu.classList.remove('is-open');
   navToggle.setAttribute('aria-expanded', 'false');
   navMenu.setAttribute('aria-hidden', 'true');
+  navMenu.setAttribute('inert', '');
   document.body.style.overflow = '';
 }
 
@@ -1110,12 +1120,17 @@ if (csMasonry && csGalleryModal) {
     showCsImage(i);
     csGalleryModal.classList.add('is-open');
     csGalleryModal.setAttribute('aria-hidden', 'false');
+    csGalleryModal.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
   }
 
   function closeCsModal() {
     csGalleryModal.classList.remove('is-open');
     csGalleryModal.setAttribute('aria-hidden', 'true');
+    // keeps its buttons out of the tab order while hidden, so aria-hidden
+    // doesn't hide focusable content from assistive tech while a keyboard
+    // user can still tab into it
+    csGalleryModal.setAttribute('inert', '');
     document.body.style.overflow = '';
   }
 
