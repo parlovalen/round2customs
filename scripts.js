@@ -669,7 +669,10 @@ if (navToggle && navMenu) {
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
+  // Custom Builder is a placeholder — it toggles its own "Coming Soon"
+  // pill instead of navigating, so it's excluded from the auto-close below
   navMenu.querySelectorAll('a').forEach(link => {
+    if (link.id === 'nav-link-custom-builder') return;
     link.addEventListener('click', closeMenu);
   });
 }
@@ -682,6 +685,25 @@ function closeMenu() {
   navToggle.setAttribute('aria-expanded', 'false');
   navMenu.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+}
+
+
+// ============================================================
+// CUSTOM BUILDER NAV ITEM — reveals its "Coming Soon" pill on click/tap
+// instead of linking anywhere (hover still reveals it for mouse users)
+// ============================================================
+const navCustomBuilder = document.getElementById('nav-link-custom-builder');
+
+if (navCustomBuilder) {
+  const toggleBadge = e => {
+    e.preventDefault();
+    navCustomBuilder.classList.toggle('is-revealed');
+  };
+
+  navCustomBuilder.addEventListener('click', toggleBadge);
+  navCustomBuilder.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') toggleBadge(e);
+  });
 }
 
 

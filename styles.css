@@ -281,11 +281,15 @@ body.nav-collapsed .product-bar {
 
 .nav-menu li a.is-current { color: var(--terracotta); }
 
-/* Custom Builder is a placeholder feature — reads normal by default; on
-   hover the text greys out instead of glowing, and the "Coming Soon" flag
-   fades in, and the selection-arrow stays suppressed entirely */
-#nav-link-custom-builder:hover { color: rgba(255, 255, 255, 0.45); text-shadow: 0 0 0 rgba(214, 94, 56, 0); }
-#nav-link-custom-builder:hover::before { opacity: 0; transform: translateX(12px); margin-right: -62px; }
+/* Custom Builder is a placeholder feature — it doesn't link anywhere.
+   Reads normal by default; on hover (mouse) or click/tap (.is-revealed,
+   toggled in scripts.js) the text greys out instead of glowing, the
+   "Coming Soon" flag fades in, and the selection-arrow stays suppressed */
+#nav-link-custom-builder { cursor: pointer; }
+#nav-link-custom-builder:hover,
+#nav-link-custom-builder.is-revealed { color: rgba(255, 255, 255, 0.45); text-shadow: 0 0 0 rgba(214, 94, 56, 0); }
+#nav-link-custom-builder:hover::before,
+#nav-link-custom-builder.is-revealed::before { opacity: 0; transform: translateX(12px); margin-right: -62px; }
 
 /* "Coming Soon" flag on the Custom Builder nav item — pinned so it overlaps
    the top-right corner of the text rather than floating clear above it,
@@ -313,7 +317,8 @@ body.nav-collapsed .product-bar {
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-#nav-link-custom-builder:hover .nav-badge { opacity: 1; transform: translateY(-40%); }
+#nav-link-custom-builder:hover .nav-badge,
+#nav-link-custom-builder.is-revealed .nav-badge { opacity: 1; transform: translateY(-40%); }
 
 /* ============================================================
    BUTTONS
@@ -658,8 +663,8 @@ h2 {
 .eyebrow {
   display: block;
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 15px;
+  font-weight: 700;
+  font-size: 24px;
   letter-spacing: 1.8px;
   color: var(--terracotta);
 }
@@ -1575,6 +1580,12 @@ body.page-vpin-noire .project-gallery h2 {
   background: linear-gradient(to bottom, var(--bg), #101010);
 }
 
+/* extra breathing room around "THE PROCESS" section on the About page */
+#in-house {
+  padding-top: calc(var(--section-py) * 1.5);
+  padding-bottom: calc(var(--section-py) * 1.5);
+}
+
 .pv-inner {
   display: grid;
   grid-template-columns: 4fr 8fr; /* 4/12 controls, 8/12 stage */
@@ -1949,7 +1960,7 @@ body.page-vpin-noire .project-gallery h2 {
   flex-wrap: wrap;
   align-items: center;
   gap: 4px;
-  padding: 5px;
+  padding: 5px 8px;
   border-radius: 60px;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(16px);
@@ -1957,14 +1968,18 @@ body.page-vpin-noire .project-gallery h2 {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* pills are bare inside the bar */
+/* pills are bare inside the bar — border is reserved (transparent) even
+   when inactive so the active state's outline only changes color, never
+   the box size, avoiding a size "pop" on click */
 .pv-alt .pv-pill {
   padding: 10px 28px;
   background: none;
-  border: none;
+  border: 1px solid transparent;
   font-family: var(--font-body);
   font-weight: 300;
   color: rgba(255, 255, 255, 0.65);
+  transition: background 0.2s ease, max-height 0.3s ease,
+              padding 0.3s ease, opacity 0.2s ease, border-color 0.2s ease;
 }
 
 .pv-alt .pv-item {
@@ -1997,13 +2012,18 @@ body.page-vpin-noire .project-gallery h2 {
 
 /* the pill is a selector now — it never collapses into a panel */
 .pv-alt .pv-item.is-active .pv-pill {
-  max-height: 56px;
-  padding: 10px 28px;
+  max-height: 48px;
+  padding: 6px 28px;
   opacity: 1;
   pointer-events: auto;
-  background: rgba(255, 255, 255, 0.1);
+  background: none;
+  border-color: var(--terracotta);
+  color: var(--terracotta);
+  font-weight: 400;
+}
+
+.pv-alt .pv-item.is-active .pv-label {
   color: var(--white);
-  font-weight: 600;
 }
 
 /* Shared photo-grid pattern — Design, Materials, Construction, Finishing */
@@ -2938,7 +2958,7 @@ body.page-vpin-noire .project-gallery h2 {
 
 .about-audience-grid {
   display: flex;
-  height: 440px;
+  height: 360px;
 }
 
 .about-audience-card {
@@ -2947,10 +2967,10 @@ body.page-vpin-noire .project-gallery h2 {
   min-width: 0;
   display: flex;
   align-items: flex-end;
-  padding: 0 44px 40px;
+  padding: 0 44px;
   overflow: hidden;
   border: 1px solid #3e3e3e;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, padding 0.35s ease;
 }
 
 .about-audience-card:first-child {
@@ -2962,10 +2982,13 @@ body.page-vpin-noire .project-gallery h2 {
   border-radius: 0 8px 8px 0;
 }
 
-/* orange outline on hover, matching the gallery tiles' hover state */
+/* title sits flush against the bottom by default, like the showroom
+   gallery tiles; hover opens up room below it for the description and
+   shows the orange outline, matching the gallery tiles' hover state */
 .about-audience-card:hover {
   border-color: #d65e38;
   border-width: 2px;
+  padding: 0 44px 40px;
 }
 
 .about-audience-card img {
@@ -2976,12 +2999,14 @@ body.page-vpin-noire .project-gallery h2 {
   object-fit: cover;
   z-index: 0;
   transform: scale(1);
-  transition: transform 0.35s ease;
+  filter: blur(0);
+  transition: transform 0.35s ease, filter 0.35s ease;
 }
 
-/* same hover zoom as the gallery tiles */
+/* same hover zoom + blur as the "WHAT SETS US APART" cards above */
 .about-audience-card:hover img {
   transform: scale(1.12);
+  filter: blur(12px);
 }
 
 .about-audience-card::after {
@@ -3002,8 +3027,15 @@ body.page-vpin-noire .project-gallery h2 {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 0;
   width: 100%;
+  transition: gap 0.35s ease;
+}
+
+/* opens the gap above the description only once it's revealed on hover,
+   so the collapsed wrapper doesn't push the title up while hidden */
+.about-audience-card:hover .about-audience-text {
+  gap: 24px;
 }
 
 .about-audience-text h3 {
@@ -3013,6 +3045,7 @@ body.page-vpin-noire .project-gallery h2 {
   line-height: 36px;
   letter-spacing: 0.84px;
   color: var(--white);
+  transform: translateY(4px);
 }
 
 .about-audience-desc-wrap {
