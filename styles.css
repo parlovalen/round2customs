@@ -1113,14 +1113,19 @@ body.page-vpin-noire .project-gallery h2 {
   object-fit: contain;
 }
 
+/* one scrollable row, so long photo lists don't push the modal off-screen;
+   "safe" keeps the first thumbs reachable once the row overflows */
 .gallery-modal-thumbs {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: safe center;
   gap: 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
 
 .gallery-modal-thumb {
+  flex-shrink: 0;
   width: 72px;
   height: 72px;
   padding: 0;

@@ -517,14 +517,8 @@ const galleryCards = document.querySelectorAll('.gallery-card');
 
 
 // ============================================================
-// GALLERY MODAL — clicking a project gallery tile opens a lightbox on
-// that tile's collection (category). Left/right arrows switch between
-// collections, not individual photos; thumbnails switch photos within
-// the current collection.
-//
-// Each tile only shows one cover photo, but its full collection can hold
-// several — listed here by category. Placeholder sets reusing existing
-// site photos until real per-collection photography is ready.
+// GALLERY MODAL — clicking a gallery tile opens a lightbox on that photo;
+// arrows and thumbnails move through the page's photo list.
 //
 // Paths below are written relative to the site root, so pages nested in a
 // subdirectory (projects/*.html) need a prefix. It's derived from how that
@@ -534,52 +528,22 @@ const galleryCards = document.querySelectorAll('.gallery-card');
 const ASSET_PREFIX = (document.querySelector('link[rel="stylesheet"][href$="styles.css"]')
   ?.getAttribute('href') || '').replace('styles.css', '');
 
-const GALLERY_COLLECTIONS = {
-  'Pinball Gallery': [
-    { src: ASSET_PREFIX + 'assets/images/hero-pinball.png', alt: 'Custom pinball machine build' },
-    { src: ASSET_PREFIX + 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build' },
-    { src: ASSET_PREFIX + 'assets/images/vpin-noire.jpg', alt: 'VPIN Noire custom pinball build' },
-  ],
-  'Retro Gallery': [
-    { src: ASSET_PREFIX + 'assets/images/theStudio.png', alt: 'R2C studio build' },
-    { src: ASSET_PREFIX + 'assets/images/retro-studio.jpg', alt: 'Retro Studio custom arcade build' },
-    { src: ASSET_PREFIX + 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
-  ],
-  'Custom Builds': [
-    { src: ASSET_PREFIX + 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
-    { src: ASSET_PREFIX + 'assets/images/apex-cosmic.jpg', alt: 'Apex Cosmic custom arcade build' },
-    { src: ASSET_PREFIX + 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
-  ],
-  'Cocktail Cabinets': [
-    { src: ASSET_PREFIX + 'assets/images/the-loft.png', alt: 'The Loft custom cabinet' },
-    { src: ASSET_PREFIX + 'assets/images/fully-custom-2player.png', alt: 'Custom 2-player arcade cabinet' },
-    { src: ASSET_PREFIX + 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
-  ],
-  'Restorations': [
-    { src: ASSET_PREFIX + 'assets/images/the-apex.png', alt: 'The Apex custom cabinet' },
-    { src: ASSET_PREFIX + 'assets/images/retro-3rd-strike.jpg', alt: 'Retro 3rd Strike custom arcade build' },
-    { src: ASSET_PREFIX + 'assets/images/theStudio.png', alt: 'R2C studio build' },
-  ],
-  'Prop Builds': [
-    { src: ASSET_PREFIX + 'assets/images/mario-bros-isolated.png', alt: 'Mario Bros arcade prop build' },
-    { src: ASSET_PREFIX + 'assets/images/mario-bros.jpg', alt: 'Mario Bros custom arcade build' },
-    { src: ASSET_PREFIX + 'assets/images/steam-pedestal.jpg', alt: 'Steam Pedestal custom arcade build' },
-  ],
-};
-
-// Case-study pages carry their own photo list (#project-photos, JSON array
-// of {src, alt} relative to the site root). The first five feed the bento
+// Pages with tiles carry their own photo list (#project-photos, JSON array
+// of {src, alt, thumb?} relative to the site root). The first few feed the bento
 // tiles; the lightbox opens on the clicked photo and arrows/thumbs move
-// through the whole list. Pages without it keep the showroom's
-// category-collection behaviour.
+// through the whole list.
 const projectPhotosEl = document.getElementById('project-photos');
 const PROJECT_PHOTOS = projectPhotosEl
-  ? JSON.parse(projectPhotosEl.textContent).map(p => ({ ...p, src: ASSET_PREFIX + p.src }))
+  ? JSON.parse(projectPhotosEl.textContent).map(p => ({
+      ...p,
+      src: ASSET_PREFIX + p.src,
+      thumb: p.thumb && ASSET_PREFIX + p.thumb,
+    }))
   : null;
 
 const galleryModal = document.getElementById('gallery-modal');
 
-if (galleryCards.length && galleryModal) {
+if (galleryCards.length && galleryModal && PROJECT_PHOTOS) {
   const modalImg    = document.getElementById('gallery-modal-img');
   const modalTitle  = document.getElementById('gallery-modal-title');
   const modalThumbs = document.getElementById('gallery-modal-thumbs');
@@ -587,9 +551,7 @@ if (galleryCards.length && galleryModal) {
   const modalNext   = document.getElementById('gallery-modal-next');
   const modalClose  = document.getElementById('gallery-modal-close');
 
-  const collections = PROJECT_PHOTOS
-    ? { [projectPhotosEl.dataset.title || '']: PROJECT_PHOTOS }
-    : GALLERY_COLLECTIONS;
+  const collections = { [projectPhotosEl.dataset.title || '']: PROJECT_PHOTOS };
   const collectionNames = Object.keys(collections);
   let collectionIndex = 0;
   let imageIndex = 0;
@@ -603,6 +565,8 @@ if (galleryCards.length && galleryModal) {
     modalThumbs.querySelectorAll('.gallery-modal-thumb').forEach((thumb, ti) => {
       thumb.classList.toggle('is-active', ti === imageIndex);
     });
+    // keep the active thumb visible in the scrolling strip
+    modalThumbs.children[imageIndex]?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
 
   function renderThumbs(images) {
@@ -611,7 +575,7 @@ if (galleryCards.length && galleryModal) {
       const thumb = document.createElement('button');
       thumb.type = 'button';
       thumb.className = 'gallery-modal-thumb';
-      thumb.innerHTML = `<img src="${item.src}" alt="${item.alt}">`;
+      thumb.innerHTML = `<img src="${item.thumb || item.src}" alt="${item.alt}">`;
       thumb.addEventListener('click', () => showImage(i));
       modalThumbs.appendChild(thumb);
     });
@@ -672,18 +636,11 @@ if (galleryCards.length && galleryModal) {
   galleryCards.forEach(card => {
     card.addEventListener('click', e => {
       e.preventDefault();
-      if (PROJECT_PHOTOS) {
-        openGalleryModal(collectionNames[0], Number(card.dataset.photo) || 0);
-      } else {
-        openGalleryModal(card.dataset.category);
-      }
+      openGalleryModal(collectionNames[0], Number(card.dataset.photo) || 0);
     });
   });
 
-  // Project mode: arrows step through photos; showroom: through collections.
-  const step = dir => PROJECT_PHOTOS
-    ? showImage(imageIndex + dir)
-    : showCollection(collectionIndex + dir, dir);
+  const step = dir => showImage(imageIndex + dir);
 
   modalPrev.addEventListener('click', () => step(-1));
   modalNext.addEventListener('click', () => step(1));
