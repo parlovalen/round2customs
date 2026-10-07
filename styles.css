@@ -4226,3 +4226,43 @@ body.page-vpin-noire .project-gallery h2 {
     mask-image: linear-gradient(to right, transparent 0%, #000 35%);
   }
 }
+
+/* ============================================================
+   MOBILE — GALLERY SWIPE CAROUSEL
+   On phones the case-study Build Gallery becomes one horizontal row you
+   swipe with your thumb instead of a stack of photos (About's The Shop
+   and the Showroom gallery keep the stacked layout). The nested rows/columns are
+   flattened with display: contents so every card is a direct item of the
+   scrolling row; each card snaps into place, and the next one peeks in
+   from the right to show there's more. The row runs to the screen edges
+   (cancelling the section padding) while snapping stays on the margin.
+   Tapping a photo still opens the gallery modal.
+   ============================================================ */
+@media (max-width: 768px) {
+  #build-gallery .gallery-grid {
+    flex-direction: row;
+    gap: 12px;
+    margin: 0 calc(var(--page-pad) * -1);
+    padding: 0 var(--page-pad);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 var(--page-pad);
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  #build-gallery .gallery-grid::-webkit-scrollbar { display: none; }
+
+  #build-gallery .gallery-row,
+  #build-gallery .gallery-col {
+    display: contents;
+  }
+
+  #build-gallery .gallery-card,
+  #build-gallery .gallery-row--split .gallery-card:first-child,
+  #build-gallery .gallery-row--split .gallery-card:last-child {
+    flex: 0 0 84%;
+    height: 280px;
+    scroll-snap-align: start;
+  }
+}
