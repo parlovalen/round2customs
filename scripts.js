@@ -24,9 +24,17 @@ const PARALLAX_MAX = 36; // px, stays within each image's overscan buffer
 if (parallaxImgs.length && !prefersReducedMotion) {
   let parallaxTicking = false;
 
+  // phones get no drift: the frames there are short and the images fill
+  // them edge to edge, so any upward shift visibly crops the top
+  const parallaxMobile = window.matchMedia('(max-width: 768px)');
+
   function applyParallax() {
     const vh = window.innerHeight;
     parallaxImgs.forEach(img => {
+      if (parallaxMobile.matches) {
+        img.style.removeProperty('--parallax-y');
+        return;
+      }
       const container = img.parentElement;
       const rect = container.getBoundingClientRect();
       const centerOffset = (rect.top + rect.height / 2) - vh / 2;
