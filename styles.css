@@ -885,8 +885,10 @@ h2 {
   color: #d65e38;
 }
 
+/* About page section titles (What Sets Us Apart, Who We Build For) —
+   flush-left rather than centred */
 .project-stories-label--center {
-  text-align: center;
+  text-align: left;
 }
 
 .project-grid {
@@ -990,8 +992,10 @@ body.page-vpin-noire .project-gallery h2 {
   color: var(--white);
 }
 
-.project-gallery-heading--center {
-  text-align: center;
+/* About page "The Shop" — white and flush-left, matching the titles above */
+.project-gallery .project-gallery-heading--center {
+  text-align: left;
+  color: var(--white);
 }
 
 #the-shop {
@@ -4100,4 +4104,35 @@ body.page-vpin-noire .project-gallery h2 {
 
   .rp-tile[data-slot="2"] { opacity: 0.35; }
   .rp-tile[data-slot="3"] { opacity: 0; pointer-events: none; }
+}
+
+/* ============================================================
+   MOBILE — LEFT-ALIGNED TEXT
+   Every title and paragraph reads flush-left on phones; the desktop
+   centred blocks (section labels, Design, Manufacturing/Process,
+   Materials, contact header) drop their centring here. Placed last so
+   it wins over the base rules above.
+   ============================================================ */
+@media (max-width: 768px) {
+  .section-label,
+  .ds-text,
+  .pv-alt .pv-header,
+  .materials-fan-text,
+  .contact-header {
+    text-align: left;
+  }
+
+  .ds-text,
+  .pv-alt .pv-header,
+  .materials-fan-text,
+  .contact-header {
+    align-items: flex-start;
+  }
+
+  /* these sit in centring flex columns, so stretch them to the content
+     width or they'd shrink to their text and stay centred as a block */
+  .trusted-vendors .section-label,
+  .materials-fan-text {
+    align-self: stretch;
+  }
 }
