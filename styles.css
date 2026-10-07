@@ -2041,6 +2041,11 @@ body.page-vpin-noire .project-gallery h2 {
   display: none;
 }
 
+/* phone-only next/previous tab carets (styled in the 768px block) */
+.pv-scroll-caret {
+  display: none;
+}
+
 /* the list itself is the chrome — a single glassy bar holding the pills,
    with the active one sitting inside it as a white thumb */
 .pv-alt .pv-list {
@@ -3815,6 +3820,52 @@ body.page-vpin-noire .project-gallery h2 {
   }
   .pv-alt .pv-list::-webkit-scrollbar { display: none; }
   .pv-alt .pv-pill { flex: 0 0 auto; white-space: nowrap; }
+
+  /* carets over the bar's faded edges — they hint that the tabs scroll
+     sideways and, tapped, step to the next/previous tab. Injected by JS
+     (see PRODUCT VIEWER in scripts.js), which adds .can-advance while the
+     last tab isn't selected and .can-retreat once past the first. They sit
+     on the controls wrapper rather than inside the list so the list's
+     fade mask and its own scrolling don't affect them. */
+  .pv-alt .pv-controls { position: relative; }
+  /* offset parent for the active-tab scroll maths in scripts.js */
+  .pv-alt .pv-list { position: relative; }
+  .pv-alt .pv-scroll-caret {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s;
+  }
+  .pv-alt .pv-scroll-caret--next { right: 4px; }
+  .pv-alt .pv-scroll-caret--prev { left: 4px; }
+  .pv-alt .pv-scroll-caret::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--white);
+    border-right: 2px solid var(--white);
+    opacity: 0.85;
+  }
+  .pv-alt .pv-scroll-caret--next::before { margin-left: -4px; transform: rotate(45deg); }
+  .pv-alt .pv-scroll-caret--prev::before { margin-left: 4px; transform: rotate(-135deg); }
+  .pv-alt .pv-controls.can-advance .pv-scroll-caret--next,
+  .pv-alt .pv-controls.can-retreat .pv-scroll-caret--prev {
+    opacity: 1;
+    visibility: visible;
+  }
+  /* once the left caret is up, fade the bar's left edge too so it reads
+     over the tabs the same way the right one does */
+  .pv-alt .pv-controls.can-retreat .pv-list {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 44px, black calc(100% - 28px), transparent);
+    mask-image: linear-gradient(to right, transparent, black 44px, black calc(100% - 28px), transparent);
+  }
   .cs-photo-grid,
   .cs-photo-grid--five { grid-template-columns: 1fr 1fr; }
   .cs-reveal-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
@@ -4108,13 +4159,13 @@ body.page-vpin-noire .project-gallery h2 {
 
 /* ============================================================
    MOBILE — LEFT-ALIGNED TEXT
-   Every title and paragraph reads flush-left on phones; the desktop
-   centred blocks (section labels, Design, Manufacturing/Process,
+   Every title and paragraph reads flush-left on phones (except the
+   Trusted Vendors label, which stays centred over its logos); the desktop
+   centred blocks (Design, Manufacturing/Process,
    Materials, contact header) drop their centring here. Placed last so
    it wins over the base rules above.
    ============================================================ */
 @media (max-width: 768px) {
-  .section-label,
   .ds-text,
   .pv-alt .pv-header,
   .materials-fan-text,
@@ -4131,8 +4182,47 @@ body.page-vpin-noire .project-gallery h2 {
 
   /* these sit in centring flex columns, so stretch them to the content
      width or they'd shrink to their text and stay centred as a block */
-  .trusted-vendors .section-label,
   .materials-fan-text {
     align-self: stretch;
+  }
+}
+
+/* ============================================================
+   MOBILE — NO BUTTON ANIMATIONS
+   The pixel-grid fill and the terracotta wipe are hover effects; on
+   phones a tap fires them and they stick, so both are switched off.
+   ============================================================ */
+@media (max-width: 768px) {
+  .btn-primary .btn-particle-canvas,
+  .btn-primary .btn-particle-canvas.active {
+    display: none;
+  }
+  .btn-primary::before {
+    display: none;
+  }
+}
+
+/* ============================================================
+   SHOWROOM — LARGER CARD TITLES ON PHONES
+   Project names on the showroom's Recent Project Stories cards run 20%
+   larger than the shared phone size (the related-projects carousel on
+   case studies keeps the original).
+   ============================================================ */
+@media (max-width: 768px) {
+  .showroom-gallery .project-card-name { font-size: 34px; line-height: 31px; letter-spacing: 0.6px; }
+
+  /* the photo fills the card at full size but is slid right behind the
+     title (its right side runs off the card), with its left edge
+     feathered into the black card instead of ending in a hard line */
+  .showroom-gallery .project-card img,
+  .showroom-gallery .project-card:hover img {
+    top: 0;
+    left: 25%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 35%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 35%);
   }
 }

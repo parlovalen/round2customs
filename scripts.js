@@ -256,6 +256,9 @@ document.querySelectorAll('.pv').forEach(pvSection => {
   // -1 = nothing expanded, which is the state the section loads in
   let pvCurrent = pvItems.findIndex(item => item.classList.contains('is-active'));
 
+  // set below once the phone caret exists, so it can track the active tab
+  let pvOnChange = null;
+
   function setPvActive(index) {
     pvCurrent = index < 0 ? -1 : (index + pvItems.length) % pvItems.length;
 
@@ -289,6 +292,16 @@ document.querySelectorAll('.pv').forEach(pvSection => {
         }
       }
     });
+
+    // where the tab bar scrolls sideways (phones), bring the active tab
+    // into view — scrolls only the bar, never the page
+    const activeItem = pvItems[pvCurrent];
+    if (activeItem && pvList.scrollWidth > pvList.clientWidth + 1) {
+      const target = activeItem.offsetLeft - (pvList.clientWidth - activeItem.offsetWidth) / 2;
+      pvList.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
+
+    if (pvOnChange) pvOnChange();
   }
 
   pvItems.forEach((item, i) => {
@@ -317,6 +330,36 @@ document.querySelectorAll('.pv').forEach(pvSection => {
 
   window.addEventListener('resize', () => setPvActive(pvCurrent));
   setPvActive(pvCurrent);
+
+  // on phones the tab bar scrolls sideways: carets at its edges hint at
+  // that and, tapped, step to the next/previous tab. The right one shows
+  // until the last tab is reached, the left one once past the first.
+  const pvControls = pvSection.querySelector('.pv-controls');
+  if (pvControls) {
+    const makeCaret = (dir, label) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `pv-scroll-caret pv-scroll-caret--${dir}`;
+      btn.setAttribute('aria-label', label);
+      pvControls.appendChild(btn);
+      return btn;
+    };
+    makeCaret('prev', 'Previous stage').addEventListener('click', () => {
+      if (pvCurrent > 0) setPvActive(pvCurrent - 1);
+    });
+    makeCaret('next', 'Next stage').addEventListener('click', () => {
+      if (pvCurrent < pvItems.length - 1) setPvActive(pvCurrent + 1);
+    });
+
+    const updatePvCaret = () => {
+      const overflows = pvList.scrollWidth > pvList.clientWidth + 1;
+      pvControls.classList.toggle('can-advance', overflows && pvCurrent < pvItems.length - 1);
+      pvControls.classList.toggle('can-retreat', overflows && pvCurrent > 0);
+    };
+    window.addEventListener('resize', updatePvCaret);
+    pvOnChange = updatePvCaret;
+    updatePvCaret();
+  }
 });
 
 
