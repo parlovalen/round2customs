@@ -9,7 +9,10 @@
   --white: #ffffff;
   --gray-inactive: #3d3d3d;
 
-  --font-display: 'Halyard Display', sans-serif;
+  /* Adobe Fonts kit family name is 'halyard-display' — 'Halyard Display'
+     only matched copies installed locally (e.g. via Creative Cloud), so
+     phones fell back to the system font */
+  --font-display: 'halyard-display', sans-serif;
   /* Gotham via the Adobe Fonts kit (weights 300-800 + italics) */
   --font-body: 'gotham', sans-serif;
 
@@ -590,6 +593,25 @@ body.nav-collapsed .product-bar {
   will-change: transform;
 }
 
+/* Customer Build: nudge the cutout 100px toward the copy and 50px down (side-by-side
+   layout only — it's centred once the section stacks on mobile) */
+@media (min-width: 769px) {
+  /* let the shifted cutout spill left instead of being clipped — the
+     section's own overflow: hidden still contains the parallax */
+  .customer-build .split-image { overflow: visible; }
+  .customer-build .split-image img {
+    top: 50px;
+    bottom: -50px;
+    left: -100px;
+    right: 100px;
+  }
+}
+/* …and a bit larger on desktop — the image is sized by the box height
+   (object-fit: contain), so a taller box grows it without cropping */
+@media (min-width: 1025px) {
+  .customer-build .split-image { min-height: 820px; }
+}
+
 .image-fade {
   position: absolute;
   inset: 0;
@@ -706,16 +728,16 @@ h2 {
 
 .logo-gallery {
   width: 100%;
-  overflow: hidden;
 }
 
+/* static row — capped width pulls the logos in from the page edges */
 .logo-track {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: calc(100% + 100px);
+  max-width: 1120px;
+  margin: 0 auto;
   gap: 20px;
-  will-change: transform;
 }
 
 .vendor-logo {
@@ -1433,6 +1455,17 @@ body.page-vpin-noire .project-gallery h2 {
   margin: 0 auto;
   transform: translateY(var(--ph-parallax-y, 0px));
   will-change: transform;
+  /* bottom 30% fades into the black page — a mask rather than a black
+     overlay, so the wordmark behind the cutout's transparent areas stays
+     untouched */
+  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 30%);
+  mask-image: linear-gradient(to top, transparent 0%, #000 30%);
+}
+
+/* opt out of the fade per page (VPIN Modern) */
+.ph-hero--no-fade .ph-image img {
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 /* On-load reveal — same slide-up + fade as the homepage hero
@@ -1583,6 +1616,13 @@ body.page-vpin-noire .project-gallery h2 {
 /* wider rising image box for pages whose design photo needs more width */
 .ds--wide .ds-image {
   width: 1272px;
+}
+
+/* at 1272px wide the 16:9 photo letterboxes inside the 885px box, leaving
+   ~75px of empty black under it — trim the section so Manufacturing
+   follows closer */
+@media (min-width: 1025px) {
+  .ds.ds--wide { height: 1020px; }
 }
 
 /* image fades into the page at its base, per the design */
@@ -3595,7 +3635,6 @@ body.page-vpin-noire .project-gallery h2 {
 
   /* Trusted vendors */
   .trusted-vendors { padding: 60px var(--page-pad); gap: 28px; }
-  .logo-gallery { overflow: visible; }
   .logo-track {
     display: grid;
     grid-template-columns: 1fr;
@@ -3603,7 +3642,6 @@ body.page-vpin-noire .project-gallery h2 {
     justify-items: center;
     width: 100%;
     gap: 0;
-    transform: none !important;
   }
   .vendor-logo { height: auto; width: 100%; max-width: 208px; }
 

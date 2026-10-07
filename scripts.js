@@ -489,28 +489,6 @@ updateNavbarScroll();
 
 
 // ============================================================
-// VENDOR LOGOS — subtle side scroll tied to page scroll
-// ============================================================
-const logoTrack = document.getElementById('logo-track');
-const vendorsSection = document.querySelector('.trusted-vendors');
-
-if (logoTrack && vendorsSection) {
-  const maxShift = 100; // px, matches the extra width added to .logo-track
-
-  function updateLogoScroll() {
-    const rect = vendorsSection.getBoundingClientRect();
-    const vh = window.innerHeight;
-    const total = rect.height + vh;
-    const progress = Math.min(Math.max((vh - rect.top) / total, 0), 1);
-    logoTrack.style.transform = `translateX(-${progress * maxShift}px)`;
-  }
-
-  window.addEventListener('scroll', updateLogoScroll, { passive: true });
-  updateLogoScroll();
-}
-
-
-// ============================================================
 // GALLERY CARDS — tiles are wired to the lightbox below.
 // ============================================================
 const galleryCards = document.querySelectorAll('.gallery-card');
