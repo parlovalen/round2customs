@@ -19,14 +19,13 @@ if (footerYearEl) footerYearEl.textContent = new Date().getFullYear();
 // ============================================================
 const parallaxImgs = document.querySelectorAll('.hero-image img, .split-image img');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// no image parallax on phones (all handlers below): the frames there are
+// short and the images fill them edge to edge, so any shift crops them
+const parallaxMobile = window.matchMedia('(max-width: 768px)');
 const PARALLAX_MAX = 36; // px, stays within each image's overscan buffer
 
 if (parallaxImgs.length && !prefersReducedMotion) {
   let parallaxTicking = false;
-
-  // phones get no drift: the frames there are short and the images fill
-  // them edge to edge, so any upward shift visibly crops the top
-  const parallaxMobile = window.matchMedia('(max-width: 768px)');
 
   function applyParallax() {
     const vh = window.innerHeight;
@@ -73,7 +72,7 @@ if (phImage && !prefersReducedMotion) {
   let phTicking = false;
 
   function applyPhParallax() {
-    const y = -Math.min(PH_PARALLAX_MAX, window.scrollY * PH_PARALLAX_FACTOR);
+    const y = parallaxMobile.matches ? 0 : -Math.min(PH_PARALLAX_MAX, window.scrollY * PH_PARALLAX_FACTOR);
     phImage.style.setProperty('--ph-parallax-y', `${y.toFixed(1)}px`);
     phTicking = false;
   }
@@ -170,7 +169,7 @@ if (dsImage && !prefersReducedMotion && !dsImage.closest('.ds--static')) {
     // 1 once its bottom has passed the top
     const progress = (vh - rect.top) / (vh + rect.height);
     const clamped = Math.max(0, Math.min(1, progress));
-    const y = (0.5 - clamped) * 2 * DS_PARALLAX_RANGE;
+    const y = parallaxMobile.matches ? 0 : (0.5 - clamped) * 2 * DS_PARALLAX_RANGE;
 
     dsImage.style.setProperty('--ds-parallax-y', `${y.toFixed(1)}px`);
     dsTicking = false;

@@ -2163,7 +2163,7 @@ body.page-vpin-noire .project-gallery h2 {
   display: flex;
   flex-direction: column;
   gap: 48px;
-  padding: 0 var(--page-pad) 220px;
+  padding: 0 var(--page-pad) 110px;
 }
 
 /* the stats row spans the full content width, one equal column per stat,
@@ -3767,6 +3767,10 @@ body.page-vpin-noire .project-gallery h2 {
     position: static;
     order: 2;
     transform: none;
+    /* drop the desktop 33% / min-width column so the copy and CTA span
+       the full content width */
+    width: 100%;
+    min-width: 0;
     max-width: none;
     gap: 20px;
   }
@@ -3823,11 +3827,16 @@ body.page-vpin-noire .project-gallery h2 {
   .cs-spec-group th { padding: 28px 0 10px; }
   .cs-spec-col + .cs-spec-col .cs-spec-table:first-child .cs-spec-group th { padding-top: 28px; }
 
-  .cs-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 20px; }
-  /* two columns — the divider belongs between the pair, so hide it on
-     every odd tile rather than only the first */
-  .cs-stats-grid .cs-stat-tile::before { left: -10px; height: 40px; }
-  .cs-stats-grid .cs-stat-tile:nth-child(odd)::before { display: none; }
+  /* single stacked column — the divider turns horizontal, centred in the
+     48px gap above each tile (the base rule still hides it on the first) */
+  .cs-stats-grid { grid-template-columns: 1fr; gap: 48px; }
+  .cs-stats-grid .cs-stat-tile::before {
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 1px;
+  }
   .cs-stat-number { font-size: 42px; }
   .cs-ba-frame { height: 320px; }
   .cs-ba-handle-grip { width: 36px; height: 36px; }
@@ -3941,6 +3950,12 @@ body.page-vpin-noire .project-gallery h2 {
 
 .ds--dual .ds-image::after {
   display: none;
+}
+
+/* phones: inset to the page margins like the gallery and content below,
+   instead of running edge to edge */
+@media (max-width: 768px) {
+  .ds--dual .ds-images { padding: 0 var(--page-pad); }
 }
 
 @media (max-width: 1024px) {
