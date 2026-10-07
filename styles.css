@@ -3638,10 +3638,15 @@ body.page-vpin-noire .project-gallery h2 {
   /* About page */
   .about-shop-photos { flex-direction: column; }
   .about-shop-photos img { height: 260px; }
+  .about-audience { padding: 55px var(--page-pad); } /* 100px less 45% */
   .about-audience-grid { flex-direction: column; height: auto; gap: 12px; }
   .about-audience-card,
   .about-audience-card:first-child,
-  .about-audience-card:last-child { height: 260px; border-width: 1px; border-radius: 8px; padding: 0 24px 24px; }
+  .about-audience-card:last-child { flex: none; height: 520px; border-width: 1px; border-radius: 8px; padding: 0 24px 24px; }
+  /* the copy is always shown on phones, so keep the title/paragraph gap
+     open rather than only on hover */
+  .about-audience-text,
+  .about-audience-card:hover .about-audience-text { gap: 16px; }
   .about-audience-text h3 { font-size: 28px; line-height: 30px; }
   .about-audience-desc-wrap { grid-template-rows: 1fr; }
   .about-audience-desc-wrap p { opacity: 1; font-size: 14px; line-height: 22px; }
