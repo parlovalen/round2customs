@@ -998,6 +998,11 @@ body.page-vpin-noire .project-gallery h2 {
   padding-top: 200px;
 }
 
+@media (max-width: 768px) {
+  /* 200px is disproportionate on a short mobile viewport */
+  #the-shop { padding-top: 100px; }
+}
+
 .gallery-grid {
   display: flex;
   flex-direction: column;
@@ -3197,7 +3202,10 @@ body.page-vpin-noire .project-gallery h2 {
   aspect-ratio: 299 / 931;
   border-radius: 12px;
   overflow: hidden;
-  transform: translateX(calc((var(--i) - 2) * (28px + var(--fan-progress) * 192px)));
+  /* spread offsets are viewport-relative (capped at the desktop px
+     values), so the outer cards stay on-screen at any width instead of
+     spreading past the edge of narrow viewports */
+  transform: translateX(calc((var(--i) - 2) * (min(28px, 3vw) + var(--fan-progress) * (min(220px, 13.5vw) - min(28px, 3vw)))));
 }
 
 .material-card img {
@@ -3210,6 +3218,10 @@ body.page-vpin-noire .project-gallery h2 {
 @media (max-width: 768px) {
   .materials-fan-stage { height: 320px; }
   .material-card { width: 120px; }
+  /* the heading is only forced onto one line where there's room for it —
+     at mobile font sizes "BUILT FROM THE BEST" doesn't fit and would
+     otherwise get clipped on both sides */
+  .materials-fan-text h2 { white-space: normal; }
 }
 
 .about-apart {
@@ -3502,6 +3514,12 @@ body.page-vpin-noire .project-gallery h2 {
   .pv-alt .pv-controls { width: 100%; }
   .pv-alt .pv-stage { height: 460px; }
 
+  /* the pill bar inherits flex-shrink:0 from the shared .pv-list rule
+     (needed for its desktop single-row layout), which stops it from ever
+     respecting .pv-controls' width here and wrapping onto multiple rows —
+     causing page-wide horizontal overflow on narrow screens */
+  .pv-alt .pv-list { flex-shrink: 1; max-width: 100%; }
+
   /* Project hero (VPIN Noire) — same layout, scaled ~0.72x + headroom so
      the image still renders in full at this frame height */
   .ph-hero { height: 790px; }
@@ -3769,6 +3787,21 @@ body.page-vpin-noire .project-gallery h2 {
   .pv-arrows { display: none; }
   .pv-pill { font-size: 15px; padding: 12px 20px 12px 14px; }
   .pv-panel p { max-width: none; }
+
+  /* the manufacturing-viewer tab bar becomes a single scrollable row
+     (Apple product-page pattern) instead of wrapping onto multiple —
+     the bar itself scrolls horizontally, so the page never does */
+  .pv-alt .pv-list {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+    mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+  }
+  .pv-alt .pv-list::-webkit-scrollbar { display: none; }
+  .pv-alt .pv-pill { flex: 0 0 auto; white-space: nowrap; }
   .cs-photo-grid,
   .cs-photo-grid--five { grid-template-columns: 1fr 1fr; }
   .cs-reveal-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
