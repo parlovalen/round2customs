@@ -1506,6 +1506,14 @@ body.page-vpin-noire .project-gallery h2 {
   border-radius: 8px;
 }
 
+/* single image in place of the pair — spans the content grid, uncropped */
+.intro-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 /* ============================================================
    DESIGN SECTION
    Figma: https://www.figma.com/design/KWppWGIEe8PSNTO8ao7Zpu/R2C?node-id=77-380
