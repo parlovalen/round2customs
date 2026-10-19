@@ -762,9 +762,9 @@ if (carouselTrack && paginationEl && carouselEl) {
   const slides = [
     { src: 'assets/images/hero-pinball.png', alt: 'VPIN Modern custom pinball build', name: 'VPIN<br>MODERN', link: 'projects/vpin-modern.html' },
     { src: 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build', name: 'VPIN<br>CLASSIC', link: 'projects/vpin-classic.html' },
-    { src: 'assets/images/theStudio.png', alt: 'R2C studio build', name: 'THE<br>STUDIO' },
-    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet', name: 'THE<br>APEX' },
-    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT' },
+    { src: 'assets/images/theStudio.png', alt: 'R2C studio build', name: 'THE<br>STUDIO', link: 'projects/retro-studio.html' },
+    { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet', name: 'THE<br>APEX', link: 'projects/apex-cosmic.html' },
+    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT', badge: 'Coming soon' },
   ];
 
   let current = 2; // start on the 3rd slide
@@ -774,7 +774,7 @@ if (carouselTrack && paginationEl && carouselEl) {
   // center; renderCarousel() below positions each one by its distance from
   // `current`. The name label travels with its slide but only shows when
   // that slide is centered.
-  const slideEls = slides.map(({ src, alt, name }) => {
+  const slideEls = slides.map(({ src, alt, name, badge }) => {
     const li = document.createElement('li');
     li.className = 'carousel-slide';
 
@@ -785,7 +785,9 @@ if (carouselTrack && paginationEl && carouselEl) {
 
     const label = document.createElement('div');
     label.className = 'studio-label';
-    label.innerHTML = `<h2>${name}</h2>`;
+    // optional badge (e.g. "Coming soon") sits above the name, left-aligned with it
+    const badgeHTML = badge ? `<span class="studio-badge">${badge}</span>` : '';
+    label.innerHTML = `<div>${badgeHTML}<h2>${name}</h2></div>`;
     li.appendChild(label);
     li._label = label;
 

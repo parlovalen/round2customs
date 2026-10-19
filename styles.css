@@ -838,6 +838,21 @@ h2 {
   text-align: left;
 }
 
+/* small pill above a slide's name — e.g. "Coming soon" on builds without a case study yet */
+.studio-badge {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 6px 14px;
+  border-radius: 60px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+}
+
 /* Pagination dots */
 .carousel-pagination {
   display: flex;
@@ -3685,6 +3700,7 @@ body.page-vpin-noire .project-gallery h2 {
   .carousel-track { width: 74vw; max-width: 300px; }
   .studio-label { padding: 24px; }
   .studio-label h2 { font-size: 32px; line-height: 30px; }
+  .studio-badge { margin-bottom: 8px; padding: 4px 10px; font-size: 12px; }
 
   /* Showroom page */
   .showroom-gallery { gap: 24px; }
