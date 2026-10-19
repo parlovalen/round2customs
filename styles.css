@@ -838,19 +838,23 @@ h2 {
   text-align: left;
 }
 
-/* small pill above a slide's name — e.g. "Coming soon" on builds without a case study yet */
+/* small pill above a slide's name — e.g. "Coming soon" on builds without a
+   case study yet. Matches the Custom Builder .nav-badge in the menu. */
 .studio-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   margin-bottom: 12px;
-  padding: 6px 14px;
+  padding: 4px 12px;
   border-radius: 60px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(90deg, #e6431e 0%, #ff8a3d 100%);
   color: var(--white);
-  font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
 }
 
 /* Pagination dots */
@@ -3700,7 +3704,7 @@ body.page-vpin-noire .project-gallery h2 {
   .carousel-track { width: 74vw; max-width: 300px; }
   .studio-label { padding: 24px; }
   .studio-label h2 { font-size: 32px; line-height: 30px; }
-  .studio-badge { margin-bottom: 8px; padding: 4px 10px; font-size: 12px; }
+  .studio-badge { margin-bottom: 8px; padding: 3px 10px; font-size: 10px; }
 
   /* Showroom page */
   .showroom-gallery { gap: 24px; }

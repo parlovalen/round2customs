@@ -764,7 +764,7 @@ if (carouselTrack && paginationEl && carouselEl) {
     { src: 'assets/images/classic-vpin.png', alt: 'VPIN Classic custom pinball build', name: 'VPIN<br>CLASSIC', link: 'projects/vpin-classic.html' },
     { src: 'assets/images/theStudio.png', alt: 'R2C studio build', name: 'THE<br>STUDIO', link: 'projects/retro-studio.html' },
     { src: 'assets/images/the-apex.png', alt: 'The Apex custom cabinet', name: 'THE<br>APEX', link: 'projects/apex-cosmic.html' },
-    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT', badge: 'Coming soon' },
+    { src: 'assets/images/the-loft.png', alt: 'The Loft custom cabinet', name: 'THE<br>LOFT', badge: 'Coming Soon' },
   ];
 
   let current = 2; // start on the 3rd slide
