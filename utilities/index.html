@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Utilities — Round 2 Customs</title>
+
+  <!-- Halyard Display + Gotham via Adobe Fonts (same kit as the main site) -->
+  <link rel="stylesheet" href="https://use.typekit.net/sjv2mus.css">
+
+  <style>
+    :root {
+      --bg: #000;
+      --terracotta: #b84d1a;
+      --white: #fff;
+      --muted: rgba(255,255,255,0.6);
+      --dim: rgba(255,255,255,0.4);
+      --hairline: rgba(255,255,255,0.1);
+      --tile: rgba(255,255,255,0.04);
+      --font-display: 'halyard-display', sans-serif;
+      --font-body: 'gotham', sans-serif;
+      --page-pad: clamp(24px, 8vw, 120px);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--white);
+      font: 16px/26px var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    header, main, footer { padding-inline: var(--page-pad); }
+    header { padding-top: clamp(48px, 8vw, 96px); padding-bottom: 40px; }
+    .eyebrow {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: clamp(40px, 7vw, 80px);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 10px 0 16px;
+    }
+    header p { color: var(--muted); margin: 0; max-width: 560px; }
+
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      padding-bottom: 80px;
+    }
+    .tile {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 220px;
+      padding: 28px;
+      border: 1px solid var(--hairline);
+      border-radius: 16px;
+      background: var(--tile);
+      color: inherit;
+      text-decoration: none;
+      transition: border-color .2s, background .2s, transform .2s;
+    }
+    .tile:hover, .tile:focus-visible {
+      border-color: var(--terracotta);
+      background: rgba(184,77,26,0.08);
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .tile-tag {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .tile h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 26px;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .tile p { margin: 0; color: var(--muted); font-size: 15px; line-height: 24px; }
+    .tile-cta {
+      margin-top: auto;
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .tile-cta::after { content: " →"; transition: margin .2s; }
+    .tile:hover .tile-cta::after { margin-left: 4px; }
+
+    footer { padding-bottom: 40px; color: var(--dim); font-size: 13px; }
+    footer a { color: inherit; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="eyebrow">Internal · Not public</div>
+    <h1>Utilities</h1>
+    <p>Shop tools for fabrication and production. Pick a tool below.</p>
+  </header>
+
+  <main>
+    <div class="tiles">
+
+      <a class="tile" href="/utilities/speaker-cover-generator.html">
+        <span class="tile-tag">Fabrication · 3D print</span>
+        <h2>Speaker Cover Generator</h2>
+        <p>Parametric speaker grille cover. Set diameters, height, lip and perforations, then export a print-ready STL.</p>
+        <span class="tile-cta">Open tool</span>
+      </a>
+
+      <!-- Add new tools here: copy a .tile block and point href at the tool's page in /utilities/ -->
+
+    </div>
+  </main>
+
+  <footer>Round 2 Customs · <a href="/">Back to site</a></footer>
+
+</body>
+</html>
