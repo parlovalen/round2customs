@@ -54,17 +54,16 @@
 
     .tiles {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 24px;
       padding-bottom: 80px;
     }
     .tile {
       position: relative;
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      min-height: 220px;
-      padding: 28px;
+      align-items: stretch;
+      gap: 28px;
+      padding: 20px;
       border: 1px solid var(--hairline);
       border-radius: 16px;
       background: var(--tile);
@@ -77,6 +76,28 @@
       background: rgba(184,77,26,0.08);
       transform: translateY(-2px);
       outline: none;
+    }
+    .tile-thumb {
+      flex: 0 0 42%;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+    }
+    .tile-thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .4s ease;
+    }
+    .tile:hover .tile-thumb img { transform: scale(1.04); }
+    .tile-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      padding: 8px 8px 8px 0;
     }
     .tile-tag {
       font-family: var(--font-display);
@@ -108,6 +129,15 @@
     .tile-cta::after { content: " →"; transition: margin .2s; }
     .tile:hover .tile-cta::after { margin-left: 4px; }
 
+    @media (max-width: 900px) {
+      .tiles { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tile { flex-direction: column; gap: 20px; }
+      .tile-thumb { flex-basis: auto; }
+      .tile-body { padding: 0 4px 4px; }
+    }
+
     footer { padding-bottom: 40px; color: var(--dim); font-size: 13px; }
     footer a { color: inherit; }
   </style>
@@ -124,13 +154,18 @@
     <div class="tiles">
 
       <a class="tile" href="/utilities/speaker-cover-generator.html">
-        <span class="tile-tag">Fabrication · 3D print</span>
-        <h2>Speaker Cover Generator</h2>
-        <p>Parametric speaker grille cover. Set diameters, height, lip and perforations, then export a print-ready STL.</p>
-        <span class="tile-cta">Open tool</span>
+        <div class="tile-thumb">
+          <img src="../assets/images/utilities/speaker-cover-thumb-web.jpg" alt="3D render of a perforated speaker cover" width="800" height="800" loading="lazy">
+        </div>
+        <div class="tile-body">
+          <span class="tile-tag">Fabrication · 3D print</span>
+          <h2>Speaker Cover Generator</h2>
+          <p>Parametric speaker grille cover. Set diameters, height, lip and perforations, then export a print-ready STL.</p>
+          <span class="tile-cta">Open tool</span>
+        </div>
       </a>
 
-      <!-- Add new tools here: copy a .tile block and point href at the tool's page in /utilities/ -->
+      <!-- Add new tools here: copy a .tile block, point href at the tool's page in /utilities/ and swap the thumbnail -->
 
     </div>
   </main>
