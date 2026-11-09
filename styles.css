@@ -748,7 +748,9 @@ h2 {
   transition: opacity 0.2s ease;
 }
 
-.vendor-logo:hover { opacity: 1; }
+.vendor-link { display: block; line-height: 0; }
+.vendor-logo:hover,
+.vendor-link:focus-visible .vendor-logo { opacity: 1; }
 
 /* ============================================================
    STUDIO CAROUSEL
@@ -3696,6 +3698,7 @@ body.page-vpin-noire .project-gallery h2 {
     width: 100%;
     gap: 0;
   }
+  .vendor-link { width: 100%; max-width: 208px; }
   .vendor-logo { height: auto; width: 100%; max-width: 208px; }
 
   /* Studio carousel */
